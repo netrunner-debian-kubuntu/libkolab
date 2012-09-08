@@ -1,8 +1,8 @@
 #!/usr/bin/make -f
 
-PHPAPI := $$(php-config --phpapi)
-PYTHON_SITELIB := $$(python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()')
-PYTHON_SITEARCH := $$(python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib(1)')
+PHPAPI := $(shell php-config --phpapi)
+PYTHON_SITELIB := $(shell python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()')
+PYTHON_SITEARCH := $(shell python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib(1)')
 
 %:
 	dh $@ --parallel --with pkgkde_symbolshelper
@@ -19,4 +19,12 @@ override_dh_auto_configure:
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
 override_dh_install:
+	mkdir -p debian/tmp/etc/php.d/mods-available
+	echo "extension=kolabcalendaring.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini
+	echo "extension=kolabicalendar.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini
+	echo "extension=kolabshared.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini
+	mkdir -p debian/tmp/usr/share/php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/tmp/usr/share/php/kolabcalendaring.php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/tmp/usr/share/php/kolabicalendar.php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/tmp/usr/share/php/kolabshared.php
 	dh_install --fail-missing

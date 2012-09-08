@@ -26,6 +26,28 @@ Description: Maps KDE containers to Kolab formats
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
 
+Package: php-kolab
+Architecture: any
+Depends: libkolab0 (= ${binary:Version}),
+	libkolabxml0,
+	libcalendaring0,
+	phpapi-2010525,
+	${misc:Depends},
+	${shlibs:Depends}
+Description: PHP bindings for Kolab Library
+ This package provides PHP kolabicalendar and kolabcalendaring modules
+
+Package: python-kolab
+Architecture: any
+Depends: libkolab0 (= ${binary:Version}),
+	libkolabxml0,
+	libcalendaring0,
+	python,
+	${misc:Depends},
+	${shlibs:Depends}
+Description: Python bindings for Kolab Library
+ This package provides Python kolabicalendar and kolabcalendaring modules
+
 Package: libkolab-dev
 Section: libdevel
 Architecture: any
