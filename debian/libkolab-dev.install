@@ -1,0 +1,11 @@
+usr/lib/libkolab.so
+usr/lib/cmake/Libkolab/LibkolabTargets.cmake
+usr/lib/cmake/Libkolab/LibkolabTargets-relwithdebinfo.cmake
+usr/lib/cmake/Libkolab/LibkolabConfig.cmake
+usr/lib/cmake/Libkolab/LibkolabConfigVersion.cmake
+usr/include/kolab/kolabobject.h
+usr/include/kolab/kcalconversion.h
+usr/include/kolab/kabcconversion.h
+usr/include/kolab/kolab_export.h
+usr/include/kolab/kolabdefinitions.h
+usr/include/kolab/errorhandler.h

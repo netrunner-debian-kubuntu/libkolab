@@ -1,0 +1,29 @@
+libkolab (0.3.1-1) unstable; urgency=low
+
+  * Build for Debian Wheezy
+
+ -- Jeroen van Meeuwen <vanmeeuwen@kolabsys.com>  Fri,  7 Sep 2012 15:53:19 +0100
+
+libkolab (0.2.1-0ubuntu1) quantal; urgency=low
+
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 19 Jul 2012 12:50:43 +0100
+
+libkolab (0.2.0+repack1-0ubuntu2) quantal; urgency=low
+
+  * Enable parallel building.
+  * Switch to debhelper compat level v9 which exports build flags.
+  * Add a watch file.
+  * Use pkgkde_symbolshelper dh addon.
+  * Update symbols file on amd64.
+  * Pass --fail-missing to dh_install.
+
+ -- Felix Geyer <debfx@ubuntu.com>  Tue, 17 Jul 2012 19:48:01 +0200
+
+libkolab (0.2.0+repack1-0ubuntu1) quantal; urgency=low
+
+  * Initial release.
+  * Repack with licence files from upstream
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Thu, 05 Jul 2012 12:55:57 +0100

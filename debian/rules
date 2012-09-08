@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+PHPAPI := $$(php-config --phpapi)
+PYTHON_SITELIB := $$(python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()')
+PYTHON_SITEARCH := $$(python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib(1)')
+
+%:
+	dh $@ --parallel --with pkgkde_symbolshelper
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DSWIG=/usr/bin/swig2.0 \
+		-DUSE_LIBCALENDARING=ON \
+		-DPHP_BINDINGS=ON \
+		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
+		-DPHP4_EXECUTABLE=/usr/bin/php5 \
+		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
+		-DPYTHON_BINDINGS=ON \
+		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
+
+override_dh_install:
+	dh_install --fail-missing

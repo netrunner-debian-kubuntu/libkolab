@@ -1,0 +1,39 @@
+From 8886295189491151dbd3590649aaf43e15321dc6 Mon Sep 17 00:00:00 2001
+From: "Jeroen van Meeuwen (Kolab Systems)" <vanmeeuwen@kolabsys.com>
+Date: Wed, 15 Aug 2012 17:20:12 +0100
+Subject: [PATCH] Fix kolab/errorhandler.h > kolabformat/errorhandler.h
+
+---
+ tests/kolabobjecttest.cpp | 2 +-
+ tests/upgradetest.cpp     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/kolabobjecttest.cpp b/tests/kolabobjecttest.cpp
+index 19d7de7..9f44f2a 100644
+--- a/tests/kolabobjecttest.cpp
++++ b/tests/kolabobjecttest.cpp
+@@ -21,7 +21,7 @@
+ 
+ #include "kolabformat/kolabobject.h"
+ #include <kdebug.h>
+-#include <kolab/errorhandler.h>
++#include <kolabformat/errorhandler.h>
+ 
+ void KolabObjectTest::preserveLatin1()
+ {
+diff --git a/tests/upgradetest.cpp b/tests/upgradetest.cpp
+index ee376be..0e943ac 100644
+--- a/tests/upgradetest.cpp
++++ b/tests/upgradetest.cpp
+@@ -21,7 +21,7 @@
+ #include <QTest>
+ #include <kolabcontainers.h>
+ #include <kolabformat.h>
+-#include <kolab/errorhandler.h>
++#include <kolabformat/errorhandler.h>
+ 
+ #include "testutils.h"
+ #include "kolabformat/kolabobject.h"
+-- 
+1.7.11.2
+
