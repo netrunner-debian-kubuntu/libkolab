@@ -1,0 +1,3 @@
+etc/php.d/mods-available/kolab.ini
+usr/lib/php5/*/*.so
+usr/share/php/kolab*.php
