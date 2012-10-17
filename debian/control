@@ -41,6 +41,7 @@ Description: PHP bindings for Kolab Library
 
 Package: python-kolab
 Architecture: any
+Section: python
 Depends: libkolab0 (= ${binary:Version}),
 	libkolabxml0,
 	libcalendaring0,

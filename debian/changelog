@@ -1,10 +1,19 @@
+libkolab (0.3.1-2.2) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Make PHP API dependency architecture-dependent.
+  * Corrected email address format in previous changelog entry.
+  * Set section to python for python-kolab.
+
+ -- Paul Klos <kolab@klos2day.nl>  Wed, 17 Oct 2012 21:45:00 +0200
+
 libkolab (0.3.1-2.1) UNRELEASED; urgency=low
 
   [ Michael Kiefer ]
   * Non-maintainer upload.
   * added possible dependency on phpapi-20100525+lfs to php-kolab 
 
- -- Michael Kiefer <Michael-Kiefer@web.de> <mail@mkiefer.de>  Sat, 29 Sep 2012 23:27:43 +0200
+ -- Michael Kiefer <Michael-Kiefer@web.de>  Sat, 29 Sep 2012 23:27:43 +0200
 
 libkolab (0.3.1-2) unstable; urgency=low
 
