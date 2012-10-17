@@ -18,6 +18,10 @@ override_dh_auto_configure:
 		-DPYTHON_BINDINGS=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
+binary-arch:
+	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab.substvars
+	dh binary-arch
+
 override_dh_install:
 	mkdir -p debian/tmp/etc/php.d/mods-available
 	echo "extension=kolabcalendaring.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini

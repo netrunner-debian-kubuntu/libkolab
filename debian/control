@@ -33,7 +33,7 @@ Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
 	libkolabxml0,
 	libcalendaring0,
-	phpapi-20100525 | phpapi-20100525+lfs,
+	${php:Depends},
 	${misc:Depends},
 	${shlibs:Depends}
 Description: PHP bindings for Kolab Library
