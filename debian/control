@@ -1,8 +1,7 @@
 Source: libkolab
 Section: libs
 Priority: optional
-Maintainer: Kubuntu Developers <kubuntu-devel@lists.ubuntu.com>
-XSBC-Original-Maintainer: Jonathan Riddell <jriddell@ubuntu.com>
+Maintainer: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
 Build-Depends: cmake,
 	debhelper (>= 9),
 	pkg-kde-tools,
