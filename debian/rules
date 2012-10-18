@@ -23,10 +23,13 @@ binary-arch:
 	dh binary-arch
 
 override_dh_install:
-	mkdir -p debian/tmp/etc/php.d/mods-available
-	echo "extension=kolabcalendaring.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini
-	echo "extension=kolabicalendar.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini
-	echo "extension=kolabshared.so" >> debian/tmp/etc/php.d/mods-available/kolab.ini
+	# Create ini file in usr/share/php5/kolab
+	# Will be installed/enabled in maintainer scripts
+	mkdir -p debian/tmp/usr/share/php5/kolab
+	echo "extension=kolabcalendaring.so" > debian/tmp/usr/share/php5/kolab/kolab.ini
+	echo "extension=kolabicalendar.so" >> debian/tmp/usr/share/php5/kolab/kolab.ini
+	echo "extension=kolabshared.so" >> debian/tmp/usr/share/php5/kolab/kolab.ini
+	# 
 	mkdir -p debian/tmp/usr/share/php
 	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/tmp/usr/share/php/kolabcalendaring.php
 	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/tmp/usr/share/php/kolabicalendar.php
