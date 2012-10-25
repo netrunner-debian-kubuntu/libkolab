@@ -1,8 +1,7 @@
 Source: libkolab
 Section: libs
 Priority: optional
-Maintainer: Kubuntu Developers <kubuntu-devel@lists.ubuntu.com>
-XSBC-Original-Maintainer: Jonathan Riddell <jriddell@ubuntu.com>
+Maintainer: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
 Build-Depends: cmake,
 	debhelper (>= 9),
 	pkg-kde-tools,
@@ -33,7 +32,8 @@ Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
 	libkolabxml0,
 	libcalendaring0,
-	phpapi-20100525 | phpapi-20100525+lfs,
+    ucf,
+	${php:Depends},
 	${misc:Depends},
 	${shlibs:Depends}
 Description: PHP bindings for Kolab Library
@@ -41,6 +41,7 @@ Description: PHP bindings for Kolab Library
 
 Package: python-kolab
 Architecture: any
+Section: python
 Depends: libkolab0 (= ${binary:Version}),
 	libkolabxml0,
 	libcalendaring0,
