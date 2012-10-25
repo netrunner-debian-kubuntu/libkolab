@@ -1,4 +1,4 @@
-libkolab (0.3.1-4) UNRELEASED; urgency=low
+libkolab (0.3.1-4) unstable; urgency=low
 
   [ Paul Klos ]
   * Make the dependency on PHP API architecture-dependent.
