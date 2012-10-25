@@ -1,3 +1,18 @@
+libkolab (0.3.1-4) UNRELEASED; urgency=low
+
+  [ Paul Klos ]
+  * Make the dependency on PHP API architecture-dependent.
+  * Corrected email address format in previous changelog entry. Set section to python for python-kolab.
+  * Create ini file for PHP module in /usr
+  * Manage kolab.ini file for PHP module from maintainer scripts.
+  * Solves Lintian warning maintainer-script-needs-depends-on-ucf.
+  * Solves Lintian warning libkolab source: unknown-field-in-dsc original-maintainer.
+
+  [ Jeroen van Meeuwen ]
+  * Rebuild
+
+ -- Paul Klos <kolab@klos2day.nl>  Wed, 24 Oct 2012 20:15:12 -0400
+
 libkolab (0.3.1-3) unstable; urgency=low
 
   * Rebuild
