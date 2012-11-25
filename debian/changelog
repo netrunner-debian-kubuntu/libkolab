@@ -1,3 +1,13 @@
+libkolab (0.4.0-1) unstable; urgency=low
+
+  [ Jeroen van Meeuwen (Kolab Systems) ]
+  * Imported Upstream version 0.4.0
+  * Update kolab.ini to match the new module from libkolab
+
+  [ Jeroen van Meeuwen ]
+
+ -- Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>  Sun, 25 Nov 2012 06:53:46 -0500
+
 libkolab (0.3.1-4) unstable; urgency=low
 
   [ Paul Klos ]
