@@ -21,12 +21,12 @@
 
 #include "kolabformat/kolabobject.h"
 #include <kdebug.h>
-#include <kolab/errorhandler.h>
+#include <kolabformat/errorhandler.h>
 
 void KolabObjectTest::preserveLatin1()
 {
     KCalCore::Event::Ptr event(new KCalCore::Event());
-    QString summary("äöü%@$£é¤¼²°");
+    QString summary(QLatin1String("äöü%@$£é¤¼²°"));
     event->setSummary(summary);
     QCOMPARE(event->summary(), summary);
     //std::cout << event->summary().toStdString() << std::endl;
@@ -41,7 +41,7 @@ void KolabObjectTest::preserveLatin1()
 void KolabObjectTest::preserveUnicode()
 {
     KCalCore::Event::Ptr event(new KCalCore::Event());
-    QString summary("€Š�ـأبـ☺");
+    QString summary(QString::fromUtf8("€Š�ـأبـ☺"));
     event->setSummary(summary);
     QCOMPARE(event->summary(), summary);
 //     std::cout << event->summary().toStdString() << std::endl;

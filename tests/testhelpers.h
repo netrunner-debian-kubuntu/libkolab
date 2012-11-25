@@ -214,7 +214,7 @@ namespace QTest {
     char *toString(const std::vector<Kolab::ContactReference> &v)
     {
         QByteArray ba = "vector<Kolab::ContactReference>(";
-        for (int i = 0; i < v.size(); i++) {
+        for (std::size_t i = 0; i < v.size(); i++) {
                 ba += QByteArray(toString(v.at(i)))+ "\n";
             }
             ba += ")";
@@ -242,7 +242,7 @@ namespace QTest {
     char *toString(const std::vector<Kolab::Attendee> &v)
     {
         QByteArray ba = "vector<Kolab::Attendee>(";
-        for (int i = 0; i < v.size(); i++) {
+        for (std::size_t i = 0; i < v.size(); i++) {
             ba += QByteArray(toString(v.at(i)))+ "\n";
             ba += QByteArray("#######################")+ "\n";
         }
@@ -264,7 +264,7 @@ namespace QTest {
     char *toString(const std::vector<Kolab::CustomProperty> &v)
     {
         QByteArray ba = "vector<Kolab::CustomProperty>(";
-        for (int i = 0; i < v.size(); i++) {
+        for (std::size_t i = 0; i < v.size(); i++) {
             ba += QByteArray(toString(v.at(i)))+ "\n";
         }
         ba += ")";
@@ -285,7 +285,7 @@ namespace QTest {
     char *toString(const std::vector<Kolab::Period> &v)
     {
         QByteArray ba = "vector<Kolab::Period>(";
-        for (int i = 0; i < v.size(); i++) {
+        for (std::size_t i = 0; i < v.size(); i++) {
             ba += QByteArray(toString(v.at(i)))+ "\n";
         }
         ba += ")";

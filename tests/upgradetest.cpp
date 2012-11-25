@@ -21,7 +21,7 @@
 #include <QTest>
 #include <kolabcontainers.h>
 #include <kolabformat.h>
-#include <kolab/errorhandler.h>
+#include <kolabformat/errorhandler.h>
 
 #include "testutils.h"
 #include "kolabformat/kolabobject.h"

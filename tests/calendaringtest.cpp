@@ -31,7 +31,7 @@
 void compareEvents(const std::vector<Kolab::Event> &list1, const std::vector<Kolab::Event> &list2)
 {
     QCOMPARE(list1.size(), list2.size());
-    for (int i = 0; i < list1.size(); i++) {
+    for (std::size_t i = 0; i < list1.size(); i++) {
         const Kolab::Event &e1 = list1.at(i);
         const Kolab::Event &e2 = list2.at(i);
 //         qDebug() << i;
@@ -150,7 +150,7 @@ void CalendaringTest::testEventConflictSet()
     r2.push_back(createEvent(Kolab::cDateTime(2011,10,9,12,1,1,true), Kolab::cDateTime(2011,10,11,12,1,1,true)));
     expectedResult.push_back(r2);
 
-    for (int i = 0; i < result.size(); i++) {
+    for (std::size_t i = 0; i < result.size(); i++) {
         const std::vector<Kolab::Event> &list = result.at(i);
         
         qDebug() << "---------_Set--------------";

@@ -68,15 +68,15 @@ ITipHandler::ITipHandler()
 
 ITipHandler::ITipMethod mapFromKCalCore(KCalCore::iTIPMethod method)
 {
-    Q_ASSERT(KCalCore::iTIPPublish == ITipHandler::iTIPPublish);
-    Q_ASSERT(KCalCore::iTIPNoMethod == ITipHandler::iTIPNoMethod);
+    Q_ASSERT((int)KCalCore::iTIPPublish == (int)ITipHandler::iTIPPublish);
+    Q_ASSERT((int)KCalCore::iTIPNoMethod == (int)ITipHandler::iTIPNoMethod);
     return static_cast<ITipHandler::ITipMethod>(method);
 }
 
 KCalCore::iTIPMethod mapToKCalCore(ITipHandler::ITipMethod method)
 {
-    Q_ASSERT(KCalCore::iTIPPublish == ITipHandler::iTIPPublish);
-    Q_ASSERT(KCalCore::iTIPNoMethod == ITipHandler::iTIPNoMethod);
+    Q_ASSERT((int)KCalCore::iTIPPublish == (int)ITipHandler::iTIPPublish);
+    Q_ASSERT((int)KCalCore::iTIPNoMethod == (int)ITipHandler::iTIPNoMethod);
     return static_cast<KCalCore::iTIPMethod>(method);
 }
 
@@ -128,7 +128,6 @@ std::string ITipHandler::toIMip(const Event &event , ITipHandler::ITipMethod m, 
     KCalCore::iTIPMethod method = mapToKCalCore(m);
     const QString &messageText = format.createScheduleMessage( e, method );
     //This code is mostly from MailScheduler::performTransaction
-    bool status;
     if ( method == KCalCore::iTIPRequest ||
         method == KCalCore::iTIPCancel ||
         method == KCalCore::iTIPAdd ||

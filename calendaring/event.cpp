@@ -121,8 +121,8 @@ std::string Event::toIMip(ITipMethod method) const
 
 Calendaring::Event::ITipMethod Event::getSchedulingMethod() const
 {
-    Q_ASSERT(iTIPPublish == ITipHandler::iTIPPublish);
-    Q_ASSERT(iTIPNoMethod == ITipHandler::iTIPNoMethod);
+    Q_ASSERT((int)iTIPPublish == (int)ITipHandler::iTIPPublish);
+    Q_ASSERT((int)iTIPNoMethod == (int)ITipHandler::iTIPNoMethod);
     return static_cast<ITipMethod>(mITipHandler.method());
 }
 
@@ -223,6 +223,17 @@ cDateTime Calendaring::Event::getOccurenceEndDate(const cDateTime &startDate)
     const KDateTime start = Kolab::Conversion::toDate(startDate);
     return Kolab::Conversion::fromDate(event->endDateForStart(start));
 }
+
+cDateTime Calendaring::Event::getLastOccurrence() const
+{
+    KCalCore::Event::Ptr event = Kolab::Conversion::toKCalCore(*this);
+    if (!event->recurs()) {
+        return cDateTime();
+    }
+    const KDateTime endDate = event->recurrence()->endDateTime();
+    return Kolab::Conversion::fromDate(endDate);
+}
+
 
     };
 };

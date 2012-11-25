@@ -39,6 +39,16 @@ if [ ${dobuild} -eq 0 -a ${doprep} -eq 0 -a ${dotest} -eq 0 -a ${doinstall} -eq 
     doinstall=1
 fi
 
+version_major=`grep -E "^set\s*\(Libkolab_VERSION_MAJOR [0-9]+\)" CMakeLists.txt | sed -r -e 's/^set\s*\(Libkolab_VERSION_MAJOR ([0-9]+)\)/\1/g'`
+version_minor=`grep -E "^set\s*\(Libkolab_VERSION_MINOR [0-9]+\)" CMakeLists.txt | sed -r -e 's/^set\s*\(Libkolab_VERSION_MINOR ([0-9]+)\)/\1/g'`
+version_patch=`grep -E "^set\s*\(Libkolab_VERSION_PATCH [0-9]+\)" CMakeLists.txt | sed -r -e 's/^set\s*\(Libkolab_VERSION_PATCH ([0-9]+)\)/\1/g'`
+
+if [ -z "${version_patch}" ]; then
+    version="${version_major}.${version_minor}"
+else
+    version="${version_major}.${version_minor}.${version_patch}"
+fi
+
 # Rebuilds the entire foo in one go. One shot, one kill.
 rm -rf build/
 mkdir -p build
@@ -51,6 +61,7 @@ if [ ${doprep} -eq 1 ]; then
         -DINCLUDE_INSTALL_DIR=/usr/include \
         -DUSE_LIBCALENDARING=ON \
         -DPHP_BINDINGS=ON \
+        -DPHP_INSTALL_DIR=/usr/lib64/php/modules \
         -DPYTHON_BINDINGS=ON \
         ..
 fi
@@ -62,6 +73,7 @@ fi
 if [ ${dotest} -eq 1 ]; then
     # Execute some tests?
     pushd tests
+    unset DISPLAY
     ./benchmarktest
     ./calendaringtest
     ./formattest
@@ -78,7 +90,10 @@ fi
 
 cd ..
 
-git archive --prefix=libkolab-0.3.1/ HEAD | gzip -c > libkolab-0.3.1.tar.gz
+rm -rf libkolab-${version}.tar.gz
+git archive --prefix=libkolab-${version}/ HEAD | gzip -c > libkolab-${version}.tar.gz
 
-cp libkolab-0.3.1.tar.gz `rpm --eval='%{_sourcedir}'`
+rm -rf `rpm --eval='%{_sourcedir}'`/libkolab-${version}.tar.gz
+cp libkolab-${version}.tar.gz `rpm --eval='%{_sourcedir}'`
+
 

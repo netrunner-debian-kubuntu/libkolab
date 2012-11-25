@@ -58,6 +58,9 @@ Content-Disposition: attachment; filename="kolab.xml"
             <text>Business</text>
             <text>Education</text>
           </categories>
+          <related-to>
+            <text>f064e7de-b197-466c-a10e-bdf8e83ab08c</text>
+          </related-to>
           <dtstart>
             <parameters>
               <tzid>

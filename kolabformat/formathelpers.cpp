@@ -55,6 +55,16 @@ FolderType folderTypeFromString(const std::string& folderTypeName)
         folderTypeName == KOLAB_FOLDER_TYPE_NOTE KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ) {
         return NoteType;
     }
+    
+    if ( folderTypeName == KOLAB_FOLDER_TYPE_CONFIGURATION ||
+        folderTypeName == KOLAB_FOLDER_TYPE_CONFIGURATION KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ) {
+        return ConfigurationType;
+    }
+    
+    if ( folderTypeName == KOLAB_FOLDER_TYPE_FREEBUSY ||
+        folderTypeName == KOLAB_FOLDER_TYPE_FREEBUSY KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ) {
+        return FreebusyType;
+    }
 
     return MailType;
 }

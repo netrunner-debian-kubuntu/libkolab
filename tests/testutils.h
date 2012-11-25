@@ -69,7 +69,7 @@ void showDiff(const QString &expected, const QString &converted)
 //     qDebug() << "CONVERTED: " << converted;
 }
 
-static KMime::Message::Ptr readMimeFile( const QString &fileName, bool &ok)
+KMime::Message::Ptr readMimeFile( const QString &fileName, bool &ok)
 {
     //   qDebug() << fileName;
     QFile file( fileName );
@@ -88,7 +88,7 @@ static KMime::Message::Ptr readMimeFile( const QString &fileName, bool &ok)
 }
 
 //Normalize incidences for comparison
-static void normalizeIncidence( KCalCore::Incidence::Ptr incidence)
+void normalizeIncidence( KCalCore::Incidence::Ptr incidence)
 {   
     //The UID is not persistent (it's just the internal pointer), therefore we clear it
     //TODO make sure that the UID does really not need to be persistent

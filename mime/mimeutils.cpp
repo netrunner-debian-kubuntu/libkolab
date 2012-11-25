@@ -48,7 +48,7 @@ KMime::Content* findContentByName(const KMime::Message::Ptr &data, const QString
 {
     Q_ASSERT(!data->contents().isEmpty());
     Q_FOREACH(KMime::Content *c, data->contents()) {
-//         kDebug() << "searching: " << c->contentType()->name();
+//         qDebug() << "searching: " << c->contentType()->name().toUtf8();
         if ( c->contentType()->name() == name ) {
             type = c->contentType()->mimeType();
             return c;
@@ -248,7 +248,7 @@ KMime::Content* createAttachmentPart(const QByteArray& cid, const QString& mimeT
         content->contentID()->setIdentifier( cid );
     }
     content->contentType()->setMimeType( mimeType.toLatin1() );
-    content->contentType()->setName( fileName, "us-ascii" );
+    content->contentType()->setName( fileName, "utf-8" );
     content->contentTransferEncoding()->setEncoding( KMime::Headers::CEbase64 );
     content->contentDisposition()->setDisposition( KMime::Headers::CDattachment );
     content->contentDisposition()->setFilename( fileName );
@@ -264,7 +264,7 @@ void getAttachments(KCalCore::Incidence::Ptr incidence, const QStringList &attac
         QByteArray type;
         KMime::Content *content = findContentByName(mimeData, name, type);
         if (!content) { // guard against malformed events with non-existent attachments
-            Warning() << "could not find attachment: "<< name << type;
+            Warning() << "could not find attachment: "<< name.toUtf8() << type;
             continue;
         }
         const QByteArray c = content->decodedContent().toBase64();

@@ -144,7 +144,7 @@ QByteArray mailAttendees( const KCalCore::IncidenceBase::Ptr &incidence,
   KCalCore::Attendee::List attendees = incidence->attendees();
   if ( attendees.isEmpty() ) {
     kWarning() << "There are no attendees to e-mail";
-    return false;
+    return QByteArray();
   }
 
   const QString from = incidence->organizer()->fullName();
@@ -187,7 +187,7 @@ QByteArray mailAttendees( const KCalCore::IncidenceBase::Ptr &incidence,
   if( toList.isEmpty() && ccList.isEmpty() ) {
     // Not really to be called a groupware meeting, eh
     kWarning() << "There are really no attendees to e-mail";
-    return false;
+    return QByteArray();
   }
   QString to;
   if ( !toList.isEmpty() ) {

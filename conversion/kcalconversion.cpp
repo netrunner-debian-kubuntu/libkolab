@@ -802,6 +802,12 @@ KCalCore::Todo::Ptr toKCalCore ( const Todo &todo )
     if (todo.due().isValid()) {
         e->setDtDue(toDate(todo.due()));
     }
+    if (!todo.relatedTo().empty()) {
+        e->setRelatedTo(Conversion::fromStdString(todo.relatedTo().front()), KCalCore::Incidence::RelTypeParent);
+        if (todo.relatedTo().size() > 1) {
+            Error() << "only one relation support but got multiple";
+        }
+    }
     e->setPercentComplete(todo.percentComplete());
     return e;
 }
@@ -813,6 +819,12 @@ Todo fromKCalCore ( const KCalCore::Todo &todo )
     getTodoEvent(t, todo);
     t.setDue(fromDate(todo.dtDue(true)));
     t.setPercentComplete(todo.percentComplete());
+    const QString relatedTo = todo.relatedTo(KCalCore::Incidence::RelTypeParent);
+    if (!relatedTo.isEmpty()) {
+        std::vector<std::string> relateds;
+        relateds.push_back(Conversion::toStdString(relatedTo));
+        t.setRelatedTo(relateds);
+    }
     return t;
 }
 

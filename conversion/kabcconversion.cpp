@@ -423,7 +423,7 @@ KABC::Addressee toKABC(const Kolab::Contact &contact)
   
   if (!contact.emailAddresses().empty()) {
       addressee.setEmails(toStringList(contact.emailAddresses()));
-      if ((contact.emailAddressPreferredIndex() >= 0) && (contact.emailAddressPreferredIndex() < contact.emailAddresses().size())) {
+      if ((contact.emailAddressPreferredIndex() >= 0) && (contact.emailAddressPreferredIndex() < static_cast<int>(contact.emailAddresses().size()))) {
           preferredEmail = fromStdString(contact.emailAddresses().at(contact.emailAddressPreferredIndex()));
       } else {
           preferredEmail = fromStdString(contact.emailAddresses().at(0));
@@ -811,11 +811,11 @@ DistList fromKABC(const KABC::ContactGroup &cg)
     dl.setUid(toStdString(cg.id()));
     
     std::vector <Kolab::ContactReference > members;
-    for (int i = 0; i < cg.dataCount(); i++) {
+    for (unsigned int i = 0; i < cg.dataCount(); i++) {
         const KABC::ContactGroup::Data &data = cg.data(i);
         members.push_back(Kolab::ContactReference(Kolab::ContactReference::EmailReference, toStdString(data.email()), toStdString(data.name())));
     }
-    for (int i = 0; i < cg.contactReferenceCount(); i++) {
+    for (unsigned int i = 0; i < cg.contactReferenceCount(); i++) {
         const KABC::ContactGroup::ContactReference &ref = cg.contactReference(i);
         members.push_back(Kolab::ContactReference(Kolab::ContactReference::UidReference, toStdString(ref.uid())));
     }

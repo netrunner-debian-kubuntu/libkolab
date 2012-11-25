@@ -41,20 +41,20 @@
 namespace Kolab {
 
 
-static QString eventKolabType() { return QString::fromLatin1(KOLAB_TYPE_EVENT); };
-static QString todoKolabType() { return QString::fromLatin1(KOLAB_TYPE_TASK); };
-static QString journalKolabType() { return QString::fromLatin1(KOLAB_TYPE_JOURNAL); };
-static QString contactKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONTACT); };
-static QString distlistKolabType() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST); }
-static QString distlistKolabTypeCompat() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST_COMPAT); }
-static QString noteKolabType() { return QString::fromLatin1(KOLAB_TYPE_NOTE); }
-static QString configurationKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONFIGURATION); }
-static QString dictKolabType() { return QString::fromLatin1(KOLAB_TYPE_DICT); }
-static QString freebusyKolabType() { return QString::fromLatin1(KOLAB_TYPE_FREEBUSY); }
+static inline QString eventKolabType() { return QString::fromLatin1(KOLAB_TYPE_EVENT); };
+static inline QString todoKolabType() { return QString::fromLatin1(KOLAB_TYPE_TASK); };
+static inline QString journalKolabType() { return QString::fromLatin1(KOLAB_TYPE_JOURNAL); };
+static inline QString contactKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONTACT); };
+static inline QString distlistKolabType() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST); }
+static inline QString distlistKolabTypeCompat() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST_COMPAT); }
+static inline QString noteKolabType() { return QString::fromLatin1(KOLAB_TYPE_NOTE); }
+static inline QString configurationKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONFIGURATION); }
+static inline QString dictKolabType() { return QString::fromLatin1(KOLAB_TYPE_DICT); }
+static inline QString freebusyKolabType() { return QString::fromLatin1(KOLAB_TYPE_FREEBUSY); }
 
-static QString xCalMimeType() { return QString::fromLatin1(MIME_TYPE_XCAL); };
-static QString xCardMimeType() { return QString::fromLatin1(MIME_TYPE_XCARD); };
-static QString kolabMimeType() { return QString::fromLatin1(MIME_TYPE_KOLAB); };
+static inline QString xCalMimeType() { return QString::fromLatin1(MIME_TYPE_XCAL); };
+static inline QString xCardMimeType() { return QString::fromLatin1(MIME_TYPE_XCARD); };
+static inline QString kolabMimeType() { return QString::fromLatin1(MIME_TYPE_KOLAB); };
 
 KCalCore::Event::Ptr readV2EventXML(const QByteArray& xmlData, QStringList& attachments)
 {
@@ -249,7 +249,7 @@ ObjectType KolabObjectReader::Private::readKolabV2(const KMime::Message::Ptr &ms
             mContactGroup = contactGroupFromKolab(xmlData);
             break;
         case NoteObject:
-            mNote = noteFromKolab(xmlData, msg);
+            mNote = noteFromKolab(xmlData, msg->date()->dateTime());
             break;
         default:
             CRITICAL("no kolab object found ");
