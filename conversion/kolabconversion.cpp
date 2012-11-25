@@ -52,7 +52,8 @@ Note fromNote(const KMime::Message::Ptr &m)
     }
     
     std::vector<Kolab::CustomProperty> customs;
-    for (QMap <QString, QString >::const_iterator it = note.custom().begin(); it != note.custom().end(); it ++) {
+    QMap<QString, QString> &customsMap = note.custom();
+    for (QMap <QString, QString >::const_iterator it = customsMap.constBegin(); it != customsMap.constEnd(); it ++) {
         customs.push_back(Kolab::CustomProperty(toStdString(it.key()), toStdString(it.value())));
     }
     n.setCustomProperties(customs);

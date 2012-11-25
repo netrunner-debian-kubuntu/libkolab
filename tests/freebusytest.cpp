@@ -123,7 +123,7 @@ void FreebusyTest::testFB()
     Kolab::Freebusy fb = Kolab::FreebusyUtils::generateFreeBusy(events, start, end);
         
     QCOMPARE((int)fb.periods().size(), (int)output.size());
-    for (int i = 0; i<output.size(); i++) {
+    for (std::size_t i = 0; i<output.size(); i++) {
         std::cout << i;
         QCOMPARE(fb.periods().at(i), output.at(i));
     }

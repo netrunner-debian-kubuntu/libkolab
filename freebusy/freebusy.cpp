@@ -127,6 +127,11 @@
 namespace Kolab {
     namespace FreebusyUtils {
 
+static QString createUuid()
+{
+    const QString uuid = QUuid::createUuid().toString();
+    return uuid.mid(1, uuid.size()-2);
+}
 
 Kolab::Period addLocalPeriod(  const KDateTime &eventStart, const KDateTime &eventEnd, const KDateTime &mDtStart, const KDateTime &mDtEnd)
 {
@@ -238,7 +243,7 @@ Freebusy generateFreeBusy(const QList<KCalCore::Event::Ptr>& events, const KDate
     freebusy.setStart(Kolab::Conversion::fromDate(start));
     freebusy.setEnd(Kolab::Conversion::fromDate(end));
     freebusy.setPeriods(freebusyPeriods);
-    freebusy.setUid(QUuid::createUuid().toString().toStdString());
+    freebusy.setUid(createUuid().toStdString());
     freebusy.setTimestamp(Kolab::Conversion::fromDate(KDateTime::currentUtcDateTime()));
     if (organizer) {
         freebusy.setOrganizer(ContactReference(Kolab::ContactReference::EmailReference, Kolab::Conversion::toStdString(organizer->email()), Kolab::Conversion::toStdString(organizer->name())));
@@ -280,7 +285,7 @@ Freebusy aggregateFreeBusy(const std::vector< Freebusy >& fbList, const std::str
     aggregateFB.setStart(Kolab::Conversion::fromDate(start));
     aggregateFB.setEnd(Kolab::Conversion::fromDate(end));
     aggregateFB.setPeriods(periods);
-    aggregateFB.setUid(QUuid::createUuid().toString().toStdString());
+    aggregateFB.setUid(createUuid().toStdString());
     aggregateFB.setTimestamp(Kolab::Conversion::fromDate(KDateTime::currentUtcDateTime()));
     aggregateFB.setOrganizer(ContactReference(Kolab::ContactReference::EmailReference, organizerEmail, organizerName));
     return aggregateFB;

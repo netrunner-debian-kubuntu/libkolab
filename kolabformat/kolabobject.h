@@ -28,26 +28,12 @@
 #include <kcalcore/todo.h>
 #include <kmime/kmime_message.h>
 
+#include "kolabdefinitions.h"
+
 namespace Kolab {
 
 class Freebusy;
 
-enum Version {
-    KolabV2,
-    KolabV3
-};
-
-enum ObjectType {
-    InvalidObject,
-    EventObject,
-    TodoObject,
-    JournalObject,
-    ContactObject,
-    DistlistObject,
-    NoteObject,
-    DictionaryConfigurationObject,
-    FreebusyObject
-};
 
 KOLAB_EXPORT KCalCore::Event::Ptr readV2EventXML(const QByteArray &xmlData, QStringList &attachments);
 

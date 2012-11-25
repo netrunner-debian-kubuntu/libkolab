@@ -106,6 +106,11 @@ public:
      */
     Kolab::cDateTime getOccurenceEndDate(const Kolab::cDateTime &start);
 
+    /**
+     * Returns the last occurrence, or and invalid cDateTime if the event is not recurring or recurring idenfinitely.
+     */
+    Kolab::cDateTime getLastOccurrence() const;
+
 private:
     Kolab::Attendee *getAttendee(const ContactReference &);
     Kolab::ITipHandler mITipHandler;

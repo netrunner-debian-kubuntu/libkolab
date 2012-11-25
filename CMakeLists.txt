@@ -31,11 +31,11 @@ endif()
 # 0.1.1 (patch release for 0.1.0)
 # 0.2 (0.2 development version towards 0.2.0)
 set(Libkolab_VERSION_MAJOR 0)
-set(Libkolab_VERSION_MINOR 3)
+set(Libkolab_VERSION_MINOR 4)
 # Enable the full x.y.z version only for release versions
-set(Libkolab_VERSION_PATCH 1)
-set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR}.${Libkolab_VERSION_PATCH} )
-# set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR} )
+#set(Libkolab_VERSION_PATCH 1)
+#set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR}.${Libkolab_VERSION_PATCH} )
+set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR} )
 set(Libkolab_VERSION_STRING ${CMAKE_PROJECT_NAME}-${Libkolab_VERSION})
 
 # set up install directories.
@@ -119,8 +119,10 @@ QT4_WRAP_CPP(CALENDARING_MOC calendaring/event.h)
 
 set(KOLAB_SRCS
     kolabformat/kolabobject.cpp
+    kolabformat/xmlobject.cpp
     kolabformat/formathelpers.cpp
     kolabformat/errorhandler.cpp
+    kolabformat/v2helpers.cpp
     mime/mimeutils.cpp
     ${CONVERSION_SRCS}
     ${kolabformatv2_SRCS}
@@ -188,4 +190,5 @@ endif(PYTHON_BINDINGS)
 
 if(PHP_BINDINGS)
     generatePHPBindings(kolabshared shared.i)
+    add_subdirectory(kolabformat/php)
 endif(PHP_BINDINGS)

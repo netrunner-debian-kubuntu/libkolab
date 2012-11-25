@@ -412,11 +412,15 @@ void KCalConversionTest::testTodoConversion_data()
         kcal.setUid("uid");
         kcal.setDtStart(toDate(date));
         kcal.setDtDue(toDate(date2));
+        kcal.setRelatedTo("uid2", KCalCore::Incidence::RelTypeParent);
         
         Kolab::Todo kolab;
         kolab.setUid("uid");
         kolab.setStart(date);
         kolab.setDue(date2);
+        std::vector<std::string> relateds;
+        relateds.push_back("uid2");
+        kolab.setRelatedTo(relateds);
 
         QTest::newRow( "todo" ) << kcal << kolab;
     }
@@ -433,11 +437,13 @@ void KCalConversionTest::testTodoConversion()
     QCOMPARE(e->uid(), kcal.uid());
     QCOMPARE(e->dtStart(), kcal.dtStart());
     QCOMPARE(e->dtDue(), kcal.dtDue());
+    QCOMPARE(e->relatedTo(KCalCore::Incidence::RelTypeParent), kcal.relatedTo(KCalCore::Incidence::RelTypeParent));
    
     const Kolab::Todo &b = fromKCalCore(kcal);
     QCOMPARE(b.uid(), kolab.uid());
     QCOMPARE(b.start(), kolab.start());
     QCOMPARE(b.due(), kolab.due());
+    QCOMPARE(b.relatedTo(), kolab.relatedTo());
 }
 
 void KCalConversionTest::testJournalConversion_data()

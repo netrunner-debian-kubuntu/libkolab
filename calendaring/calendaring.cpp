@@ -44,17 +44,17 @@ bool conflicts(const Kolab::Event &e1, const Kolab::Event &e2)
 std::vector< std::vector< Event > > getConflictingSets(const std::vector< Event > &events, const std::vector< Event > &events2)
 {
     std::vector< std::vector< Kolab::Event > > ret;
-    for(int i = 0; i < events.size(); i++) {
+    for(std::size_t i = 0; i < events.size(); i++) {
         std::vector<Kolab::Event> set;
         const Kolab::Event &event = events.at(i);
         set.push_back(event);
-        for(int q = i+1; q < events.size(); q++) {
+        for(std::size_t q = i+1; q < events.size(); q++) {
             const Kolab::Event &e2 = events.at(q);
             if (conflicts(event, e2)) {
                 set.push_back(e2);
             }
         }
-        for(int m = 0; m < events2.size(); m++) {
+        for(std::size_t m = 0; m < events2.size(); m++) {
             const Kolab::Event &e2 = events2.at(m);
             if (conflicts(event, e2)) {
                 set.push_back(e2);

@@ -100,6 +100,7 @@ void FormatTest::testIncidence_data()
     QTest::newRow( "v2eventComplex" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/complex.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/complex.ics.mime");
     QTest::newRow( "v2eventAttachment" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/attachment.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/attachment.ics.mime");
     QTest::newRow( "v2eventAllday" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/allday.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/allday.ics.mime");
+    QTest::newRow( "v2eventUtf8Attachment" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/attachmentUtf8.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/attachmentUtf8.ics.mime");
     //The following test just fails because we have a nicer mime message output than horde
 //     QTest::newRow( "v2eventHorde" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/horde.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/horde.ics.mime");
     QTest::newRow( "v2todoSimple" ) << Kolab::KolabV2 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v2/task/simple.ics") << TESTFILEDIR+QString::fromLatin1("v2/task/simple.ics.mime");
@@ -115,6 +116,8 @@ void FormatTest::testIncidence_data()
     QTest::newRow( "v3todoComplex" ) << Kolab::KolabV3 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v3/task/complex.ics") << TESTFILEDIR+QString::fromLatin1("v3/task/complex.ics.mime");
     QTest::newRow( "v3journalSimple" ) << Kolab::KolabV3 << Kolab::JournalObject << TESTFILEDIR+QString::fromLatin1("v3/journal/simple.ics") << TESTFILEDIR+QString::fromLatin1("v3/journal/simple.ics.mime");
     QTest::newRow( "v3journalComplex" ) << Kolab::KolabV3 << Kolab::JournalObject << TESTFILEDIR+QString::fromLatin1("v3/journal/complex.ics") << TESTFILEDIR+QString::fromLatin1("v3/journal/complex.ics.mime");
+    QTest::newRow( "v3utf8quotedPrintable" ) << Kolab::KolabV3 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v3/event/utf8.ics") << TESTFILEDIR+QString::fromLatin1("v3/event/utf8quotedPrintable.ics.mime");
+    QTest::newRow( "v3utf8base64" ) << Kolab::KolabV3 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v3/event/utf8.ics") << TESTFILEDIR+QString::fromLatin1("v3/event/utf8base64.ics.mime");
 }
 
 

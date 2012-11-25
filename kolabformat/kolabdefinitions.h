@@ -30,6 +30,12 @@ namespace Kolab {
 #define KOLAB_FOLDER_TYPE_FREEBUSY      "freebusy"
 
 #define KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ".default"
+#define KOLAB_FOLDER_TYPE_DRAFT_SUFFIX ".drafts"
+#define KOLAB_FOLDER_TYPE_SENT_SUFFIX ".sentitems"
+#define KOLAB_FOLDER_TYPE_OUTBOX_SUFFIX ".outbox"
+#define KOLAB_FOLDER_TYPE_TRASH_SUFFIX ".wastebasket"
+#define KOLAB_FOLDER_TYPE_JUNK_SUFFIX ".junkemail"
+#define KOLAB_FOLDER_TYPE_INBOX_SUFFIX ".inbox"
 
 #define KOLAB_FOLDER_TYPE_ANNOTATION "/vendor/kolab/folder-type"
 
@@ -54,6 +60,23 @@ namespace Kolab {
 #define KOLAB_TYPE_CONFIGURATION    "application/x-vnd.kolab.configuration"
 #define KOLAB_TYPE_DICT    "application/x-vnd.kolab.configuration.dictionary"
 #define KOLAB_TYPE_FREEBUSY    "application/x-vnd.kolab.freebusy"
+
+enum Version {
+    KolabV2,
+    KolabV3
+};
+
+enum ObjectType {
+    InvalidObject,
+    EventObject,
+    TodoObject,
+    JournalObject,
+    ContactObject,
+    DistlistObject,
+    NoteObject,
+    DictionaryConfigurationObject,
+    FreebusyObject
+};
 
 }
 
