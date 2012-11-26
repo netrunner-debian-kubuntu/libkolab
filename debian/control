@@ -32,7 +32,8 @@ Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
 	libkolabxml0,
 	libcalendaring0,
-    ucf,
+	php-kolabformat,
+	ucf,
 	${php:Depends},
 	${misc:Depends},
 	${shlibs:Depends}
