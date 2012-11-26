@@ -9,7 +9,7 @@ inidir=/etc/php5/mods-available
 module=kolab
 package=php-${module}
 inifile=${module}.ini
-priority=30
+priority=31
 
 if [ "$1" = "configure" ]; then
 
@@ -18,7 +18,7 @@ if [ "$1" = "configure" ]; then
 	ucfr --force ${package} ${inidir}/${inifile}
 
 	# Move pre-extension manager conffile
-	dpkg-maintscript-helper mv_conffile /etc/php5/conf.d/${inifile} ${inidir}/${inifile} 0.3.0~ -- "$@";
+	dpkg-maintscript-helper mv_conffile /etc/php5/conf.d/${inifile} ${inidir}/${inifile} 0.4.0~ -- "$@";
 
 	if [ -f "${inidir}/${inifile}.dpkg-new" ]; then
 	    md5sum="$(md5sum ${inidir}/${inifile}.dpkg-new | sed -e 's/ .*//')"
@@ -29,7 +29,7 @@ if [ "$1" = "configure" ]; then
 	fi
 
 	# Enable the module
-	php5enmod ${module}/${priority:-20}
+	php5enmod ${module}/${priority:-21}
 fi
 
 exit 0
