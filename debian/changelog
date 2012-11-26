@@ -1,3 +1,13 @@
+libkolab (0.4.0-2) unstable; urgency=low
+
+  [ Jeroen van Meeuwen (Kolab Systems) ]
+  * Correct loading of libkolab PHP bindings modules
+  * Pull in php-kolabformat just to make sure kolabformat.so is loaded
+
+  [ Jeroen van Meeuwen ]
+
+ -- Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>  Mon, 26 Nov 2012 15:36:55 +0100
+
 libkolab (0.4.0-1) unstable; urgency=low
 
   [ Jeroen van Meeuwen (Kolab Systems) ]
