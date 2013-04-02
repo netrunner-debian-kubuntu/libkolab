@@ -2,6 +2,7 @@ Source: libkolab
 Section: libs
 Priority: optional
 Maintainer: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
+Uploaders: Paul Klos <kolab@klos2day.nl>
 Build-Depends: cmake,
 	debhelper (>= 9),
 	pkg-kde-tools,
