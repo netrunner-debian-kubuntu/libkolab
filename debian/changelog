@@ -1,3 +1,9 @@
+libkolab (0.4.0-3) unstable; urgency=low
+
+  * Prepare for transition into Debian proper
+
+ -- Paul Klos <kolab@klos2day.nl>  Wed, 03 Apr 2013 00:04:34 +0200
+
 libkolab (0.4.0-2) unstable; urgency=low
 
   [ Jeroen van Meeuwen (Kolab Systems) ]
