@@ -1,3 +1,5 @@
+Correction for PHP search paths.
+
 diff --git a/cmake/modules/SWIGUtils.cmake b/cmake/modules/SWIGUtils.cmake
 index 05c1bb3..830c84f 100644
 --- a/cmake/modules/SWIGUtils.cmake
