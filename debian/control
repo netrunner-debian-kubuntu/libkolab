@@ -3,7 +3,9 @@ Section: libs
 Priority: optional
 Maintainer: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
 Uploaders: Paul Klos <kolab@klos2day.nl>
-Build-Depends: cmake,
+Build-Depends:
+        cmake,
+        libqt4-dev,
 	debhelper (>= 9),
 	libkolabxml-dev,
 	libboost-dev,
