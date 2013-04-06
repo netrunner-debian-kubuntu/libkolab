@@ -58,7 +58,7 @@ Section: libdevel
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
          ${misc:Depends}
-Description: Maps KDE containers to Kolab formats
+Description: Development package for Kolab library
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
  .
