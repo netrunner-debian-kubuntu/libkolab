@@ -5,17 +5,14 @@ Maintainer: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
 Uploaders: Paul Klos <kolab@klos2day.nl>
 Build-Depends: cmake,
 	debhelper (>= 9),
-	pkg-kde-tools,
-	kdelibs5-dev,
-	kdepimlibs5-dev,
 	libkolabxml-dev,
-	libboost1.49-dev,
+	libboost-dev,
 	libxerces-c-dev,
-	libboost-thread1.49-dev,
-	libboost-system1.49-dev,
+	libboost-thread-dev,
+	libboost-system-dev,
 	libcalendaring-dev,
 	libcurl4-gnutls-dev,
-	swig2.0,
+	swig,
 	php5-dev,
 	python-dev
 Standards-Version: 3.9.3
