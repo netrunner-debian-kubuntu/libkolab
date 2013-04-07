@@ -4,6 +4,11 @@ PHPAPI := $(shell php-config --phpapi)
 PYTHON_SITELIB := $(shell python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()')
 PYTHON_SITEARCH := $(shell python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib(1)')
 
+export DH_VERBOSE=1
+export DH_OPTIONS=-v
+
+export DEB_LDFLAGS_MAINT_APPEND="-Wl,--as-needed"
+
 %:
 	dh $@ --parallel
 
