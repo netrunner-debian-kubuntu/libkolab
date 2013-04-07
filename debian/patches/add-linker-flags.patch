@@ -1,0 +1,11 @@
+--- a/cmake/modules/SWIGUtils.cmake
++++ b/cmake/modules/SWIGUtils.cmake
+@@ -16,7 +16,7 @@
+ 
+     #Compile PHP Bindings
+     # Since there is no php library we can't compile with -Wl,--no-undefined
+-    set(CMAKE_SHARED_LINKER_FLAGS "")
++    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-z,relro,--as-needed")
+ 
+     if (APPLE)
+         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flat_namespace -undefined suppress" )
