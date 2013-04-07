@@ -1,3 +1,9 @@
+Add SWIG linker flags:
+- -z,relro to solve Lintian warning hardening-no-relro
+- --as-needed because of dpkg-shlibdeps warnings
+
+Maybe these options should be set upstream
+
 --- a/cmake/modules/SWIGUtils.cmake
 +++ b/cmake/modules/SWIGUtils.cmake
 @@ -16,7 +16,7 @@
