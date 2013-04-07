@@ -23,9 +23,9 @@ override_dh_auto_configure:
 		-DPYTHON_BINDINGS=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
-binary-arch:
+override_dh_gencontrol:
 	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab.substvars
-	dh binary-arch
+	dh_gencontrol
 
 override_dh_install:
 	mkdir -p debian/tmp/usr/share/php
