@@ -5,3 +5,5 @@
 # Neither memmove nor memcpy occur in the source code,
 # so overriding this warning
 libkolab0 binary: hardening-no-fortify-functions
+# Using shlibs for now
+libkolab0 binary: no-symbols-control-file
