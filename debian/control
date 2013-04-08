@@ -29,6 +29,14 @@ Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Maps KDE containers to Kolab formats
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
+ .
+ The libkolab package provides:
+ - kolabformatv2: Kolabformat v2 implementation from kdepim-runtime (moved here)
+ - kolabformat: Kolab object reading/writing (mime message + kolab-format). Handles v2/v3 transparently.
+ - conversion: Conversions from KDE to Kolab containers and vice verca.
+ - mime: Mime message handling used by kolabformat
+ - icalendar: Exposes iCalendar functionality: iCal reading/writing, iTip, iMip
+ - calendaring: Some general calendaring functions
 
 Package: php-kolab
 Architecture: any
@@ -41,7 +49,10 @@ Depends: libkolab0 (= ${binary:Version}),
 	${misc:Depends},
 	${shlibs:Depends}
 Description: PHP bindings for Kolab Library
- This package provides PHP kolabicalendar and kolabcalendaring modules
+ This package provides the Kolab PHP modules icalendar and calendaring modules.
+ .
+ The calendaring module provides some general calendaring functions
+ The icalendar module exposes iCalendar functionality: iCal reading/writing, iTip, iMip
 
 Package: python-kolab
 Architecture: any
@@ -53,7 +64,11 @@ Depends: libkolab0 (= ${binary:Version}),
 	${misc:Depends},
 	${shlibs:Depends}
 Description: Python bindings for Kolab Library
- This package provides Python kolabicalendar and kolabcalendaring modules
+ This package provides the Kolab Python modules icalendar and calendaring modules.
+ .
+ The calendaring module provides some general calendaring functions
+ The icalendar module exposes iCalendar functionality: iCal reading/writing, iTip, iMip
+ 
 
 Package: libkolab-dev
 Section: libdevel
@@ -64,4 +79,5 @@ Description: Development package for Kolab library
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
  .
- This package contains the development files for the library.
+ This package contains the development files for the library,
+ including headers and Libkolab cmake files.
