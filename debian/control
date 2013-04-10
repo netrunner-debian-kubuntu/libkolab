@@ -41,8 +41,6 @@ Description: Maps KDE containers to Kolab formats
 Package: php-kolab
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
-	libkolabxml0,
-	libcalendaring0,
 	php-kolabformat,
 	ucf,
 	${php:Depends},
@@ -59,8 +57,6 @@ Package: python-kolab
 Architecture: any
 Section: python
 Depends: libkolab0 (= ${binary:Version}),
-	libkolabxml0,
-	libcalendaring0,
 	python,
 	${misc:Depends},
 	${shlibs:Depends}
