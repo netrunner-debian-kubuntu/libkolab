@@ -1,8 +1,8 @@
 Source: libkolab
 Section: libs
 Priority: optional
-Maintainer: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
-Uploaders: Paul Klos <kolab@klos2day.nl>
+Maintainer: Debian Kolab Maintainers <pkg-kolab-devel@lists.alioth.debian.org>
+Uploaders: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>, Paul Klos <kolab@klos2day.nl>
 Build-Depends:
         cmake,
         libqt4-dev,
