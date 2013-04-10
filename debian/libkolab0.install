@@ -1,1 +1,2 @@
-usr/lib/*.so.*
+usr/lib/libkolab.0
+usr/lib/libkolab.0.*
