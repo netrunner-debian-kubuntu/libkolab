@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 
 PHPAPI := $(shell php-config --phpapi)
-PYTHON_SITELIB := $(shell python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()')
 PYTHON_SITEARCH := $(shell python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib(1)')
 
 export DH_VERBOSE=1
@@ -14,7 +13,6 @@ export DEB_LDFLAGS_MAINT_APPEND="-Wl,--as-needed"
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
-		-DSWIG=/usr/bin/swig2.0 \
 		-DUSE_LIBCALENDARING=ON \
 		-DPHP_BINDINGS=ON \
 		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
