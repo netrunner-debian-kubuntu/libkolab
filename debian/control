@@ -16,9 +16,7 @@ Build-Depends:
 	libcurl4-gnutls-dev,
 	swig,
 	php5-dev,
-	python,
-        python2.7,
-        python2.7-dev
+        python-dev (>= 2.7)
 X-Python-Version: >= 2.7
 Standards-Version: 3.9.3
 Homepage: http://git.kolab.org/libkolab
