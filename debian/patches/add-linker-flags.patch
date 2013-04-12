@@ -1,8 +1,10 @@
-Add SWIG linker flags:
-- -z,relro to solve Lintian warning hardening-no-relro
-- --as-needed because of dpkg-shlibdeps warnings
-
-Maybe these options should be set upstream
+Description: Add relro linker flag to SWIG
+ * Lintian throws a hardening-no-relro warning, somehow
+   the standard dpkg linker flags are not passed to
+   the cmake build.
+ * Also add as-needed flag because of dpkg-shlibdeps warnings.
+Author: Paul Klos <kolab@klos2day.nl>
+Last-Update: 2013-04-11
 
 --- a/cmake/modules/SWIGUtils.cmake
 +++ b/cmake/modules/SWIGUtils.cmake

@@ -1,4 +1,6 @@
-Correction for PHP search paths.
+Description: Correction for PHP search paths.
+Author: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
+Last-Update: 2012-09-08
 
 diff --git a/cmake/modules/SWIGUtils.cmake b/cmake/modules/SWIGUtils.cmake
 index 05c1bb3..830c84f 100644
