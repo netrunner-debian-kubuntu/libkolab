@@ -12,7 +12,7 @@ export DEB_LDFLAGS_MAINT_APPEND="-Wl,--as-needed"
 	dh $@ --parallel --with python2
 
 override_dh_auto_configure:
-	dh_auto_configure -- \
+	dh_auto_configure -B build/server -- \
 		-DUSE_LIBCALENDARING=ON \
 		-DPHP_BINDINGS=ON \
 		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
@@ -20,6 +20,27 @@ override_dh_auto_configure:
 		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
 		-DPYTHON_BINDINGS=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
+
+	dh_auto_configure -B build/client -- \
+		-DPHP_BINDINGS=ON \
+		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
+		-DPHP4_EXECUTABLE=/usr/bin/php5 \
+		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
+		-DPYTHON_BINDINGS=ON \
+		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
+
+override_dh_auto_build:
+	dh_auto_configure -D build/client
+	dh_auto_configure -D build/server
+
+override_dh_auto_install:
+	dh_auto_configure -D build/client --destdir debian/client
+	dh_auto_configure -D build/server --destdir debian/server
+
+override_dh_auto_clean:
+	rm -rf debian/client debian/server build
+	dh_auto_clean -B build/client
+	dh_auto_clean -B build/server
 
 override_dh_gencontrol:
 	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab.substvars
@@ -34,8 +55,5 @@ override_dh_install:
 	dh_install --fail-missing
 
 override_dh_auto_test:
-	dh_auto_test || :
-
-override_dh_auto_clean:
-	dh_auto_clean
-	rm -f debian/php-kolab.substvars
+	dh_auto_test -B build/client || :
+	dh_auto_test -B build/server || :
