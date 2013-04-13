@@ -1,3 +1,12 @@
+libkolab (0.4.2-1~1.gbp3e4640) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @3e46408250b10e60e33a3e242c03ab685a2b6d0a **
+
+  * Imported Upstream version 0.4.0
+  * Imported Upstream version 0.4.2
+
+ -- Paul Klos <kolab@klos2day.nl>  Sun, 14 Apr 2013 00:23:43 +0200
+
 libkolab (0.4.0-3) unstable; urgency=low
 
   * Prepare for transition into Debian proper
