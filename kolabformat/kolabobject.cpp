@@ -576,7 +576,7 @@ KMime::Message::Ptr KolabObjectWriter::writeDistlist(const KABC::ContactGroup &d
         const Kolab::DistList &dist = Kolab::Conversion::fromKABC(distlist);
         const std::string &v3String = Kolab::writeDistlist(dist, Conversion::toStdString(getProductId(productId)));
         ErrorHandler::handleLibkolabxmlErrors();
-        return  Mime::createMessage(Conversion::fromStdString(dist.uid()), xCardMimeType(), contactKolabType(), Conversion::fromStdString(v3String).toUtf8(), true, getProductId(productId));
+        return  Mime::createMessage(Conversion::fromStdString(dist.uid()), xCardMimeType(), distlistKolabType(), Conversion::fromStdString(v3String).toUtf8(), true, getProductId(productId));
     }
     KolabV2::DistributionList d(&distlist);
     return distListToKolabFormat(d, getProductId(productId));

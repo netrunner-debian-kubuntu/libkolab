@@ -258,6 +258,10 @@ KMime::Content* createAttachmentPart(const QByteArray& cid, const QString& mimeT
 
 void getAttachments(KCalCore::Incidence::Ptr incidence, const QStringList &attachments, const KMime::Message::Ptr &mimeData)
 {
+    if (!incidence) {
+        Error() << "Invalid incidence";
+        return;
+    }
 //     kDebug() << "getting " << attachments.size() << "attachments";
 //     kDebug() << mimeData->encodedContent();
     foreach (const QString &name, attachments) {
@@ -278,6 +282,10 @@ void getAttachments(KCalCore::Incidence::Ptr incidence, const QStringList &attac
 
 void getAttachmentsById(KCalCore::Incidence::Ptr incidence, const KMime::Message::Ptr &mimeData)
 {
+    if (!incidence) {
+        Error() << "Invalid incidence";
+        return;
+    }
 //     kDebug() << "getting " << attachments.size() << "attachments";
 //     kDebug() << mimeData->encodedContent();
 

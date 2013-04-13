@@ -7,6 +7,7 @@
 %include "std_vector.i"
 %import(module="kolabformat") <kolabevent.h>
 namespace std {
-    %template(vectorevent) vector<Kolab::Event>;
-    %template(vectorevent2) vector< vector<Kolab::Event> >;
+/* vectorevent moved to libkolabxml, vectorevent2 breaks the pythonbindings without vectorevent in here (compile error) */
+/*    %template(vectorevent) vector<Kolab::Event>; */
+/*    %template(vectorevent2) vector< vector<Kolab::Event> >; */
 };

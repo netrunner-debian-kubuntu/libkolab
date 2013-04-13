@@ -55,6 +55,9 @@ private slots:
     
     void testContact_data();
     void testContact();
+    
+    void testDistlist_data();
+    void testDistlist();
 
     void testNote_data();
     void testNote();

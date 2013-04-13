@@ -46,7 +46,10 @@ template <typename KCalPtr, typename Container>
 static KCalPtr fromXML(const QByteArray &xmlData, QStringList &attachments)
 {
     const QDomDocument xmlDoc = KolabV2::KolabBase::loadDocument( QString::fromUtf8(xmlData) ); //TODO extract function from V2 format
-    Q_ASSERT ( !xmlDoc.isNull() );
+    if ( xmlDoc.isNull() ) {
+        Critical() << "Failed to read the xml document";
+        return KCalPtr();
+    }
     const KCalPtr i = Container::fromXml( xmlDoc, QString() ); //For parsing we don't need the timezone, so we don't set one
     Q_ASSERT ( i );
     QDomNodeList nodes = xmlDoc.elementsByTagName("inline-attachment");
@@ -61,7 +64,7 @@ static inline IncidencePtr incidenceFromKolabImpl( const KMime::Message::Ptr &da
 {
     KMime::Content *xmlContent = Mime::findContentByType( data, mimetype );
     if ( !xmlContent ) {
-        Warning() << "couldn't find part";
+        Critical() << "couldn't find part";
         return IncidencePtr();
     }
     const QByteArray &xmlData = xmlContent->decodedContent();
