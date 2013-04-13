@@ -29,6 +29,7 @@
 
 #include <kcalcore/icalformat.h>
 #include <kabc/vcardconverter.h>
+#include <kabc/contactgrouptool.h>
 #include <akonadi/notes/noteutils.h>
 
 #include "testutils.h"
@@ -279,6 +280,72 @@ void FormatTest::testContact()
     QCOMPARE(Kolab::ErrorHandler::instance().error(), Kolab::ErrorHandler::Debug);
 }
 
+void FormatTest::testDistlist_data()
+{
+    QTest::addColumn<Kolab::Version>( "version" );
+    QTest::addColumn<Kolab::ObjectType>( "type" );
+    QTest::addColumn<QString>( "vcardFileName" );
+    QTest::addColumn<QString>( "mimeFileName" );
+    
+    QTest::newRow( "v3distlistSimple" ) << Kolab::KolabV3 << Kolab::DistlistObject << TESTFILEDIR+QString::fromLatin1("v3/contacts/distlist.vcf") << TESTFILEDIR+QString::fromLatin1("v3/contacts/distlist.vcf.mime");
+}
+
+void FormatTest::testDistlist()
+{
+    QFETCH( Kolab::Version, version );
+    QFETCH( Kolab::ObjectType, type );
+    QFETCH( QString, vcardFileName ); //To compare
+    QFETCH( QString, mimeFileName ); //For parsing
+    
+    //Parse mime message
+    bool ok = false;
+    const KMime::Message::Ptr &msg = readMimeFile( mimeFileName, ok );
+    QVERIFY(ok);
+    Kolab::KolabObjectReader reader;
+    Kolab::ObjectType t = reader.parseMimeMessage(msg);
+    QCOMPARE(t, type);
+    QCOMPARE(reader.getVersion(), version);
+    QCOMPARE(Kolab::ErrorHandler::instance().error(), Kolab::ErrorHandler::Debug);
+    
+    KABC::ContactGroup convertedAddressee = reader.getDistlist();
+    
+    //Parse vcard
+    QFile vcardFile( vcardFileName );
+    QVERIFY( vcardFile.open( QFile::ReadOnly ) );
+    KABC::VCardConverter converter;
+    QByteArray c = vcardFile.readAll();
+    QBuffer data(&c);
+    data.open(QIODevice::ReadOnly);
+    
+    KABC::ContactGroup realAddressee;
+    KABC::ContactGroupTool::convertFromXml( &data, realAddressee );
+
+    {
+        QBuffer expected;
+        expected.open(QIODevice::WriteOnly);
+        KABC::ContactGroupTool::convertToXml(realAddressee, &expected);
+        
+        QBuffer converted;
+        converted.open(QIODevice::WriteOnly);
+        KABC::ContactGroupTool::convertToXml(convertedAddressee, &converted);
+        
+        showDiff(expected.buffer(), converted.buffer());
+    }
+    QCOMPARE( realAddressee, convertedAddressee );
+
+    //Write
+    const KMime::Message::Ptr &convertedMime = Kolab::KolabObjectWriter::writeDistlist(realAddressee, version);
+    
+    if ( !compareMimeMessage( convertedMime, msg )) {
+        QString expected = msg->encodedContent();
+        normalizeMimemessage(expected);
+        QString converted = convertedMime->encodedContent();
+        normalizeMimemessage(converted);
+        showDiff(expected, converted);
+        QVERIFY( false );
+    }
+    QCOMPARE(Kolab::ErrorHandler::instance().error(), Kolab::ErrorHandler::Debug);
+}
 
 void FormatTest::testNote_data()
 {
@@ -376,6 +443,18 @@ void FormatTest::generateVCard()
 //     KABC::Addressee convertedAddressee = reader.getContact();
 //     KABC::VCardConverter converter;
 //     qDebug() << converter.createVCard(convertedAddressee);
+
+//     bool ok = false;
+//     const KMime::Message::Ptr &msg = readMimeFile( TESTFILEDIR+QString::fromLatin1("v3/contacts/distlist.vcf.mime"), ok );
+//     qDebug() << msg->encodedContent();
+//     Kolab::KolabObjectReader reader;
+//     Kolab::ObjectType t = reader.parseMimeMessage(msg);
+// 
+//     KABC::ContactGroup convertedAddressee = reader.getDistlist();
+//     QBuffer buf;
+//     buf.open(QIODevice::WriteOnly);
+//     KABC::ContactGroupTool::convertToXml(convertedAddressee, &buf);
+//     qDebug() << buf.buffer();
 }
 
 //Pseudo test to show that JPG is always lossy, even with quality set to 100

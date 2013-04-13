@@ -52,10 +52,14 @@ std::string XMLObject::writeEvent(const Event &event, Version version, const std
     mWrittenUID.clear();
     if (version == KolabV2) {
         const KCalCore::Event::Ptr i = Conversion::toKCalCore(event);
+        if (!i) {
+            Critical() << "invalid incidence";
+            return std::string();
+        }
         if (i->uid().isEmpty()) {
             i->setUid(createUuid());
         }
-        mWrittenUID = Conversion::toStdString(i->uid().toUtf8().constData());
+        mWrittenUID = Conversion::toStdString(i->uid());
         //The timezone is used for created and last modified dates
         const QString &xml = KolabV2::Event::eventToXML(i, QLatin1String("UTC"));
         return Conversion::toStdString(xml);
@@ -70,9 +74,13 @@ Event XMLObject::readEvent(const std::string& s, Version version)
     if (version == KolabV2) {
         QStringList attachments;
         const KCalCore::Event::Ptr event = Kolab::fromXML<KCalCore::Event::Ptr, KolabV2::Event>(QString::fromUtf8(s.c_str()).toUtf8(), attachments);
+        if (!event || Kolab::ErrorHandler::errorOccured()) {
+            Critical() << "failed to read xml";
+            return Event();
+        }
         mAttachments.clear();
         foreach (const QString &attachment, attachments) {
-            mAttachments.push_back(std::string(attachment.toUtf8().constData()));
+            mAttachments.push_back(Conversion::toStdString(attachment));
         }
         return Conversion::fromKCalCore(*event);
     }
@@ -84,10 +92,14 @@ std::string XMLObject::writeTodo(const Todo &event, Version version, const std::
     mWrittenUID.clear();
     if (version == KolabV2) {
         const KCalCore::Todo::Ptr i = Conversion::toKCalCore(event);
+        if (!i) {
+            Critical() << "invalid incidence";
+            return std::string();
+        }
         if (i->uid().isEmpty()) {
             i->setUid(createUuid());
         }
-        mWrittenUID = Conversion::toStdString(i->uid().toUtf8().constData());
+        mWrittenUID = Conversion::toStdString(i->uid());
         //The timezone is used for created and last modified dates
         const QString &xml = KolabV2::Task::taskToXML(i, QLatin1String("UTC"));
         return Conversion::toStdString(xml);
@@ -102,9 +114,13 @@ Todo XMLObject::readTodo(const std::string& s, Version version)
     if (version == KolabV2) {
         QStringList attachments;
         const KCalCore::Todo::Ptr event = Kolab::fromXML<KCalCore::Todo::Ptr, KolabV2::Task>(QString::fromUtf8(s.c_str()).toUtf8(), attachments);
+        if (!event || Kolab::ErrorHandler::errorOccured()) {
+            Error() << "failed to read xml";
+            return Todo();
+        }
         mAttachments.clear();
         foreach (const QString &attachment, attachments) {
-            mAttachments.push_back(std::string(attachment.toUtf8().constData()));
+            mAttachments.push_back(Conversion::toStdString(attachment));
         }
         return Conversion::fromKCalCore(*event);
     }
@@ -116,10 +132,14 @@ std::string XMLObject::writeJournal(const Journal &event, Version version, const
     mWrittenUID.clear();
     if (version == KolabV2) {
         const KCalCore::Journal::Ptr i = Conversion::toKCalCore(event);
+        if (!i) {
+            Critical() << "invalid journal";
+            return std::string();
+        }
         if (i->uid().isEmpty()) {
             i->setUid(createUuid());
         }
-        mWrittenUID = Conversion::toStdString(i->uid().toUtf8().constData());
+        mWrittenUID = Conversion::toStdString(i->uid());
         //The timezone is used for created and last modified dates
         const QString &xml = KolabV2::Journal::journalToXML(i, QLatin1String("UTC"));
         return Conversion::toStdString(xml);
@@ -134,9 +154,13 @@ Journal XMLObject::readJournal(const std::string& s, Version version)
     if (version == KolabV2) {
         QStringList attachments;
         const KCalCore::Journal::Ptr event = Kolab::fromXML<KCalCore::Journal::Ptr, KolabV2::Journal>(QString::fromUtf8(s.c_str()).toUtf8(), attachments);
+        if (!event || Kolab::ErrorHandler::errorOccured()) {
+            Critical() << "failed to read xml";
+            return Journal();
+        }
         mAttachments.clear();
         foreach (const QString &attachment, attachments) {
-            mAttachments.push_back(std::string(attachment.toUtf8().constData()));
+            mAttachments.push_back(Conversion::toStdString(attachment));
         }
         return Conversion::fromKCalCore(*event);
     }
@@ -204,10 +228,9 @@ std::string XMLObject::writeContact(const Contact &contact, Version version, con
         if (addressee.uid().isEmpty()) {
             addressee.setUid(createUuid());
         }
-        mWrittenUID = Conversion::toStdString(addressee.uid().toUtf8().constData());
+        mWrittenUID = Conversion::toStdString(addressee.uid());
         const KolabV2::Contact contact(&addressee);
-        const QByteArray xml = contact.saveXML().toUtf8();
-        return std::string(xml.constData());
+        return Conversion::toStdString(contact.saveXML());
     }
     const std::string result = Kolab::writeContact(contact, productId);
     mWrittenUID = Kolab::getSerializedUID();
@@ -232,10 +255,9 @@ std::string XMLObject::writeDistlist(const DistList &distlist, Version version, 
         if (contactGroup.id().isEmpty()) {
             contactGroup.setId(createUuid());
         }
-        mWrittenUID = Conversion::toStdString(contactGroup.id().toUtf8().constData());
+        mWrittenUID = Conversion::toStdString(contactGroup.id());
         const KolabV2::DistributionList d(&contactGroup);
-        const QByteArray xml = d.saveXML().toUtf8();
-        return std::string(xml.constData());
+        return Conversion::toStdString(d.saveXML());
     }
     const std::string result = Kolab::writeDistlist(distlist, productId);
     mWrittenUID = Kolab::getSerializedUID();
@@ -246,6 +268,10 @@ Note XMLObject::readNote(const std::string& s, Version version)
 {
     if (version == KolabV2) {
         const KMime::Message::Ptr msg = noteFromKolab(QByteArray(s.c_str(), s.length()), KDateTime());
+        if (!msg || Kolab::ErrorHandler::errorOccured()) {
+            Critical() << "failed to read xml";
+            return Note();
+        }
         return Conversion::fromNote(msg);
     }
     return Kolab::readNote(s, false);

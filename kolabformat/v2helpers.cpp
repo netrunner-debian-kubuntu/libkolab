@@ -40,6 +40,10 @@ namespace Kolab {
 
 static QImage getPicture(const QString &pictureAttachmentName, const KMime::Message::Ptr &data, QByteArray &type)
 {
+    if (!data) {
+        Critical() << "empty message";
+        return QImage();
+    }
     KMime::Content *imgContent = Mime::findContentByName(data, pictureAttachmentName/*"kolab-picture.png"*/, type);
     if (!imgContent) {
         Warning() << "could not find picture: " << pictureAttachmentName;
@@ -79,6 +83,10 @@ static QImage getPicture(const QString &pictureAttachmentName, const KMime::Mess
 
 KABC::Addressee addresseeFromKolab( const QByteArray &xmlData, const KMime::Message::Ptr &data)
 {
+    if (!data) {
+        Critical() << "empty message";
+        return KABC::Addressee();
+    }
     KABC::Addressee addressee;
 //     Debug() << "xmlData " << xmlData;
     KolabV2::Contact contact(QString::fromUtf8(xmlData));
@@ -140,6 +148,10 @@ static QByteArray createPicture(const QImage &img, const QString &/*format*/, QS
 KMime::Message::Ptr contactToKolabFormat(const KolabV2::Contact& contact, const QString &productId)
 {
     KMime::Message::Ptr message = Mime::createMessage( KOLAB_TYPE_CONTACT, false, productId );
+    if (!message) {
+        Critical() << "empty message";
+        return KMime::Message::Ptr();
+    }
     message->subject()->fromUnicodeString( contact.uid(), "utf-8" );
     message->from()->fromUnicodeString( contact.fullEmail(), "utf-8" );
     
@@ -181,6 +193,10 @@ KABC::ContactGroup contactGroupFromKolab(const QByteArray &xmlData)
 KMime::Message::Ptr distListToKolabFormat(const KolabV2::DistributionList& distList, const QString &productId)
 {    
     KMime::Message::Ptr message = Mime::createMessage( KOLAB_TYPE_DISTLIST, false, productId );
+    if (!message) {
+        Critical() << "empty message";
+        return KMime::Message::Ptr();
+    }
     message->subject()->fromUnicodeString( distList.uid(), "utf-8" );
     message->from()->fromUnicodeString( distList.uid(), "utf-8" );
     
@@ -209,12 +225,20 @@ KMime::Message::Ptr noteFromKolab(const QByteArray &xmlData, const KDateTime &cr
 
 KMime::Message::Ptr noteToKolab(const KMime::Message::Ptr& msg, const QString &productId)
 {
+    if (!msg) {
+        Critical() << "empty message";
+        return KMime::Message::Ptr();
+    }
     Akonadi::NoteUtils::NoteMessageWrapper note(msg);
     return Mime::createMessage(note.title(), KOLAB_TYPE_NOTE, KOLAB_TYPE_NOTE, noteToKolabXML(msg), false, productId);
 }
 
 QByteArray noteToKolabXML(const KMime::Message::Ptr& msg)
 {
+    if (!msg) {
+        Critical() << "empty message";
+        return QByteArray();
+    }
     Akonadi::NoteUtils::NoteMessageWrapper note(msg);
     KolabV2::Note j;
     j.setSummary( note.title() );
@@ -226,7 +250,10 @@ QStringList readLegacyDictionaryConfiguration(const QByteArray &xmlData, QString
 {
     QStringList dictionary;
     const QDomDocument xmlDoc = KolabV2::KolabBase::loadDocument( QString::fromUtf8(xmlData) ); //TODO extract function from V2 format
-    Q_ASSERT ( !xmlDoc.isNull() );
+    if ( xmlDoc.isNull() ) {
+        Error() << "Failed to read the xml document";
+        return QStringList();
+    }
 
     QDomElement top = xmlDoc.documentElement();
 

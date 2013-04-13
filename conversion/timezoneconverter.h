@@ -15,38 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KCALCONVERSIONTEST_H
-#define KCALCONVERSIONTEST_H
+#ifndef TIMEZONECONVERTER_H
+#define TIMEZONECONVERTER_H
 
-#include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QString>
 
-class KCalConversionTest : public QObject
+class TimezoneConverter
 {
-  Q_OBJECT
-  private slots:
-
-    void testDate_data();
-    void testDate();
-    
-    void testDuration_data();
-    void testDuration();
-    
-    void testConversion_data();
-    void testConversion();
-
-    void testTodoConversion_data();
-    void testTodoConversion();
-    
-    void testJournalConversion_data();
-    void testJournalConversion();
-    
-    void testContactConversion_data();
-    void testContactConversion();
-    
-    void testDateTZ_data();
-    void testDateTZ();
-
+public:
+    static QString normalizeTimezone(const QString &tz);
+private:
+    static QString fromCityName(const QString &tz);
+    static QString fromHardcodedList(const QString &tz);
+    static QString fromGMTOffsetTimezone(const QString &tz);
 };
 
-#endif
+#endif // TIMEZONECONVERTER_H

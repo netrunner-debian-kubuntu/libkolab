@@ -15,38 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KCALCONVERSIONTEST_H
-#define KCALCONVERSIONTEST_H
+#ifndef XMLOBJECTTEST_H
+#define XMLOBJECTTEST_H
 
-#include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QObject>
 
-class KCalConversionTest : public QObject
+class XMLObjectTest: public QObject
 {
-  Q_OBJECT
-  private slots:
-
-    void testDate_data();
-    void testDate();
-    
-    void testDuration_data();
-    void testDuration();
-    
-    void testConversion_data();
-    void testConversion();
-
-    void testTodoConversion_data();
-    void testTodoConversion();
-    
-    void testJournalConversion_data();
-    void testJournalConversion();
-    
-    void testContactConversion_data();
-    void testContactConversion();
-    
-    void testDateTZ_data();
-    void testDateTZ();
-
+    Q_OBJECT
+private slots:
+    void testEvent();
+    void testDontCrash();
 };
 
-#endif
+#endif // XMLOBJECTTEST_H

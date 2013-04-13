@@ -1,10 +1,9 @@
 Date: Mon, 23 Apr 2012 12:46:37 +0200
-X-Kolab-Type: application/x-vnd.kolab.distribution-list
+X-Kolab-Type: application/x-vnd.kolab.contact.distlist
 X-Kolab-Mime-Version: 3.0
 User-Agent: Libkolab-0.1.0
 Content-Type: multipart/mixed; boundary="nextPart1365947.WmFcbPlLFA"
 Subject: 4xuyC0cyjV
-From: Volker Krause <vkrause@kde.org>
 MIME-Version: 1.0
 
 
@@ -38,10 +37,6 @@ Content-Disposition: attachment; filename="kolab.xml"
     <rev>
       <timestamp>20120505T050505Z</timestamp>
     </rev>
-    <categories>
-      <text>cat1</text>
-      <text>cat2</text>
-    </categories>
     <kind>
       <text>group</text>
     </kind>
@@ -49,16 +44,11 @@ Content-Disposition: attachment; filename="kolab.xml"
       <text>My Distlist</text>
     </fn>
     <member>
-      <uri>mailto:John%20Doe%3cjdoe@example.com%3e</uri>
+      <uri>mailto:John%20Doe%3Cjdoe%40example.com%3E</uri>
     </member>
     <member>
-      <uri>mailto:John%20Doe2%3cjdoe2@example.com%3e</uri>
+      <uri>mailto:John%20Doe2%3Cjdoe2%40example.com%3E</uri>
     </member>
-    <x-custom>
-      <identifier>X-Identifier</identifier>
-      <value>TestValue</value>
-    </x-custom>
-
   </vcard>
 
 </vcards>

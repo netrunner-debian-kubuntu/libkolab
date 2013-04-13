@@ -16,6 +16,7 @@
  */
 
 #include "commonconversion.h"
+#include "timezoneconverter.h"
 #include <kolabformat/errorhandler.h>
 
 #include <iostream>
@@ -35,7 +36,11 @@ KDateTime::Spec getTimeSpec(bool isUtc, const std::string& timezone)
         return  KDateTime::Spec(KDateTime::ClockTime);
     }
     //Timezone
-    KTimeZone tz = KSystemTimeZones::zone(QString::fromStdString(timezone)); //Needs ktimezoned (timezone daemon running) http://api.kde.org/4.x-api/kdelibs-apidocs/kdecore/html/classKSystemTimeZones.html
+
+    //Convert non-olson timezones if necessary
+    const QString normalizedTz = TimezoneConverter::normalizeTimezone(QString::fromStdString(timezone));
+    Debug() << "normalized " << normalizedTz;
+    KTimeZone tz = KSystemTimeZones::zone(normalizedTz); //Needs ktimezoned (timezone daemon running) http://api.kde.org/4.x-api/kdelibs-apidocs/kdecore/html/classKSystemTimeZones.html
     if (!tz.isValid()) {
         Error() << "timezone not found" << QString::fromStdString(timezone);
         if (!KSystemTimeZones::isTimeZoneDaemonAvailable()) {
@@ -87,7 +92,14 @@ cDateTime fromDate(const KDateTime &dt)
             date.setUTC(true);
         } else if (dt.timeType() == KDateTime::TimeZone) { //Timezone
             //TODO handle local timezone?
-            date.setTimezone(toStdString(dt.timeZone().name())); //FIXME use system independent name according to spec
+            //Convert non-olson timezones if necessary
+            const QString timezone = TimezoneConverter::normalizeTimezone(dt.timeZone().name());
+            if (!timezone.isEmpty()) {
+                date.setTimezone(toStdString(timezone));
+            } else {
+                Error() << "invalid timezone: " << dt.timeZone().name() << " , assuming floating time";
+                return date;
+            }
         } else if (dt.timeType() != KDateTime::ClockTime) {
             Error() << "invalid timespec, assuming floating time" << dt.timeType();
             return date;
@@ -154,3 +166,4 @@ std::string fromMailto(const QUrl &mailtoUri, std::string &name)
 
     }
 }
+

@@ -19,6 +19,7 @@
 #include "freebusy.h"
 #include "conversion/kcalconversion.h"
 #include "conversion/commonconversion.h"
+#include "libkolab-version.h"
 #include <kcalcore/freebusy.h>
 #include <kcalcore/icalformat.h>
 #include <kdebug.h>
@@ -311,6 +312,7 @@ std::string toIFB(const Kolab::Freebusy &freebusy)
     fb->setLastModified(Kolab::Conversion::toDate(freebusy.timestamp()));
 
     KCalCore::ICalFormat format;
+    format.setApplication("libkolab", LIBKOLAB_LIB_VERSION_STRING);
     QString data = format.createScheduleMessage( fb, KCalCore::iTIPPublish );
     return Conversion::toStdString(data);
 }

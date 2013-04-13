@@ -63,7 +63,20 @@ if [ ${doprep} -eq 1 ]; then
         -DPHP_BINDINGS=ON \
         -DPHP_INSTALL_DIR=/usr/lib64/php/modules \
         -DPYTHON_BINDINGS=ON \
-        ..
+        -DCMAKE_BUILD_TYPE=Release \
+        .. || \
+    cmake \
+        -DCMAKE_VERBOSE_MAKEFILE=ON \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DLIB_INSTALL_DIR=/usr/lib64 \
+        -DINCLUDE_INSTALL_DIR=/usr/include \
+        -DUSE_LIBCALENDARING=OFF \
+        -DPHP_BINDINGS=ON \
+        -DPHP_INSTALL_DIR=/usr/lib64/php/modules \
+        -DPYTHON_BINDINGS=ON \
+        -DCMAKE_BUILD_TYPE=Release \
+        .. || \
+    exit 1
 fi
 
 if [ ${dobuild} -eq 1 ]; then
