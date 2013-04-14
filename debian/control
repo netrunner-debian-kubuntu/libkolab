@@ -39,6 +39,29 @@ Description: Maps KDE containers to Kolab formats
   - icalendar:     Exposes iCalendar functionality:
                    iCal reading/writing, iTip, iMip
   - calendaring:   Some general calendaring functions
+ .
+ The libkolab library belongs to the Kolab 3 server components.
+
+Package: libkolab-kde0
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Maps KDE containers to Kolab formats (client version)
+ libkolab provides conversions from/to KDE containers, mime message
+ handling and facilities to read and write kolabv2 and kolabv3.
+ .
+ The libkolab package provides:
+  - kolabformatv2: Kolabformat v2 implementation moved here from kdepim-runtime
+  - kolabformat:   Kolab object reading/writing (mime message + kolab-format).
+                   Handles v2/v3 transparently.
+  - conversion:    Conversions from KDE to Kolab containers and vice verca.
+  - mime:          Mime message handling used by kolabformat
+  - icalendar:     Exposes iCalendar functionality:
+                   iCal reading/writing, iTip, iMip
+  - calendaring:   Some general calendaring functions
+ .
+ The libkolab-kde library depends on KDE and Qt functionality, and is
+ targeted for use in desktop environments. Specifically, libkolab-kde
+ allows kontact/kmail to use Kolab 3 functionality.
 
 Package: php-kolab
 Architecture: any
