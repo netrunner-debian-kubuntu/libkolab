@@ -30,12 +30,12 @@ override_dh_auto_configure:
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
 override_dh_auto_build:
-	dh_auto_configure -D build/client
-	dh_auto_configure -D build/server
+	dh_auto_build -D build/client
+	dh_auto_build -D build/server
 
 override_dh_auto_install:
-	dh_auto_configure -D build/client --destdir debian/client
-	dh_auto_configure -D build/server --destdir debian/server
+	dh_auto_install -D build/client --destdir debian/client
+	dh_auto_install -D build/server --destdir debian/server
 
 override_dh_auto_clean:
 	rm -rf debian/client debian/server build
