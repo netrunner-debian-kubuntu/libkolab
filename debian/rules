@@ -53,7 +53,9 @@ override_dh_install:
 	#mv debian/client/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/client/usr/share/php/kolabobject.php
 	#mv debian/client/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/client/usr/share/php/kolabshared.php
 	# Install the PHP modules manually, because they depend on PHP the API version,
-	# which has to be determoned dynamically, so we can't put it into an .install file.
+	# which has to be determined dynamically, so we can't put it into an .install file.
+	echo $(pwd)
+	find ./ -name kolab.ini
 	dh_install --package php-kolab \
                --sourcedir debian/client \
                /usr/lib/php5/$(PHPAPI)/kolab*.php \
