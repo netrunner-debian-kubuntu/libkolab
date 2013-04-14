@@ -4,8 +4,8 @@ Priority: optional
 Maintainer: Debian Kolab Maintainers <pkg-kolab-devel@lists.alioth.debian.org>
 Uploaders: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>, Paul Klos <kolab@klos2day.nl>
 Build-Depends:
-        cmake,
-        libqt4-dev,
+	cmake,
+	libqt4-dev,
 	debhelper (>= 9),
 	libkolabxml-dev,
 	libboost-dev,
@@ -16,7 +16,8 @@ Build-Depends:
 	libcurl4-gnutls-dev,
 	swig,
 	php5-dev,
-        python-dev (>= 2.7)
+	python-dev (>= 2.7),
+	kdelibs5-dev,
 X-Python-Version: >= 2.7
 Standards-Version: 3.9.3
 Homepage: http://git.kolab.org/libkolab
