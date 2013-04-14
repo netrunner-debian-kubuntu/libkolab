@@ -47,12 +47,18 @@ override_dh_gencontrol:
 	dh_gencontrol
 
 override_dh_install:
-	mkdir -p debian/tmp/usr/share/php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/tmp/usr/share/php/kolabcalendaring.php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/tmp/usr/share/php/kolabicalendar.php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/tmp/usr/share/php/kolabobject.php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/tmp/usr/share/php/kolabshared.php
-	dh_install --fail-missing
+	mkdir -p debian/client/usr/share/php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/client/usr/share/php/kolabcalendaring.php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/client/usr/share/php/kolabicalendar.php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/client/usr/share/php/kolabobject.php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/client/usr/share/php/kolabshared.php
+	dh_install --fail-missing --sourcedir=debian/client
+	mkdir -p debian/server/usr/share/php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/server/usr/share/php/kolabcalendaring.php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/server/usr/share/php/kolabicalendar.php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/server/usr/share/php/kolabobject.php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/server/usr/share/php/kolabshared.php
+	dh_install --fail-missing --sourcedir=debian/server
 
 override_dh_auto_test:
 	dh_auto_test -B build/client || :
