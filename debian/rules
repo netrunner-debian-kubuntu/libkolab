@@ -56,11 +56,12 @@ override_dh_install:
 	# which has to be determined dynamically, so we can't put it into an .install file.
 	echo $(pwd)
 	find ./ -name kolab.ini
+	cp -a debian/usr/share/php5/kolab/kolab.ini debian/php-kolab/usr/share/php5/kolab/
 	dh_install --package php-kolab \
                --sourcedir debian/client \
                /usr/lib/php5/$(PHPAPI)/kolab*.php \
                /usr/share/php/
-	dh_install --package php-kolab --list-missing --sourcedir=debian/client
+	#dh_install --package php-kolab --list-missing --sourcedir=debian/client
 	dh_install --package python-kolab --list-missing --sourcedir=debian/client
 	dh_install --package libkolab-kde0 --list-missing --sourcedir=debian/client
 	dh_install --package libkolab0 --list-missing --sourcedir=debian/server
