@@ -47,22 +47,18 @@ override_dh_gencontrol:
 	dh_gencontrol
 
 override_dh_install:
-	#mkdir -p debian/client/usr/share/php
-	#mv debian/client/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/client/usr/share/php/kolabcalendaring.php
-	#mv debian/client/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/client/usr/share/php/kolabicalendar.php
-	#mv debian/client/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/client/usr/share/php/kolabobject.php
-	#mv debian/client/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/client/usr/share/php/kolabshared.php
 	# Install the PHP modules manually, because they depend on PHP the API version,
 	# which has to be determined dynamically, so we can't put it into an .install file.
-	echo $(pwd)
-	find ./ -name kolab.ini
-	dh_install --package php-kolab \
-               --sourcedir debian/client \
-               /usr/lib/php5/$(PHPAPI)/kolab*.php \
-               /usr/share/php/
-	mkdir -p debian/php-kolab/usr/share/php5/kolab/
-	cp -a debian/usr/share/php5/kolab/kolab.ini debian/php-kolab/usr/share/php5/kolab/
-	#dh_install --package php-kolab --list-missing --sourcedir=debian/client
+	mkdir -p debian/client/usr/share/php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/client/usr/share/php/kolabcalendaring.php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/client/usr/share/php/kolabicalendar.php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/client/usr/share/php/kolabobject.php
+	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/client/usr/share/php/kolabshared.php
+	# Put kolab.ini into place
+	mkdir -p debian/client/usr/share/php5/kolab
+	cp debian/usr/share/php5/kolab/kolab.ini debian/client/usr/share/php5/kolab/
+	# Install the packages
+	dh_install --package php-kolab --sourcedir debian/client
 	dh_install --package python-kolab --list-missing --sourcedir=debian/client
 	dh_install --package libkolab-kde0 --list-missing --sourcedir=debian/client
 	dh_install --package libkolab0 --list-missing --sourcedir=debian/server
