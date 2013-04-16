@@ -7,7 +7,7 @@ Build-Depends:
 	cmake,
 	libqt4-dev,
 	debhelper (>= 9),
-	libkolabxml-dev,
+	libkolabxml-dev (>= 0.8.4),
 	libboost-dev,
 	libxerces-c-dev,
 	libboost-thread-dev,
@@ -26,6 +26,7 @@ Homepage: http://git.kolab.org/libkolab
 Package: libkolab0
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
+Conflicts: libkolab-kde0
 Description: Maps KDE containers to Kolab formats
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
@@ -45,6 +46,7 @@ Description: Maps KDE containers to Kolab formats
 Package: libkolab-kde0
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
+Conflicts: libkolab0
 Description: Maps KDE containers to Kolab formats (client version)
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
