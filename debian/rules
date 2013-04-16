@@ -19,6 +19,7 @@ override_dh_auto_configure:
 		-DPHP4_EXECUTABLE=/usr/bin/php5 \
 		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
 		-DPYTHON_BINDINGS=ON \
+		-DVERBOSE_MAKE_FILE=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
 	dh_auto_configure -B build/client -- \
@@ -27,6 +28,7 @@ override_dh_auto_configure:
 		-DPHP4_EXECUTABLE=/usr/bin/php5 \
 		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
 		-DPYTHON_BINDINGS=ON \
+		-DVERBOSE_MAKE_FILE=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
 override_dh_auto_build:
