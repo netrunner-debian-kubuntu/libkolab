@@ -51,17 +51,17 @@ override_dh_gencontrol:
 override_dh_install:
 	# Install the PHP modules manually, because they depend on PHP the API version,
 	# which has to be determined dynamically, so we can't put it into an .install file.
-	mkdir -p debian/client/usr/share/php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/client/usr/share/php/kolabcalendaring.php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/client/usr/share/php/kolabicalendar.php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/client/usr/share/php/kolabobject.php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/client/usr/share/php/kolabshared.php
+	mkdir -p debian/server/usr/share/php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/server/usr/share/php/kolabcalendaring.php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/server/usr/share/php/kolabicalendar.php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/server/usr/share/php/kolabobject.php
+	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/server/usr/share/php/kolabshared.php
 	# Put kolab.ini into place
-	mkdir -p debian/client/usr/share/php5/kolab
-	cp debian/usr/share/php5/kolab/kolab.ini debian/client/usr/share/php5/kolab/
+	mkdir -p debian/server/usr/share/php5/kolab
+	cp debian/usr/share/php5/kolab/kolab.ini debian/server/usr/share/php5/kolab/
 	# Install the packages
-	dh_install --package php-kolab --sourcedir debian/client
-	dh_install --package python-kolab --list-missing --sourcedir=debian/client
+	dh_install --package php-kolab --sourcedir debian/server
+	dh_install --package python-kolab --list-missing --sourcedir=debian/server
 	dh_install --package libkolab-kde0 --list-missing --sourcedir=debian/client
 	dh_install --package libkolab0 --list-missing --sourcedir=debian/server
 
