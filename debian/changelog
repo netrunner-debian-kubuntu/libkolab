@@ -1,9 +1,20 @@
-libkolab (0.4.2-1~1.gbp3e4640) UNRELEASED; urgency=low
+libkolab (0.4.2-1~2.gbp8a54ba) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @3e46408250b10e60e33a3e242c03ab685a2b6d0a **
+  ** SNAPSHOT build @8a54bad3b35fbe0d491f9f64121fc29016744705 **
 
   * Imported Upstream version 0.4.0
   * Imported Upstream version 0.4.2
+  * Update changelog
+  * Build the package twice: once for clients, once for servers. The client build depends on kdepimlibs. The server build depends on libcalendaring.
+  * Build-depend on kdelibs5-dev
+  * Build-depend on kdepimlibs5-dev
+  * Correct copy-paste errors in overrides
+  * Duplicate dh_install for client and server
+  * New binary package libkolab-kde for the libkolab that depends on KDE/Qt
+  * Add debug info
+  * Copy kolab.ini manually in rules file
+  * Copy kolab.ini after installing the other files and make sure the path exists
+  * Fix install locations
 
  -- Paul Klos <kolab@klos2day.nl>  Sun, 14 Apr 2013 00:23:43 +0200
 
