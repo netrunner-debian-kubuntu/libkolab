@@ -19,7 +19,6 @@ override_dh_auto_configure:
 		-DPHP4_EXECUTABLE=/usr/bin/php5 \
 		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
 		-DPYTHON_BINDINGS=ON \
-		-DVERBOSE_MAKE_FILE=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
 	dh_auto_configure -B build/client -- \
@@ -28,16 +27,15 @@ override_dh_auto_configure:
 		-DPHP4_EXECUTABLE=/usr/bin/php5 \
 		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
 		-DPYTHON_BINDINGS=ON \
-		-DVERBOSE_MAKE_FILE=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
 
 override_dh_auto_build:
-	dh_auto_build -D build/client
-	dh_auto_build -D build/server
+	dh_auto_build -B build/client
+	dh_auto_build -B build/server
 
 override_dh_auto_install:
-	dh_auto_install -D build/client --destdir debian/client
-	dh_auto_install -D build/server --destdir debian/server
+	dh_auto_install -B build/client --destdir debian/client
+	dh_auto_install -B build/server --destdir debian/server
 
 override_dh_auto_clean:
 	rm -rf debian/client debian/server build
