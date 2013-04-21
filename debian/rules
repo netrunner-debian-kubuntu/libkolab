@@ -74,7 +74,7 @@ override_dh_install:
 	dh_install --package libkolab-kde0 --list-missing --sourcedir=debian/client
 	dh_install --package libkolab-kde-dev --list-missing --sourcedir=debian/client
 	dh_install --package php-kolab-kde --sourcedir debian/client
-	dh_install --package python-kolab --list-missing --sourcedir=debian/client
+	dh_install --package python-kolab-kde --list-missing --sourcedir=debian/client
 
 override_dh_auto_test:
 	dh_auto_test -B build/client || :
