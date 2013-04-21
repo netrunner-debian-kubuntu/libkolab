@@ -1,0 +1,94 @@
+Description: Build two separate flavours of libkolab
+ Depending on whether or not USE_LIBCALENDARING is set,
+ libkolab builds against libcalendaring or against
+ kdepimlibs. The resulting library is always named libkolab.
+ .
+ This patch creates libraries with different names: the
+ server target is still kolab, but the client target is
+ now kolab-kde.
+Author: Paul Klos <kolab@klos2day.nl>
+Last-Update: 2013-04-21
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -149,16 +149,32 @@
+     add_subdirectory(tests)
+ endif(BUILD_TESTS)
+ 
+-add_library(kolab SHARED ${KOLAB_SRCS})
+-target_link_libraries(kolab ${KOLAB_LINK_LIBRARIES})
+-set_target_properties(kolab PROPERTIES VERSION ${Libkolab_VERSION}
+-                                     SOVERSION ${Libkolab_VERSION_MAJOR} )
+-
+-install(TARGETS kolab EXPORT LibkolabExport 
+-    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+-    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+-    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+-)
++if (USE_LIBCALENDARING)
++    # This builds the regular libkolab as used in server environments
++    set(Target_Name "kolab")
++    add_library(kolab SHARED ${KOLAB_SRCS})
++    target_link_libraries(kolab ${KOLAB_LINK_LIBRARIES})
++    set_target_properties(kolab PROPERTIES VERSION ${Libkolab_VERSION}
++                                        SOVERSION ${Libkolab_VERSION_MAJOR} )
++    install(TARGETS kolab EXPORT LibkolabExport
++        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
++        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
++        ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
++    )
++else()
++    # This builds the libkolab-kde to be used in client environments
++    # Specifically, akonadi-kolab needs to link against this flavour
++    set(Target_Name "kolab-kde")
++    add_library(kolab-kde SHARED ${KOLAB_SRCS})
++    target_link_libraries(kolab-kde ${KOLAB_LINK_LIBRARIES})
++    set_target_properties(kolab-kde PROPERTIES VERSION ${Libkolab_VERSION}
++                                        SOVERSION ${Libkolab_VERSION_MAJOR} )
++    install(TARGETS kolab-kde EXPORT LibkolabExport
++        RUNTIME DESTINATION ${BIN_INSTALL_DIR}
++        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
++        ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
++    )
++endif()
+ 
+ install(FILES
+     kolab_export.h
+--- a/cmake/modules/SWIGUtils.cmake
++++ b/cmake/modules/SWIGUtils.cmake
+@@ -7,7 +7,7 @@
+         COMMAND ${SWIG} -v -c++ -php -I${Libkolabxml_INCLUDES} -module ${MODULE_NAME} -o ${CMAKE_CURRENT_BINARY_DIR}/${KOLAB_SWIG_PHP_SOURCE_FILE} ${INTERFACE_FILE}
+         COMMENT "Generating php bindings"
+         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-        DEPENDS ${INTERFACE_FILE} kolab
++        DEPENDS ${INTERFACE_FILE} ${Target_Name}
+         VERBATIM
+     )
+ 
+@@ -31,7 +31,7 @@
+     if (PHP4_FOUND OR (PHP4_INCLUDE_PATH AND PHP4_EXECUTABLE))
+         include_directories(${PHP4_INCLUDE_PATH} "${PHP4_INCLUDE_PATH}/Zend" "${PHP4_INCLUDE_PATH}/TSRM" "${PHP4_INCLUDE_PATH}/main")
+         add_library(${MODULE_NAME}_phpbindings SHARED ${KOLAB_SWIG_PHP_SOURCE_FILE})
+-        target_link_libraries(${MODULE_NAME}_phpbindings kolab)
++        target_link_libraries(${MODULE_NAME}_phpbindings ${Target_Name})
+         SET_TARGET_PROPERTIES(${MODULE_NAME}_phpbindings PROPERTIES OUTPUT_NAME ${MODULE_NAME})
+         SET_TARGET_PROPERTIES(${MODULE_NAME}_phpbindings PROPERTIES PREFIX "")
+ 
+@@ -72,7 +72,7 @@
+         COMMAND ${SWIG} -v -c++ -python -module ${MODULE_NAME} -I${Libkolabxml_INCLUDES} -o ${KOLAB_SWIG_PYTHON_SOURCE_FILE} ${INTERFACE_FILE}
+         COMMENT "Generating python bindings"
+         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-        DEPENDS ${INTERFACE_FILE} kolab
++        DEPENDS ${INTERFACE_FILE} ${Target_Name}
+         VERBATIM
+         )
+ 
+@@ -87,7 +87,7 @@
+     #cmake 2.6.4 fails to respect the module prefix
+     SET_TARGET_PROPERTIES(${MODULE_NAME} PROPERTIES PREFIX "${PYTHON_MODULE_PREFIX}")
+ 
+-    target_link_libraries(${MODULE_NAME} kolab ${PYTHON_LIBRARIES})
++    target_link_libraries(${MODULE_NAME} ${Target_Name} ${PYTHON_LIBRARIES})
+     # configure_file(test.py ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+ 
+     set(PYTHON_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/pythonbindings" CACHE STRING "Install directory for python bindings.")
