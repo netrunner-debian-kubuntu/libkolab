@@ -72,6 +72,7 @@ Depends: libkolab0 (= ${binary:Version}),
 	${php:Depends},
 	${misc:Depends},
 	${shlibs:Depends}
+Conflicts: php-kolab-kde
 Description: PHP bindings for Kolab Library
  This package provides the Kolab PHP modules icalendar and calendaring.
  .
@@ -87,6 +88,7 @@ Depends: libkolab-kde0 (= ${binary:Version}),
 	${php:Depends},
 	${misc:Depends},
 	${shlibs:Depends}
+Conflicts: php-kolab
 Description: PHP bindings for Kolab Library (KDE version)
  This package provides the Kolab PHP modules icalendar and calendaring.
  .
@@ -101,6 +103,7 @@ Depends: libkolab0 (= ${binary:Version}),
 	python,
 	${misc:Depends},
 	${shlibs:Depends}
+Conflicts: python-kolab-kde
 Description: Python bindings for Kolab Library
  This package provides the Kolab Python modules icalendar and calendaring.
  .
@@ -115,6 +118,7 @@ Depends: libkolab-kde0 (= ${binary:Version}),
 	python,
 	${misc:Depends},
 	${shlibs:Depends}
+Conflicts: python-kolab
 Description: Python bindings for Kolab Library (KDE version)
  This package provides the Kolab Python modules icalendar and calendaring.
  .
@@ -127,6 +131,7 @@ Section: libdevel
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
          ${misc:Depends}
+Conflicts: libkolab-kde-dev
 Description: Development package for Kolab library
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
@@ -139,6 +144,7 @@ Section: libdevel
 Architecture: any
 Depends: libkolab-kde0 (= ${binary:Version}),
          ${misc:Depends}
+Conflicts: libkolab-kde
 Description: Development package for Kolab library (KDE version)
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
