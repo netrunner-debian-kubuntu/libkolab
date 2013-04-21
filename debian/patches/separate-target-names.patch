@@ -11,7 +11,22 @@ Last-Update: 2013-04-21
 
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -149,16 +149,32 @@
+@@ -53,9 +53,14 @@
+ find_package(Qt4 4.6.0 REQUIRED)
+ 
+ if (USE_LIBCALENDARING)
++    # This builds the regular libkolab as used in server environments
++    set(Target_Name "kolab")
+     find_package(Libcalendaring)
+     macro_log_feature(LIBCALENDARING_FOUND "Libcalendaring" "KDE Calendaring-Dependencies Library" "http://git.kolab.org/libcalendaring/" TRUE "" "Required if KDE libraries are not available.")
+ else()
++    # This builds the libkolab-kde to be used in client environments
++    # Specifically, akonadi-kolab needs to link against this flavour
++    set(Target_Name "kolab-kde")
+     find_package(KDE4 4.8 REQUIRED)
+     find_package(KdepimLibs 4.8 REQUIRED)
+ endif()
+@@ -149,16 +154,27 @@
      add_subdirectory(tests)
  endif(BUILD_TESTS)
  
@@ -26,8 +41,6 @@ Last-Update: 2013-04-21
 -    ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 -)
 +if (USE_LIBCALENDARING)
-+    # This builds the regular libkolab as used in server environments
-+    set(Target_Name "kolab")
 +    add_library(kolab SHARED ${KOLAB_SRCS})
 +    target_link_libraries(kolab ${KOLAB_LINK_LIBRARIES})
 +    set_target_properties(kolab PROPERTIES VERSION ${Libkolab_VERSION}
@@ -38,9 +51,6 @@ Last-Update: 2013-04-21
 +        ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 +    )
 +else()
-+    # This builds the libkolab-kde to be used in client environments
-+    # Specifically, akonadi-kolab needs to link against this flavour
-+    set(Target_Name "kolab-kde")
 +    add_library(kolab-kde SHARED ${KOLAB_SRCS})
 +    target_link_libraries(kolab-kde ${KOLAB_LINK_LIBRARIES})
 +    set_target_properties(kolab-kde PROPERTIES VERSION ${Libkolab_VERSION}
