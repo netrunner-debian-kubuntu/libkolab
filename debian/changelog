@@ -26,11 +26,16 @@ libkolab (0.4.2-1~5.gbpec8174) UNRELEASED; urgency=low
   * Correct library names
   * Use server build output for all packages except libkolab-kde
   * Correct dh_auto_build/dh_auto_install options
-  * Create separate client and server builds. The server build is still called libkolab and depends on libcalendaring. The client build is named libkolab-kde, and links against kdepimlibs.
-  * Set target names sooner. Build failed because apparently the target name is required sooner.
+  * Create separate client and server builds.
+    The server build is still called libkolab and depends on libcalendaring.
+    The client build is named libkolab-kde, and links against kdepimlibs.
+  * Set target names sooner.
+    Build failed because apparently the target name is required sooner.
   * Correct library names
   * Remove unneccesary build dependency on kdelibs5-dev.
-  * Create separate -dev, php and python packages. All 4 packages (libkolab, libkolab-dev, php-kolab and python-kolab) must be supplied in both a server and a KDE falvour.
+  * Create separate -dev, php and python packages.
+    All 4 packages (libkolab, libkolab-dev, php-kolab and python-kolab)
+    must be supplied in both a server and a KDE falvour.
 
  -- Paul Klos <kolab@klos2day.nl>  Sun, 14 Apr 2013 00:23:43 +0200
 
