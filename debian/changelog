@@ -1,10 +1,6 @@
-libkolab (0.4.2-1~5.gbpec8174) UNRELEASED; urgency=low
+libkolab (0.4.2-1) unstable; urgency=low
 
-  ** SNAPSHOT build @ec8174d0c614120bb5b4b5d43c134f1f7e184b56 **
-
-  * Imported Upstream version 0.4.0
   * Imported Upstream version 0.4.2
-  * Update changelog
   * Build the package twice: once for clients, once for servers.
     The client build depends on kdepimlibs. The server build
     depends on libcalendaring.
@@ -18,11 +14,9 @@ libkolab (0.4.2-1~5.gbpec8174) UNRELEASED; urgency=low
   * Copy kolab.ini after installing the other files
     and make sure the path exists
   * Fix install locations
-  * Update changelog
   * Depend on correct version of libkolabxml Add Conflicts for
     libkolab0 and libkolab-kde0
   * More verbosity
-  * Update changelog
   * Correct library names
   * Use server build output for all packages except libkolab-kde
   * Correct dh_auto_build/dh_auto_install options
@@ -36,8 +30,17 @@ libkolab (0.4.2-1~5.gbpec8174) UNRELEASED; urgency=low
   * Create separate -dev, php and python packages.
     All 4 packages (libkolab, libkolab-dev, php-kolab and python-kolab)
     must be supplied in both a server and a KDE falvour.
+  * Correct long lines
+  * Call dh_install for all packages
+  * Add package conflicts
+  * Make php-kolab-kde depend on PHP api
+  * Correct dh_install call for python-kolab-kde
+  * Separate shlibs file for libkolab and libkolab-kde
+  * Updated loong descriptions
+  * Add LIB_INSTALL_DIR
+  * Update changelog
 
- -- Paul Klos <kolab@klos2day.nl>  Sun, 14 Apr 2013 00:23:43 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Sun, 21 Apr 2013 23:19:24 +0200
 
 libkolab (0.4.0-3) unstable; urgency=low
 
