@@ -46,7 +46,7 @@ Package: libkolab-kde0
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Conflicts: libkolab0
-Description: Maps KDE containers to Kolab formats (client version)
+Description: Maps KDE containers to Kolab formats (KDE version)
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
  .
@@ -79,6 +79,21 @@ Description: PHP bindings for Kolab Library
   - The icalendar module exposes iCalendar functionality:
     iCal reading/writing, iTip, iMip
 
+Package: php-kolab-kde
+Architecture: any
+Depends: libkolab-kde0 (= ${binary:Version}),
+	php-kolabformat,
+	ucf,
+	${php:Depends},
+	${misc:Depends},
+	${shlibs:Depends}
+Description: PHP bindings for Kolab Library (KDE version)
+ This package provides the Kolab PHP modules icalendar and calendaring.
+ .
+  - The calendaring module provides some general calendaring functions
+  - The icalendar module exposes iCalendar functionality:
+    iCal reading/writing, iTip, iMip
+
 Package: python-kolab
 Architecture: any
 Section: python
@@ -92,13 +107,39 @@ Description: Python bindings for Kolab Library
   - The calendaring module provides some general calendaring functions
   - The icalendar module exposes iCalendar functionality:
     iCal reading/writing, iTip, iMip
- 
+
+Package: python-kolab-kde
+Architecture: any
+Section: python
+Depends: libkolab-kde0 (= ${binary:Version}),
+	python,
+	${misc:Depends},
+	${shlibs:Depends}
+Description: Python bindings for Kolab Library (KDE version)
+ This package provides the Kolab Python modules icalendar and calendaring.
+ .
+  - The calendaring module provides some general calendaring functions
+  - The icalendar module exposes iCalendar functionality:
+    iCal reading/writing, iTip, iMip
+
 Package: libkolab-dev
 Section: libdevel
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
          ${misc:Depends}
 Description: Development package for Kolab library
+ libkolab provides conversions from/to KDE containers, mime message
+ handling and facilities to read and write kolabv2 and kolabv3.
+ .
+ This package contains the development files for the library,
+ including headers and Libkolab cmake files.
+
+Package: libkolab-kde-dev
+Section: libdevel
+Architecture: any
+Depends: libkolab-kde0 (= ${binary:Version}),
+         ${misc:Depends}
+Description: Development package for Kolab library (KDE version)
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
  .
