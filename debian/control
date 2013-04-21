@@ -95,6 +95,8 @@ Description: PHP bindings for Kolab Library (KDE version)
   - The calendaring module provides some general calendaring functions
   - The icalendar module exposes iCalendar functionality:
     iCal reading/writing, iTip, iMip
+ .
+ This package is intended to be used in a KDE environment.
 
 Package: python-kolab
 Architecture: any
@@ -125,6 +127,8 @@ Description: Python bindings for Kolab Library (KDE version)
   - The calendaring module provides some general calendaring functions
   - The icalendar module exposes iCalendar functionality:
     iCal reading/writing, iTip, iMip
+ .
+ This package is intended to be used in a KDE environment.
 
 Package: libkolab-dev
 Section: libdevel
@@ -151,3 +155,5 @@ Description: Development package for Kolab library (KDE version)
  .
  This package contains the development files for the library,
  including headers and Libkolab cmake files.
+ .
+ This package is intended to be used in a KDE environment.
