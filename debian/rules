@@ -44,6 +44,7 @@ override_dh_auto_clean:
 
 override_dh_gencontrol:
 	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab.substvars
+	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab-kde.substvars
 	dh_gencontrol
 
 override_dh_install:
