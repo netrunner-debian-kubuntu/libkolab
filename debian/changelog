@@ -1,3 +1,11 @@
+libkolab (0.4.2-2~1.gbpb2bb43) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @b2bb43be6cdbc6e0968c8bda243f099c771f3de7 **
+
+  * UNRELEASED
+
+ -- Paul Klos <kolab@klos2day.nl>  Mon, 22 Apr 2013 17:38:17 +0200
+
 libkolab (0.4.2-1) unstable; urgency=low
 
   * Imported Upstream version 0.4.2
