@@ -24,7 +24,7 @@ Homepage: http://git.kolab.org/libkolab
 
 Package: libkolab0
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, libkolabxml0 (>= 0.8.4)
 Conflicts: libkolab-kde0
 Description: Maps KDE containers to Kolab formats
  libkolab provides conversions from/to KDE containers, mime message
@@ -44,7 +44,7 @@ Description: Maps KDE containers to Kolab formats
 
 Package: libkolab-kde0
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, libkolabxml0 (>= 0.8.4)
 Conflicts: libkolab0
 Description: Maps KDE containers to Kolab formats (KDE version)
  libkolab provides conversions from/to KDE containers, mime message
