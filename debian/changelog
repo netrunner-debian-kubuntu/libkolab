@@ -1,11 +1,9 @@
-libkolab (0.4.2-3~2.gbpd4249c) UNRELEASED; urgency=low
+libkolab (0.4.2-3) unstable; urgency=low
 
-  ** SNAPSHOT build @d4249c4519d5d2cbbf22533e5b448929414dd333 **
-
-  * UNRELEASED
   * Revert to single build, depend only on kdepimlibs.
+  * Update changelog
 
- -- Paul Klos <kolab@klos2day.nl>  Tue, 23 Apr 2013 20:27:15 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Tue, 23 Apr 2013 20:45:12 +0200
 
 libkolab (0.4.2-2) unstable; urgency=low
 
