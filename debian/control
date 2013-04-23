@@ -12,7 +12,6 @@ Build-Depends:
 	libxerces-c-dev,
 	libboost-thread-dev,
 	libboost-system-dev,
-	libcalendaring-dev,
 	libcurl4-gnutls-dev,
 	swig,
 	php5-dev,
@@ -42,28 +41,6 @@ Description: Maps KDE containers to Kolab formats
  .
  The libkolab library belongs to the Kolab 3 server components.
 
-Package: libkolab-kde0
-Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, libkolabxml0 (>= 0.8.4)
-Conflicts: libkolab0
-Description: Maps KDE containers to Kolab formats (KDE version)
- libkolab provides conversions from/to KDE containers, mime message
- handling and facilities to read and write kolabv2 and kolabv3.
- .
- The libkolab package provides:
-  - kolabformatv2: Kolabformat v2 implementation moved here from kdepim-runtime
-  - kolabformat:   Kolab object reading/writing (mime message + kolab-format).
-                   Handles v2/v3 transparently.
-  - conversion:    Conversions from KDE to Kolab containers and vice verca.
-  - mime:          Mime message handling used by kolabformat
-  - icalendar:     Exposes iCalendar functionality:
-                   iCal reading/writing, iTip, iMip
-  - calendaring:   Some general calendaring functions
- .
- The libkolab-kde library depends on KDE and Qt functionality, and is
- targeted for use in desktop environments. Specifically, libkolab-kde
- allows kontact/kmail to use Kolab 3 functionality.
-
 Package: php-kolab
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
@@ -80,24 +57,6 @@ Description: PHP bindings for Kolab Library
   - The icalendar module exposes iCalendar functionality:
     iCal reading/writing, iTip, iMip
 
-Package: php-kolab-kde
-Architecture: any
-Depends: libkolab-kde0 (= ${binary:Version}),
-	php-kolabformat,
-	ucf,
-	${php:Depends},
-	${misc:Depends},
-	${shlibs:Depends}
-Conflicts: php-kolab
-Description: PHP bindings for Kolab Library (KDE version)
- This package provides the Kolab PHP modules icalendar and calendaring.
- .
-  - The calendaring module provides some general calendaring functions
-  - The icalendar module exposes iCalendar functionality:
-    iCal reading/writing, iTip, iMip
- .
- This package is intended to be used in a KDE environment.
-
 Package: python-kolab
 Architecture: any
 Section: python
@@ -113,23 +72,6 @@ Description: Python bindings for Kolab Library
   - The icalendar module exposes iCalendar functionality:
     iCal reading/writing, iTip, iMip
 
-Package: python-kolab-kde
-Architecture: any
-Section: python
-Depends: libkolab-kde0 (= ${binary:Version}),
-	python,
-	${misc:Depends},
-	${shlibs:Depends}
-Conflicts: python-kolab
-Description: Python bindings for Kolab Library (KDE version)
- This package provides the Kolab Python modules icalendar and calendaring.
- .
-  - The calendaring module provides some general calendaring functions
-  - The icalendar module exposes iCalendar functionality:
-    iCal reading/writing, iTip, iMip
- .
- This package is intended to be used in a KDE environment.
-
 Package: libkolab-dev
 Section: libdevel
 Architecture: any
@@ -142,18 +84,3 @@ Description: Development package for Kolab library
  .
  This package contains the development files for the library,
  including headers and Libkolab cmake files.
-
-Package: libkolab-kde-dev
-Section: libdevel
-Architecture: any
-Depends: libkolab-kde0 (= ${binary:Version}),
-         ${misc:Depends}
-Conflicts: libkolab-kde
-Description: Development package for Kolab library (KDE version)
- libkolab provides conversions from/to KDE containers, mime message
- handling and facilities to read and write kolabv2 and kolabv3.
- .
- This package contains the development files for the library,
- including headers and Libkolab cmake files.
- .
- This package is intended to be used in a KDE environment.

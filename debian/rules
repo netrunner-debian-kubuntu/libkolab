@@ -12,8 +12,7 @@ export DEB_LDFLAGS_MAINT_APPEND="-Wl,--as-needed"
 	dh $@ --parallel --with python2
 
 override_dh_auto_configure:
-	dh_auto_configure -B build/server -- \
-		-DUSE_LIBCALENDARING=ON \
+	dh_auto_configure -- \
 		-DPHP_BINDINGS=ON \
 		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
 		-DPHP4_EXECUTABLE=/usr/bin/php5 \
@@ -21,63 +20,24 @@ override_dh_auto_configure:
 		-DPYTHON_BINDINGS=ON \
 		-DLIB_INSTALL_DIR=/usr/lib \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
-
-	dh_auto_configure -B build/client -- \
-		-DPHP_BINDINGS=ON \
-		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
-		-DPHP4_EXECUTABLE=/usr/bin/php5 \
-		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
-		-DPYTHON_BINDINGS=ON \
-		-DLIB_INSTALL_DIR=/usr/lib \
-		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH)
-
-override_dh_auto_build:
-	dh_auto_build -B build/client
-	dh_auto_build -B build/server
-
-override_dh_auto_install:
-	dh_auto_install -B build/client --destdir debian/client
-	dh_auto_install -B build/server --destdir debian/server
-
-override_dh_auto_clean:
-	rm -rf debian/client debian/server build
-	dh_auto_clean -B build/client
-	dh_auto_clean -B build/server
 
 override_dh_gencontrol:
 	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab.substvars
-	echo "php:Depends=phpapi-${PHPAPI}" >> debian/php-kolab-kde.substvars
 	dh_gencontrol
 
 override_dh_install:
 	# Install the PHP modules manually, because they depend on PHP the API version,
 	# which has to be determined dynamically, so we can't put it into an .install file.
-	mkdir -p debian/server/usr/share/php
-	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/server/usr/share/php/kolabcalendaring.php
-	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/server/usr/share/php/kolabicalendar.php
-	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/server/usr/share/php/kolabobject.php
-	mv debian/server/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/server/usr/share/php/kolabshared.php
-	mkdir -p debian/client/usr/share/php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/client/usr/share/php/kolabcalendaring.php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/client/usr/share/php/kolabicalendar.php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/client/usr/share/php/kolabobject.php
-	mv debian/client/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/client/usr/share/php/kolabshared.php
+	mkdir -p debian/tmp/usr/share/php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/tmp/usr/share/php/kolabcalendaring.php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/tmp/usr/share/php/kolabicalendar.php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/tmp/usr/share/php/kolabobject.php
+	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/tmp/usr/share/php/kolabshared.php
 	# Put kolab.ini into place
-	mkdir -p debian/server/usr/share/php5/kolab
-	cp debian/usr/share/php5/kolab/kolab.ini debian/server/usr/share/php5/kolab/
-	mkdir -p debian/client/usr/share/php5/kolab
-	cp debian/usr/share/php5/kolab/kolab.ini debian/client/usr/share/php5/kolab/
-	# Install the server packages
-	dh_install --package libkolab0 --list-missing --sourcedir=debian/server
-	dh_install --package libkolab-dev --list-missing --sourcedir=debian/server
-	dh_install --package php-kolab --sourcedir debian/server
-	dh_install --package python-kolab --list-missing --sourcedir=debian/server
-	# Install the client packages 
-	dh_install --package libkolab-kde0 --list-missing --sourcedir=debian/client
-	dh_install --package libkolab-kde-dev --list-missing --sourcedir=debian/client
-	dh_install --package php-kolab-kde --sourcedir debian/client
-	dh_install --package python-kolab-kde --list-missing --sourcedir=debian/client
+	mkdir -p debian/tmp/usr/share/php5/kolab
+	cp debian/usr/share/php5/kolab/kolab.ini debian/tmp/usr/share/php5/kolab/
+	# Install the packages 
+	dh_install --list-missing
 
 override_dh_auto_test:
-	dh_auto_test -B build/client || :
-	dh_auto_test -B build/server || :
+	dh_auto_test || :
