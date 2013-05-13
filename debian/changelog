@@ -1,13 +1,12 @@
-libkolab (0.4.2-4~1.gbp439ee2) UNRELEASED; urgency=low
-
-  ** SNAPSHOT build @439ee2cf462eade066c7ab4a5035213b00a2cb2d **
+libkolab (0.4.2-4) unstable; urgency=low
 
   * Remove leftovers from dual build
   * Create shlibs from rules (not static file)
   * Remove obsolete conflicts
   * Add separate copyright for debian/*
+  * Update changelog
 
- -- Paul Klos <kolab@klos2day.nl>  Mon, 13 May 2013 22:02:31 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Mon, 13 May 2013 22:27:24 +0200
 
 libkolab (0.4.2-3) unstable; urgency=low
 
