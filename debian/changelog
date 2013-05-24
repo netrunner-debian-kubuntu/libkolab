@@ -1,3 +1,9 @@
+libkolab (0.4.2-5) unstable; urgency=low
+
+  * Upload to Debian
+
+ -- Paul Klos <kolab@klos2day.nl>  Fri, 24 May 2013 21:52:37 +0200
+
 libkolab (0.4.2-4) unstable; urgency=low
 
   * Remove leftovers from dual build
