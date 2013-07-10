@@ -1,15 +1,12 @@
-libkolab (0.4.2-6~3.gbpcdc499) UNRELEASED; urgency=low
-
-  ** SNAPSHOT build @cdc4998d87e22cf2729f902ef437597bbd3e0b94 **
+libkolab (0.4.2-6) unstable; urgency=low
 
   * Simpler SWIG test
-  * Update changelog
   * Update standards version
   * Remove unused-override hardening-no-fortify-functions
-  * Update changelog
   * Exclude kdepim-runtime from shdeps
+  * Update changelog
 
- -- Paul Klos <kolab@klos2day.nl>  Wed, 10 Jul 2013 20:37:04 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Wed, 10 Jul 2013 22:44:45 +0200
 
 libkolab (0.4.2-5) unstable; urgency=low
 
