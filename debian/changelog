@@ -1,3 +1,11 @@
+libkolab (0.4.2-6~1.gbp97dc7a) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @97dc7aaf5e86a88c3353a08069cda0bf6b0908bc **
+
+  * Simpler SWIG test
+
+ -- Paul Klos <kolab@klos2day.nl>  Wed, 10 Jul 2013 20:37:04 +0200
+
 libkolab (0.4.2-5) unstable; urgency=low
 
   * Upload to Debian
