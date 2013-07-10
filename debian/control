@@ -18,7 +18,7 @@ Build-Depends:
 	python-dev (>= 2.7),
 	kdepimlibs5-dev,
 X-Python-Version: >= 2.7
-Standards-Version: 3.9.3
+Standards-Version: 3.9.4
 Homepage: http://git.kolab.org/libkolab
 
 Package: libkolab0
