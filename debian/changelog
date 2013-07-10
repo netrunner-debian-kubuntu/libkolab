@@ -1,8 +1,11 @@
-libkolab (0.4.2-6~1.gbp97dc7a) UNRELEASED; urgency=low
+libkolab (0.4.2-6~2.gbpc0f4e3) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @97dc7aaf5e86a88c3353a08069cda0bf6b0908bc **
+  ** SNAPSHOT build @c0f4e33c70207d597a45c0e47e45c2bd104dd515 **
 
   * Simpler SWIG test
+  * Update changelog
+  * Update standards version
+  * Remove unused-override hardening-no-fortify-functions
 
  -- Paul Klos <kolab@klos2day.nl>  Wed, 10 Jul 2013 20:37:04 +0200
 
