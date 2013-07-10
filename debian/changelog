@@ -1,11 +1,13 @@
-libkolab (0.4.2-6~2.gbpc0f4e3) UNRELEASED; urgency=low
+libkolab (0.4.2-6~3.gbpcdc499) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @c0f4e33c70207d597a45c0e47e45c2bd104dd515 **
+  ** SNAPSHOT build @cdc4998d87e22cf2729f902ef437597bbd3e0b94 **
 
   * Simpler SWIG test
   * Update changelog
   * Update standards version
   * Remove unused-override hardening-no-fortify-functions
+  * Update changelog
+  * Exclude kdepim-runtime from shdeps
 
  -- Paul Klos <kolab@klos2day.nl>  Wed, 10 Jul 2013 20:37:04 +0200
 
