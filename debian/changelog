@@ -1,12 +1,16 @@
-libkolab (0.4.2-6) unstable; urgency=low
+libkolab (0.4.2-6~1.gbpdc9e04) UNRELEASED; urgency=low
 
+  ** SNAPSHOT build @dc9e045916139ececcba32b2c61490a82a245ba3 **
+
+  * Remove unneccessary export
+  * Install kolab.ini from debian/ dir
   * Simpler SWIG test
   * Update standards version
   * Remove unused-override hardening-no-fortify-functions
   * Exclude kdepim-runtime from shdeps
   * Update changelog
 
- -- Paul Klos <kolab@klos2day.nl>  Wed, 10 Jul 2013 22:44:45 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Thu, 11 Jul 2013 21:43:31 +0200
 
 libkolab (0.4.2-5) unstable; urgency=low
 
