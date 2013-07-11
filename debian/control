@@ -73,7 +73,10 @@ Package: libkolab-dev
 Section: libdevel
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
-         ${misc:Depends}
+         ${misc:Depends},
+         libqt4-dev,
+         kdepimlibs5-dev,
+         libkolabxml-dev
 Description: Development package for Kolab library
  libkolab provides conversions from/to KDE containers, mime message
  handling and facilities to read and write kolabv2 and kolabv3.
