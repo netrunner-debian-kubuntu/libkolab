@@ -25,18 +25,8 @@ override_dh_gencontrol:
 	dh_gencontrol
 
 override_dh_install:
-	# Install the PHP modules manually, because they depend on PHP the API version,
-	# which has to be determined dynamically, so we can't put it into an .install file.
-	mkdir -p debian/tmp/usr/share/php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabcalendaring.php debian/tmp/usr/share/php/kolabcalendaring.php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabicalendar.php debian/tmp/usr/share/php/kolabicalendar.php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabobject.php debian/tmp/usr/share/php/kolabobject.php
-	mv debian/tmp/usr/lib/php5/$(PHPAPI)/kolabshared.php debian/tmp/usr/share/php/kolabshared.php
-	# Put kolab.ini into place
-	mkdir -p debian/tmp/usr/share/php5/kolab
-	cp debian/usr/share/php5/kolab/kolab.ini debian/tmp/usr/share/php5/kolab/
 	# Install the packages 
-	dh_install --list-missing
+	dh_install --fail-missing
 
 override_dh_auto_test:
 	dh_auto_test || :
