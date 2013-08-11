@@ -59,7 +59,7 @@ Package: python-kolab
 Architecture: any
 Section: python
 Depends: libkolab0 (= ${binary:Version}),
-	python,
+	${python:Depends},
 	${misc:Depends},
 	${shlibs:Depends}
 Description: Python bindings for Kolab Library
