@@ -1,5 +1,10 @@
-libkolab (0.4.2-6) unstable; urgency=low
+libkolab (0.4.2-6~1.gbp20a03f) UNRELEASED; urgency=low
 
+  ** SNAPSHOT build @20a03fa9bf496a796625f0fd2c0e5058a9bee612 **
+
+  * Don't set LIB_INSTALL_DIR, it messes up the generated cmake module
+  * Use generated Python dependencies for python-kolab
+  * Add copyright section for generated cmake files
   * Remove unneccessary export
   * Install kolab.ini from debian/ dir
   * Simpler SWIG test
@@ -9,7 +14,7 @@ libkolab (0.4.2-6) unstable; urgency=low
   * Streamline php-kolab install
   * Fix dependencies for libkolab-dev
 
- -- Paul Klos <kolab@klos2day.nl>  Thu, 11 Jul 2013 23:05:37 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Sun, 11 Aug 2013 17:18:28 +0200
 
 libkolab (0.4.2-5) unstable; urgency=low
 
