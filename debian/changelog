@@ -1,7 +1,8 @@
-libkolab (0.4.2-6~1.gbp20a03f) UNRELEASED; urgency=low
+libkolab (0.4.2-6~2.gbp02c902) UNRELEASED; urgency=low
 
-  ** SNAPSHOT build @20a03fa9bf496a796625f0fd2c0e5058a9bee612 **
+  ** SNAPSHOT build @02c902edfc6a4a5f552ee0dad94342e01f093dda **
 
+  * Disable rpath
   * Don't set LIB_INSTALL_DIR, it messes up the generated cmake module
   * Use generated Python dependencies for python-kolab
   * Add copyright section for generated cmake files
