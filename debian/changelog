@@ -1,6 +1,4 @@
-libkolab (0.4.2-6~2.gbp02c902) UNRELEASED; urgency=low
-
-  ** SNAPSHOT build @02c902edfc6a4a5f552ee0dad94342e01f093dda **
+libkolab (0.4.2-6) unstable; urgency=low
 
   * Disable rpath
   * Don't set LIB_INSTALL_DIR, it messes up the generated cmake module
@@ -14,8 +12,9 @@ libkolab (0.4.2-6~2.gbp02c902) UNRELEASED; urgency=low
   * Exclude kdepim-runtime from shdeps
   * Streamline php-kolab install
   * Fix dependencies for libkolab-dev
+  * Update changelog
 
- -- Paul Klos <kolab@klos2day.nl>  Sun, 11 Aug 2013 17:18:28 +0200
+ -- Paul Klos <kolab@klos2day.nl>  Mon, 12 Aug 2013 14:01:00 +0200
 
 libkolab (0.4.2-5) unstable; urgency=low
 
