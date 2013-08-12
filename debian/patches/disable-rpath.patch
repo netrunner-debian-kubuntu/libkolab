@@ -1,0 +1,18 @@
+Description: Disable rpath setting by cmake
+ If LIB_INSTALL_DIR is set, the root dir LibkolabConfig.cmake is wrong,
+ but the php and python modules get built with an rpath.
+ This must be disabled.
+Author: Paul Klos <kolab@klos2day.nl>
+Last-Update: 2013-08-12
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,8 @@
+ set(Libkolab_MODULE_DIR ${Libkolab_SOURCE_DIR}/cmake/modules)
+ set(CMAKE_MODULE_PATH ${Libkolab_MODULE_DIR})
+ 
++SET(CMAKE_SKIP_RPATH TRUE)
++
+ # only available from cmake-2.8.0
+ if(${CMAKE_MAJOR_VERSION} EQUAL 2 AND ${CMAKE_MINOR_VERSION} GREATER 7)
+     cmake_policy(SET CMP0012 NEW)
