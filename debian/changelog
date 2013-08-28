@@ -1,3 +1,12 @@
+libkolab (0.4.2-7) unstable; urgency=low
+
+  * Fix saving of pictures to kabc resources (Closes: #721099)
+    Upstream commit
+    http://git.kolab.org/libkolab/
+    commit/?id=fa19b0d21f3e064adbdff907f06cd15b2cb81d16
+
+ -- Paul Klos <kolab@klos2day.nl>  Wed, 28 Aug 2013 20:20:39 +0200
+
 libkolab (0.4.2-6) unstable; urgency=low
 
   * Disable rpath
