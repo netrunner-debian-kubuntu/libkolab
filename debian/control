@@ -8,6 +8,7 @@ Build-Depends:
 	libqt4-dev,
 	debhelper (>= 9),
 	libkolabxml-dev (>= 1.0),
+	libboost-program-options-dev,
 	libcurl4-gnutls-dev,
 	swig,
 	php5-dev,
