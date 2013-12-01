@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kcalcore/event.h>
 #include <kcalcore/icalformat.h>
+#include <ksystemtimezone.h>
 
 // void icuFoo()
 // {
@@ -51,6 +52,11 @@
 // //     icu::TimeZone *tz = icu::TimeZone::getStaticClassID();
 // 
 // }
+
+void TimezoneTest::initTestCase()
+{
+    QVERIFY2(KSystemTimeZones::isTimeZoneDaemonAvailable(), "Timezone support is required for this test. Either use libcalendaring or make sure KTimeZoned is available");
+}
 
 void TimezoneTest::testFromName()
 {
@@ -77,6 +83,7 @@ void TimezoneTest::testFromHardcodedList_data()
     QTest::newRow( "12" ) << QString::fromLatin1("(GMT-08:00) Pacific Time (US and Canada); Tijuana");
     QTest::newRow( "13" ) << QString::fromLatin1("(GMT-11:00) Midway Island, Samoa");
     QTest::newRow( "14" ) << QString::fromLatin1("W. Europe Standard Time");
+    QTest::newRow( "15" ) << QString::fromLatin1("(GMT+1.00) Sarajevo/Warsaw/Zagreb");
 }
 
 void TimezoneTest::testFromHardcodedList()
@@ -144,6 +151,20 @@ void TimezoneTest::testKolabObjectReader()
     }
     QVERIFY( *(realIncidence.data()) ==  *(convertedIncidence.data()) );
 }
+
+void TimezoneTest::testFindLegacyTimezone()
+{
+    const QString normalized = TimezoneConverter::normalizeTimezone("US/Pacific");
+    kDebug() << normalized;
+    QVERIFY(!normalized.isEmpty());
+}
+
+void TimezoneTest::testTimezoneDaemonAvailable()
+{
+    //With KDE it should be available and with libcalendaring it should return true
+    QVERIFY(KSystemTimeZones::isTimeZoneDaemonAvailable());
+}
+
 
 QTEST_MAIN( TimezoneTest )
 

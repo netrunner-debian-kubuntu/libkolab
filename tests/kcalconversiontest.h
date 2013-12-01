@@ -25,6 +25,7 @@ class KCalConversionTest : public QObject
 {
   Q_OBJECT
   private slots:
+    void initTestCase();
 
     void testDate_data();
     void testDate();

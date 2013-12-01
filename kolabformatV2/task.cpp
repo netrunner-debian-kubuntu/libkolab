@@ -38,42 +38,6 @@
 
 using namespace KolabV2;
 
-// Kolab Storage Specification:
-//    "The priority can be a number between 1 and 5, with 1 being the highest priority."
-// iCalendar (RFC 2445):
-//    "The priority is specified as an integer in the range
-//     zero to nine. A value of zero specifies an
-//     undefined priority. A value of one is the
-//     highest priority. A value of nine is the lowest
-//     priority."
-
-static int kcalPriorityToKolab( const int kcalPriority )
-{
-  if ( kcalPriority >= 0 && kcalPriority <= 9 ) {
-    // We'll map undefined (0) to 3 (default)
-    //                                   0  1  2  3  4  5  6  7  8  9
-    static const int priorityMap[10] = { 3, 1, 1, 2, 2, 3, 3, 4, 4, 5 };
-    return priorityMap[kcalPriority];
-  }
-  else {
-    kWarning() << "Got invalid priority" << kcalPriority;
-    return 3;
-  }
-}
-
-static int kolabPrioritytoKCal( const int kolabPriority )
-{
-  if ( kolabPriority >= 1 && kolabPriority <= 5 ) {
-    //                                  1  2  3  4  5
-    static const int priorityMap[5] = { 1, 3, 5, 7, 9 };
-    return priorityMap[kolabPriority - 1];
-  }
-  else {
-    kWarning() << "Got invalid priority" << kolabPriority;
-    return 5;
-  }
-}
-
 KCalCore::Todo::Ptr Task::fromXml( const QDomDocument& xmlDoc, const QString& tz )
 {
   Task task( tz );
@@ -91,7 +55,7 @@ QString Task::taskToXML( const KCalCore::Todo::Ptr &todo, const QString& tz )
 
 Task::Task( const QString& tz, const KCalCore::Todo::Ptr &task )
   : Incidence( tz, task ),
-    mPriority( 5 ), mPercentCompleted( 0 ),
+    mPercentCompleted( 0 ),
     mStatus( KCalCore::Incidence::StatusNone ),
     mHasStartDate( false ), mHasDueDate( false ),
     mHasCompletedDate( false )
@@ -103,16 +67,6 @@ Task::Task( const QString& tz, const KCalCore::Todo::Ptr &task )
 
 Task::~Task()
 {
-}
-
-void Task::setPriority( int priority )
-{
-  mPriority = priority;
-}
-
-int Task::priority() const
-{
-  return mPriority;
 }
 
 void Task::setPercentCompleted( int percent )
@@ -209,21 +163,7 @@ bool Task::loadAttribute( QDomElement& element )
 {
   QString tagName = element.tagName();
 
-  if ( tagName == "priority" ) {
-    bool ok;
-    mKolabPriorityFromDom = element.text().toInt( &ok );
-    if ( !ok || mKolabPriorityFromDom < 1 || mKolabPriorityFromDom > 5 ) {
-      kWarning() << "Invalid \"priority\" value:" << element.text();
-      mKolabPriorityFromDom = -1;
-    }
-  } else if ( tagName == "x-kcal-priority" ) {
-    bool ok;
-    mKCalPriorityFromDom = element.text().toInt( &ok );
-    if ( !ok || mKCalPriorityFromDom < 0 || mKCalPriorityFromDom > 9 ) {
-      kWarning() << "Invalid \"x-kcal-priority\" value:" << element.text();
-      mKCalPriorityFromDom = -1;
-    }
-  } else if ( tagName == "completed" ) {
+  if ( tagName == "completed" ) {
     bool ok;
     int percent = element.text().toInt( &ok );
     if ( !ok || percent < 0 || percent > 100 )
@@ -262,11 +202,6 @@ bool Task::saveAttributes( QDomElement& element ) const
 {
   // Save the base class elements
   Incidence::saveAttributes( element );
-
-  // We need to save x-kcal-priority as well, since the Kolab priority can only save values from
-  // 1 to 5, but we have values from 0 to 9, and do not want to loose them
-  writeString( element, "priority", QString::number( kcalPriorityToKolab( priority() ) ) );
-  writeString( element, "x-kcal-priority", QString::number( priority() ) );
 
   writeString( element, "completed", QString::number( percentCompleted() ) );
 
@@ -318,9 +253,6 @@ bool Task::saveAttributes( QDomElement& element ) const
 
 bool Task::loadXML( const QDomDocument& document )
 {
-  mKolabPriorityFromDom = -1;
-  mKCalPriorityFromDom = -1;
-
   QDomElement top = document.documentElement();
 
   if ( top.tagName() != "task" ) {
@@ -342,7 +274,6 @@ bool Task::loadXML( const QDomDocument& document )
       kDebug() <<"Node is not a comment or an element???";
   }
 
-  decideAndSetPriority();
   return true;
 }
 
@@ -368,7 +299,6 @@ void Task::setFields( const KCalCore::Todo::Ptr &task )
 {
   Incidence::setFields( task );
 
-  setPriority( task->priority() );
   setPercentCompleted( task->percentComplete() );
   setStatus( task->status() );
   setHasStartDate( task->hasStartDate() );
@@ -399,46 +329,10 @@ void Task::setFields( const KCalCore::Todo::Ptr &task )
   }
 }
 
-void Task::decideAndSetPriority()
-{
-  // If we have both Kolab and KCal values in the XML, we prefer the KCal value, but only if the
-  // values are still in sync
-  if  ( mKolabPriorityFromDom != -1 && mKCalPriorityFromDom != -1 ) {
-    const bool inSync = ( kcalPriorityToKolab( mKCalPriorityFromDom ) == mKolabPriorityFromDom );
-    if ( inSync ) {
-      setPriority( mKCalPriorityFromDom );
-    }
-    else {
-      // Out of sync, some other client changed the Kolab priority, so we have to ignore our
-      // KCal priority
-      setPriority( kolabPrioritytoKCal( mKolabPriorityFromDom ) );
-    }
-  }
-
-  // Only KCal priority set, use that.
-  else if ( mKolabPriorityFromDom == -1 && mKCalPriorityFromDom != -1 ) {
-    kWarning() << "No Kolab priority found, only the KCal priority!";
-    setPriority( mKCalPriorityFromDom );
-  }
-
-  // Only Kolab priority set, use that
-  else if ( mKolabPriorityFromDom != -1 && mKCalPriorityFromDom == -1 ) {
-    setPriority( kolabPrioritytoKCal( mKolabPriorityFromDom ) );
-  }
-
-  // No priority set, use the default
-  else {
-    // According the RFC 2445, we should use 0 here, for undefined priority, but AFAIK KOrganizer
-    // doesn't support that, so we'll use 5.
-    setPriority( 5 );
-  }
-}
-
 void Task::saveTo( const KCalCore::Todo::Ptr &task )
 {
   Incidence::saveTo( task );
 
-  task->setPriority( priority() );
   task->setPercentComplete( percentCompleted() );
   task->setStatus( status() );
   task->setHasStartDate( hasStartDate() );

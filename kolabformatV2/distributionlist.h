@@ -86,6 +86,7 @@ private:
   struct Member {
     QString displayName;
     QString email;
+    QString uid;
   };
   QList<Member> mDistrListMembers;
 };

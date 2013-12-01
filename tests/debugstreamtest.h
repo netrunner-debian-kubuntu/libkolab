@@ -15,40 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef DEBUGSTREAMTEST_H
+#define DEBUGSTREAMTEST_H
 
-#ifndef CALENDARINGTEST_H
-#define CALENDARINGTEST_H
 #include <QObject>
 
-class CalendaringTest: public QObject
+class DebugStreamTest: public QObject
 {
     Q_OBJECT
 private slots:
-    void initTestCase();
-
-    void testCalendaringEvent();
-    
-    void testEventConflict_data();
-    void testEventConflict();
-
-    void testEventConflictSet();
-
-    void testTimesInInterval_data();
-    void testTimesInInterval();
-    void testTimesInIntervalBenchmark();
-
-    void testCalendar_data();
-    void testCalendar();
-
-    void delegationTest();
-
-    void testMime();
-    void testICal();
-    void testIMip();
-
-    void testRecurrence();
-
-    void testDateTimeUtils();
+    void testDebugstream();
+    void testDebugNotLogged();
+    void testHasError();
 };
 
-#endif // CALENDARINGTEST_H
+#endif // DEBUGSTREAMTEST_H
