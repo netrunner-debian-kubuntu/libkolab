@@ -1,3 +1,11 @@
+libkolab (0.5.0-1~1.gbp579016) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @57901645e1037e340b9af5ab01c87bc388855d30 **
+
+  * Imported Upstream version 0.5.0
+
+ -- Paul Klos <kolab@klos2day.nl>  Sun, 01 Dec 2013 13:47:45 +0100
+
 libkolab (0.4.2-7) unstable; urgency=low
 
   * Fix saving of pictures to kabc resources (Closes: #721099)
