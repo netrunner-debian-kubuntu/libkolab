@@ -33,7 +33,6 @@
 #include "contact.h"
 
 #include <kabc/addressee.h>
-#include <kcalcore/freebusyurlstore.h>
 #include <kdebug.h>
 #include <QFile>
 #include <float.h>
@@ -1063,7 +1062,7 @@ void Contact::setFields( const KABC::Addressee* addressee )
     }
   }
 
-  QString url = KCalCore::FreeBusyUrlStore::self()->readUrl( addressee->preferredEmail() );
+  const QString url = addressee->custom("KOLAB", "FreebusyUrl");
   if ( !url.isEmpty() ) {
     setFreeBusyUrl( url );
   }
@@ -1110,12 +1109,13 @@ void Contact::saveTo( KABC::Addressee* addressee )
                              dateToString( anniversary() ) );
   else
     addressee->removeCustom( "KADDRESSBOOK", "X-Anniversary" );
+  
+  addressee->insertCustom( "KOLAB", "FreebusyUrl", freeBusyUrl() );
 
   // We need to store both the original attachment name and the picture data into the addressee.
   // This is important, otherwise we would save the image under another attachment name w/o deleting the original one!
   if ( !mPicture.isNull() ) {
     KABC::Picture picture( mPicture );
-    picture.setType(mPictureFormat);
     addressee->setPhoto( picture );
   }
   // Note that we must save the filename in all cases, so that removing the picture
@@ -1123,7 +1123,6 @@ void Contact::saveTo( KABC::Addressee* addressee )
   addressee->insertCustom( "KOLAB", "PictureAttachmentName", mPictureAttachmentName );
   if ( !mLogo.isNull() ) {
     KABC::Picture picture( mLogo );
-    picture.setType(mLogoFormat);
     addressee->setLogo( picture );
   }
   addressee->insertCustom( "KOLAB", "LogoAttachmentName", mLogoAttachmentName );

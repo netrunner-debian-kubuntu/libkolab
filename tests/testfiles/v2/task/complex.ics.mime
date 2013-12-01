@@ -29,6 +29,7 @@ Content-Disposition: attachment; filename="kolab.xml"
  <creation-date>2009-09-01T13:39:15Z</creation-date>
  <last-modification-date>2009-09-01T13:39:15+00:00</last-modification-date>
  <sensitivity>private</sensitivity>
+ <priority>1</priority>
  <start-date>2009-09-01T14:00:00Z</start-date>
  <summary>Complex Task</summary>
  <location>Here</location>
@@ -64,8 +65,6 @@ Content-Disposition: attachment; filename="kolab.xml"
    <end-offset>-15</end-offset>
   </alarm>
  </advanced-alarms>
- <priority>1</priority>
- <x-kcal-priority>1</x-kcal-priority>
  <completed>50</completed>
  <status>not-started</status>
  <due-date>2009-09-08T14:00:00Z</due-date>

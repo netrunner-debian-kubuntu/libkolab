@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Mollekopf <mollekopf@kolabsys.com>
+ * Copyright (C) 2012  Sofia Balicka <balicka@kolabsys.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -15,40 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef CALENDARINGTEST_H
-#define CALENDARINGTEST_H
+#ifndef MIMEOBJECTTEST_H
+#define MIMEOBJECTTEST_H
 #include <QObject>
 
-class CalendaringTest: public QObject
+class MIMEObjectTest: public QObject
 {
     Q_OBJECT
+
 private slots:
     void initTestCase();
-
-    void testCalendaringEvent();
-    
-    void testEventConflict_data();
-    void testEventConflict();
-
-    void testEventConflictSet();
-
-    void testTimesInInterval_data();
-    void testTimesInInterval();
-    void testTimesInIntervalBenchmark();
-
-    void testCalendar_data();
-    void testCalendar();
-
-    void delegationTest();
-
-    void testMime();
-    void testICal();
-    void testIMip();
-
-    void testRecurrence();
-
-    void testDateTimeUtils();
+    void testEvent();
+    void testJournal(); 
+    void testNote();
+    void testContact();
+    void testDistlist();
 };
+#endif // MIMEOBJECTTEST_H
 
-#endif // CALENDARINGTEST_H

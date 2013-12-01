@@ -78,6 +78,9 @@ public:
 
   void saveTo( const KCalCore::Incidence::Ptr &incidence );
 
+  virtual void setPriority( int priority );
+  virtual int priority() const;
+
   virtual void setSummary( const QString& summary );
   virtual QString summary() const;
 
@@ -159,6 +162,9 @@ protected:
   };
   QList<Custom> mCustomList;
 
+  // This is the KCal priority, not the Kolab priority.
+  // See kcalPriorityToKolab() and kolabPrioritytoKCal().
+  int mPriority;
 };
 
 }

@@ -78,6 +78,8 @@ void KolabV2::DistributionList::loadDistrListMember( const QDomElement& element 
         member.displayName = e.text();
       else if ( tagName == "smtp-address" )
         member.email = e.text();
+      else if ( tagName == "uid" )
+        member.uid = e.text();
     }
   }
   mDistrListMembers.append( member );
@@ -90,8 +92,12 @@ void DistributionList::saveDistrListMembers( QDomElement& element ) const
     QDomElement e = element.ownerDocument().createElement( "member" );
     element.appendChild( e );
     const Member& m = *it;
-    writeString( e, "display-name", m.displayName );
-    writeString( e, "smtp-address", m.email );
+    if (!m.uid.isEmpty()) {
+      writeString( e, "uid", m.uid );
+    } else {
+      writeString( e, "display-name", m.displayName );
+      writeString( e, "smtp-address", m.email );
+    }
   }
 }
 
@@ -192,8 +198,13 @@ void DistributionList::setFields( const KABC::ContactGroup* contactGroup )
 
     mDistrListMembers.append( m );
   }
-  if (contactGroup->contactReferenceCount() > 0) {
-    kWarning() << "Tried to save contact references, which should have been resolved already";
+  for ( uint index = 0; index < contactGroup->contactReferenceCount(); ++index ) {
+    const KABC::ContactGroup::ContactReference& data = contactGroup->contactReference( index );
+
+    Member m;
+    m.uid = data.uid();
+
+    mDistrListMembers.append( m );
   }
   if (contactGroup->contactGroupReferenceCount() > 0) {
     kWarning() << "Tried to save contact group references, which should have been resolved already";
@@ -209,8 +220,11 @@ void DistributionList::saveTo( KABC::ContactGroup* contactGroup )
 
   QList<Member>::ConstIterator mit = mDistrListMembers.constBegin();
   for ( ; mit != mDistrListMembers.constEnd(); ++mit ) {
-    const KABC::ContactGroup::Data data( (*mit).displayName, (*mit).email );
-    contactGroup->append( data );
+    if (!(*mit).uid.isEmpty()) {
+      contactGroup->append(KABC::ContactGroup::ContactReference( (*mit).uid ));
+    } else {
+      contactGroup->append(KABC::ContactGroup::Data( (*mit).displayName, (*mit).email ));
+    }
   }
 }
 

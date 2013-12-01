@@ -44,15 +44,24 @@
 
 using namespace KolabV2;
 
-
 Incidence::Incidence( const QString& tz, const KCalCore::Incidence::Ptr &incidence )
-  : KolabBase( tz ), mFloatingStatus( Unset ), mHasAlarm( false )
+  : KolabBase( tz ), mFloatingStatus( Unset ), mHasAlarm( false ), mPriority( 0 )
 {
   Q_UNUSED( incidence );
 }
 
 Incidence::~Incidence()
 {
+}
+
+void Incidence::setPriority( int priority )
+{
+  mPriority = priority;
+}
+
+int Incidence::priority() const
+{
+  return mPriority;
 }
 
 void Incidence::setSummary( const QString& summary )
@@ -472,7 +481,25 @@ bool Incidence::loadAttribute( QDomElement& element )
 {
   QString tagName = element.tagName();
 
-  if ( tagName == "summary" )
+  if ( tagName == "priority" ) {
+    bool ok;
+    int p = element.text().toInt( &ok );
+    if ( !ok || p < 1 || p > 9 ) {
+      kWarning() << "Invalid \"priority\" value:" << element.text();
+    } else {
+      setPriority( p );
+    }
+  } else if ( tagName == "x-kcal-priority" ) { //for backwards compat
+    bool ok;
+    int p = element.text().toInt( &ok );
+    if ( !ok || p < 0 || p > 9 ) {
+      kWarning() << "Invalid \"x-kcal-priority\" value:" << element.text();
+    } else {
+      if ( priority() == 0 ) {
+        setPriority(p);
+      }
+    }
+  } else if ( tagName == "summary" )
     setSummary( element.text() );
   else if ( tagName == "location" )
     setLocation( element.text() );
@@ -526,6 +553,10 @@ bool Incidence::saveAttributes( QDomElement& element ) const
 {
   // Save the base class elements
   KolabBase::saveAttributes( element );
+
+  if (priority() != 0) {
+    writeString( element, "priority", QString::number( priority() ) );
+  }
 
   if ( mFloatingStatus == HasTime )
     writeString( element, "start-date", dateTimeToString( startDate() ) );
@@ -747,6 +778,7 @@ void Incidence::setFields( const KCalCore::Incidence::Ptr &incidence )
 {
   KolabBase::setFields( incidence );
 
+  setPriority( incidence->priority() );
   if ( incidence->allDay() ) {
     // This is a all-day event. Don't timezone move this one
     mFloatingStatus = AllDay;
@@ -857,6 +889,7 @@ void Incidence::saveTo( const KCalCore::Incidence::Ptr &incidence )
 {
   KolabBase::saveTo( incidence );
 
+  incidence->setPriority( priority() );
   if ( mFloatingStatus == AllDay ) {
     // This is an all-day event. Don't timezone move this one
     incidence->setDtStart( startDate() );
@@ -972,6 +1005,6 @@ QString Incidence::productID() const
 }
 
 // Unhandled KCalCore::Incidence fields:
-// revision, status (unused), priority (done in tasks), attendee.uid,
+// revision, status (unused), attendee.uid,
 // mComments, mReadOnly
 

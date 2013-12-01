@@ -85,18 +85,6 @@ QList<QByteArray> getContentMimeTypeList(const KMime::Message::Ptr& data)
     return typeList;
 }
 
-
-
-QByteArray getXmlDocument(const KMime::Message::Ptr &data, const QByteArray &mimetype)
-{
-    if ( KMime::Content *xmlContent = findContentByType( data, mimetype ) ) {
-        return xmlContent->decodedContent();
-    }
-    Error() << "document not found";
-    return QByteArray();
-}
-
-
 QString fromCid(const QString &cid)
 {
     if (cid.left(4) != QString::fromLatin1("cid:")) { //Don't set if not a cid, happens when serializing format v2

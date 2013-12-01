@@ -34,7 +34,7 @@ namespace Kolab {
 class KOLAB_EXPORT XMLObject
 {
 public:
-    explicit XMLObject();
+    XMLObject();
 
     std::string getSerializedUID() const;
     
@@ -85,6 +85,9 @@ public:
 
     Kolab::Configuration readConfiguration(const std::string& s, Kolab::Version version);
     std::string writeConfiguration(const Kolab::Configuration &, Kolab::Version version, const std::string& productId = std::string());
+
+    Kolab::File readFile(const std::string& s, Kolab::Version version);
+    std::string writeFile(const Kolab::File &, Kolab::Version version, const std::string& productId = std::string());
     
 private:
     std::vector<std::string> mAttachments;
