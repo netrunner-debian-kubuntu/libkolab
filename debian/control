@@ -2,7 +2,7 @@ Source: libkolab
 Section: libs
 Priority: optional
 Maintainer: Debian Kolab Maintainers <pkg-kolab-devel@lists.alioth.debian.org>
-Uploaders: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>, Paul Klos <kolab@klos2day.nl>
+Uploaders: Paul Klos <kolab@klos2day.nl>
 Build-Depends:
 	cmake,
 	libqt4-dev,
@@ -18,6 +18,8 @@ Build-Depends:
 X-Python-Version: >= 2.7
 Standards-Version: 3.9.4
 Homepage: http://git.kolab.org/libkolab
+Vcs-Git: git://git.debian.org/git/pkg-kolab/libkolab.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-kolab/libkolab.git
 
 Package: libkolab0
 Architecture: any
