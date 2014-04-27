@@ -49,8 +49,6 @@ class FormatTest: public QObject
 {
     Q_OBJECT
 private slots:
-
-    void initTestCase();
     
     void testIncidence_data();
     void testIncidence();

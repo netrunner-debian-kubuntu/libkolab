@@ -31,7 +31,7 @@ endif()
 # 0.1.1 (patch release for 0.1.0)
 # 0.2 (0.2 development version towards 0.2.0)
 set(Libkolab_VERSION_MAJOR 0)
-set(Libkolab_VERSION_MINOR 5)
+set(Libkolab_VERSION_MINOR 4)
 # Enable the full x.y.z version only for release versions
 set(Libkolab_VERSION_PATCH 2)
 set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR}.${Libkolab_VERSION_PATCH} )
@@ -44,19 +44,11 @@ set(INCLUDE_INSTALL_DIR include CACHE STRING "The directory where to install hea
 set(INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/kolab)
 set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/Libkolab )
 
-# Make relative paths absolute (needed later on)
-foreach(p LIB INCLUDE CMAKECONFIG)
-    set(var ${p}_INSTALL_DIR)
-    if(NOT IS_ABSOLUTE "${${var}}")
-        set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
-    endif()
-endforeach()
-
 include(MacroLogFeature)
 
 # Do the building
-find_package(Libkolabxml 1.0 REQUIRED)
-macro_log_feature(Libkolabxml_FOUND "Libkolabxml" "Kolab XML Format 3 serializing library" "http://git.kolab.org/libkolabxml/" TRUE "1.0" "Required for reading/writing Kolab XML Objects")
+find_package(Libkolabxml 0.7 REQUIRED)
+macro_log_feature(Libkolabxml_FOUND "Libkolabxml" "Kolab XML Format 3 serializing library" "http://git.kolab.org/libkolabxml/" TRUE "0.7" "Required for reading/writing Kolab XML Objects")
 
 find_package(Qt4 4.6.0 REQUIRED)
 
@@ -73,16 +65,14 @@ find_package(SWIG)
 #Show summary of found libraries
 macro_display_feature_log()
 
+# add_definitions(-DKDEPIMLIBS_VERSION=0x${KdepimLibs_VERSION_MAJOR}0${KdepimLibs_VERSION_MINOR}${KDEPIMLIBS_VERSION_PATCH})
 # add_definitions( -DKDEPIMLIBS_VERSION=((${KdepimLibs_VERSION_MAJOR}<<16)|(${KdepimLibs_VERSION_MINOR}<<8)|(${KDEPIMLIBS_VERSION_PATCH})) )
-add_definitions( -DKDEPIMLIBS_VERSION_MAJOR=${KdepimLibs_VERSION_MAJOR} )
-add_definitions( -DKDEPIMLIBS_VERSION_MINOR=${KdepimLibs_VERSION_MINOR} )
-add_definitions( -DKDEPIMLIBS_VERSION_PATCH=${KdepimLibs_VERSION_PATCH} )
 
 if("${KdepimLibs_VERSION}" VERSION_GREATER "4.8.40" OR USE_LIBCALENDARING)
     add_definitions(-DKDEPIMLIBS_VERSION_DEVEL)
 endif()
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -DQT_NO_EXCEPTIONS -fno-common -Woverloaded-virtual -fno-threadsafe-statics -fvisibility=hidden -Werror=return-type -fvisibility-inlines-hidden -fexceptions -UQT_NO_EXCEPTIONS -fPIC -g" )
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -DQT_NO_EXCEPTIONS -fno-check-new -fno-common -Woverloaded-virtual -fno-threadsafe-statics -fvisibility=hidden -Werror=return-type -fvisibility-inlines-hidden -fexceptions -UQT_NO_EXCEPTIONS -fPIC -g" )
 # message("${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG")
 
@@ -124,7 +114,6 @@ add_subdirectory(conversion)
 add_subdirectory(calendaring)
 add_subdirectory(icalendar)
 add_subdirectory(freebusy)
-add_subdirectory(utils)
 
 QT4_WRAP_CPP(CALENDARING_MOC calendaring/event.h)
 # QT4_WRAP_CPP(CONVERSION_MOC conversion/qtevent.h conversion/qtduration.h)
@@ -135,7 +124,6 @@ set(KOLAB_SRCS
     kolabformat/formathelpers.cpp
     kolabformat/errorhandler.cpp
     kolabformat/v2helpers.cpp
-	kolabformat/mimeobject.cpp
     mime/mimeutils.cpp
     ${CONVERSION_SRCS}
     ${kolabformatv2_SRCS}
@@ -178,8 +166,6 @@ install(FILES
     kolabformat/formathelpers.h
     kolabformat/kolabobject.h
     kolabformat/errorhandler.h
-    kolabformat/xmlobject.h
-    kolabformat/mimeobject.h
     conversion/kcalconversion.h
     conversion/kabcconversion.h
     conversion/commonconversion.h
@@ -187,12 +173,9 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}
 )
 
-#Get the include directory relative to CMAKECONFIG_INSTALL_DIR
-file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKECONFIG_INSTALL_DIR}" "${INCLUDE_INSTALL_DIR}")
-#Assemble the full relative path. This will be used in the LibkolabConfig.cmake, which will be installed in CMAKECONFIG_INSTALL_DIR
-set(CONF_INCLUDE_DIRS "\${Libkolab_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-
 install(EXPORT LibkolabExport DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE LibkolabTargets.cmake )
+
+file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
 
 configure_file(${Libkolab_MODULE_DIR}/LibkolabConfig.cmake.in ${Libkolab_BINARY_DIR}/LibkolabConfig.cmake @ONLY )
 configure_file(${Libkolab_MODULE_DIR}/LibkolabConfigVersion.cmake.in ${Libkolab_BINARY_DIR}/LibkolabConfigVersion.cmake @ONLY )
@@ -204,7 +187,6 @@ install(FILES ${Libkolab_BINARY_DIR}/LibkolabConfig.cmake ${Libkolab_BINARY_DIR}
 include(SWIGUtils)
 if(PYTHON_BINDINGS)
     generatePythonBindings(shared shared.i)
-    add_subdirectory(kolabformat/python)
 endif(PYTHON_BINDINGS)
 
 if(PHP_BINDINGS)

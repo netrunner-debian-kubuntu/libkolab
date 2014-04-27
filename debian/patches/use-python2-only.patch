@@ -1,0 +1,12 @@
+Index: libkolab-0.4.2/CMakeLists.txt
+===================================================================
+--- libkolab-0.4.2.orig/CMakeLists.txt	2014-04-27 12:29:12.000000000 +0200
++++ libkolab-0.4.2/CMakeLists.txt	2014-04-27 13:24:32.599020139 +0200
+@@ -62,6 +62,7 @@
+     find_package(KdepimLibs 4.8 REQUIRED)
+ endif()
+ 
++set(PythonLibs_FIND_VERSION 2.7)
+ find_package(SWIG)
+ 
+ #Show summary of found libraries

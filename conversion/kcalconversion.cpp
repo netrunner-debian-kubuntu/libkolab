@@ -33,7 +33,6 @@ namespace Kolab {
 //The uid of a contact which refers to the uuid of a contact in the addressbook
 #define CUSTOM_KOLAB_CONTACT_UUID "X_KOLAB_CONTACT_UUID"
 #define CUSTOM_KOLAB_CONTACT_CUTYPE "X_KOLAB_CONTACT_CUTYPE"
-#define CUSTOM_KOLAB_URL "X-KOLAB-URL"
 
 KCalCore::Duration toDuration(const Kolab::Duration &d)
 {
@@ -392,10 +391,7 @@ void getIncidence(T &i, const I &e)
     std::vector<Kolab::CustomProperty> customProperties;
     const QMap<QByteArray, QString> &props = e.customProperties();
     for (QMap<QByteArray, QString>::const_iterator it = props.begin(); it != props.end(); it++) {
-        QString key(it.key());
-        if (key == QLatin1String(CUSTOM_KOLAB_URL)) {
-            continue;
-        }
+        QString key = QString(it.key());
         customProperties.push_back(Kolab::CustomProperty(toStdString(key.remove("X-KOLAB-")), toStdString(it.value())));
     }
     i.setCustomProperties(customProperties);
@@ -657,9 +653,6 @@ void setTodoEvent(KCalCore::Incidence &i, const T &e)
     if (e.organizer().isValid()) {
         i.setOrganizer(KCalCore::Person::Ptr(new KCalCore::Person(fromStdString(e.organizer().name()), fromStdString(e.organizer().email())))); //TODO handle uid too
     }
-    if (!e.url().empty()) {
-        i.setNonKDECustomProperty(CUSTOM_KOLAB_URL, fromStdString(e.url()));
-    }
     if (e.recurrenceID().isValid()) {
         i.setRecurrenceId(toDate(e.recurrenceID())); //TODO THISANDFUTURE
     }
@@ -711,7 +704,6 @@ void getTodoEvent(T &i, const I &e)
     if (e.organizer() && !e.organizer()->email().isEmpty()) {
         i.setOrganizer(Kolab::ContactReference(Kolab::ContactReference::EmailReference, toStdString(e.organizer()->email()), toStdString(e.organizer()->name()))); //TODO handle uid too
     }
-    i.setUrl(toStdString(e.nonKDECustomProperty(CUSTOM_KOLAB_URL)));
     i.setRecurrenceID(fromDate(e.recurrenceId()), false); //TODO THISANDFUTURE
     getRecurrence(i, e);
     std::vector <Kolab::Alarm> alarms;

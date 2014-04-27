@@ -1,3 +1,6 @@
-make_python_package.patch
+fix-libkolab-kabc-picture.patch
 disable-rpath.patch
+simpler_cmake_test.patch
+libkolab-0.3.1-php-paths.patch
 add-linker-flags.patch
+use-python2-only.patch

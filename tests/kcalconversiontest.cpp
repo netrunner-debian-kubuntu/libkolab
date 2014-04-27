@@ -53,10 +53,6 @@ void compareAttendeesVectors(const KCalCore::Attendee::List &list, const KCalCor
     }
 }
 
-void KCalConversionTest::initTestCase()
-{
-    QVERIFY2(KSystemTimeZones::isTimeZoneDaemonAvailable(), "Timezone support is required for this test. Either use libcalendaring or make sure KTimeZoned is available");
-}
 
 void KCalConversionTest::testDate_data()
 {
@@ -187,8 +183,6 @@ void KCalConversionTest::testConversion_data()
         kcal.setStatus(KCalCore::Incidence::StatusConfirmed);
         kcal.setLocation("location");
         kcal.setOrganizer(KCalCore::Person::Ptr(new KCalCore::Person("organizer", "organizer@email")));
-        //Url
-        kcal.setNonKDECustomProperty("X-KOLAB-URL", "http://test.org");
         KCalCore::Attendee::Ptr att(new KCalCore::Attendee("attendee", "attendee@email", false, KCalCore::Attendee::NeedsAction, KCalCore::Attendee::ReqParticipant));
         att->setDelegate("mailto:delegatee<delegatee@email>");
         att->setDelegator("mailto:delegator<delegator@email>");
@@ -241,7 +235,6 @@ void KCalConversionTest::testConversion_data()
         kolab.setStatus(Kolab::StatusConfirmed);
         kolab.setLocation("location");
         kolab.setOrganizer(Kolab::ContactReference(Kolab::ContactReference::EmailReference,"organizer@email", "organizer")); //TODO uid
-        kolab.setUrl("http://test.org");
         
         Kolab::Attendee a(Kolab::ContactReference(Kolab::ContactReference::EmailReference,"attendee@email", "attendee"));//TODO uid
         a.setDelegatedTo(std::vector<Kolab::ContactReference>() << Kolab::ContactReference(Kolab::ContactReference::EmailReference,"delegatee@email", "delegatee"));
@@ -346,8 +339,7 @@ void KCalConversionTest::testConversion()
     QFETCH(KCalCore::Event, kcal);
     QFETCH(Kolab::Event, kolab);
     
-    KCalCore::Event::Ptr e = toKCalCore(kolab);
-    const Kolab::Event &b = fromKCalCore(kcal);
+    const KCalCore::Event::Ptr e = toKCalCore(kolab);
     
     QCOMPARE(e->uid(), kcal.uid());
     QCOMPARE(e->created(), kcal.created());
@@ -369,10 +361,6 @@ void KCalConversionTest::testConversion()
     QCOMPARE(e->location(), kcal.location());
     QCOMPARE(e->organizer()->name(), kcal.organizer()->name());
     QCOMPARE(e->organizer()->email(), kcal.organizer()->email());
-    QCOMPARE(e->nonKDECustomProperty("X-KOLAB-URL"), kcal.nonKDECustomProperty("X-KOLAB-URL"));
-    //otherwise we'd break the customProperties comparison
-    e->removeNonKDECustomProperty("X-KOLAB-URL");
-    kcal.removeNonKDECustomProperty("X-KOLAB-URL");
     compareAttendeesVectors(e->attendees(), kcal.attendees());
     comparePointerVectors(e->attachments(), kcal.attachments());
     
@@ -383,6 +371,7 @@ void KCalConversionTest::testConversion()
 //         toKCalCore(kolab);
 //     }
     
+    const Kolab::Event &b = fromKCalCore(kcal);
     QCOMPARE(b.uid(), kolab.uid());
     QCOMPARE(b.created(), kolab.created());
     QCOMPARE(b.lastModified(), kolab.lastModified());
@@ -404,7 +393,6 @@ void KCalConversionTest::testConversion()
     QCOMPARE(b.status(), kolab.status());
     QCOMPARE(b.location(), kolab.location());
     QCOMPARE(b.organizer(), kolab.organizer());
-    QCOMPARE(b.url(), kolab.url());
     QCOMPARE(b.attendees(), kolab.attendees());
     QCOMPARE(b.attachments(), kolab.attachments());
     QCOMPARE(b.customProperties(), kolab.customProperties());
@@ -506,36 +494,17 @@ void KCalConversionTest::testContactConversion_data()
     
     Kolab::cDateTime date(2011,2,2,12,11,10,true);
     Kolab::cDateTime date2(2011,2,2,12,12,10,true);
+    
     {
         KABC::Addressee kcal;
         kcal.setUid("uid");
         kcal.setFormattedName("name");
-
+        
         Kolab::Contact kolab;
         kolab.setUid("uid");
         kolab.setName("name");
-
-        QTest::newRow("basic") << kcal << kolab;
-    }
-    {
-        KABC::Addressee kcal;
-        kcal.setUid("uid");
-        //The first address is always the preferred
-        kcal.setEmails(QStringList() << "email1@example.org" << "email2@example.org");
-        kcal.insertCustom("KOLAB", "EmailTypesemail1@example.org", "home,work");
-
-        Kolab::Contact kolab;
-        kolab.setUid("uid");
-
-        Kolab::Email email1("email1@example.org", Kolab::Email::Work|Kolab::Email::Home);
-        Kolab::Email email2("email2@example.org");
-
-        std::vector<Kolab::Email> emails;
-        emails.push_back(email1);
-        emails.push_back(email2);
-        kolab.setEmailAddresses(emails, 0);
-
-        QTest::newRow("emailTypesAndPreference") << kcal << kolab;
+        
+        QTest::newRow( "contact" ) << kcal << kolab;
     }
 }
 
@@ -549,17 +518,10 @@ void KCalConversionTest::testContactConversion()
     
     QCOMPARE(e.uid(), kcal.uid());
     QCOMPARE(e.formattedName(), kcal.formattedName());
-    QCOMPARE(e.emails(), kcal.emails());
-    QCOMPARE(e.preferredEmail(), kcal.preferredEmail());
-    foreach (const QString &mail, e.emails()) {
-        QCOMPARE(e.custom(QLatin1String("KOLAB"), QString::fromLatin1("EmailTypes%1").arg(mail)), kcal.custom(QLatin1String("KOLAB"), QString::fromLatin1("EmailTypes%1").arg(mail)));
-    }
     
     const Kolab::Contact &b = fromKABC(kcal);
     QCOMPARE(b.uid(), kolab.uid());
     QCOMPARE(b.name(), kolab.name());
-    QCOMPARE(b.emailAddresses(), kolab.emailAddresses());
-    QCOMPARE(b.emailAddressPreferredIndex(), kolab.emailAddressPreferredIndex());
 }
 
 

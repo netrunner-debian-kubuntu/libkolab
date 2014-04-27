@@ -1,0 +1,43 @@
+Description: Correction for PHP search paths.
+Author: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>
+Last-Update: 2012-09-08
+
+diff --git a/cmake/modules/SWIGUtils.cmake b/cmake/modules/SWIGUtils.cmake
+index 05c1bb3..830c84f 100644
+--- a/cmake/modules/SWIGUtils.cmake
++++ b/cmake/modules/SWIGUtils.cmake
+@@ -24,10 +24,12 @@ macro (generatePHPBindings MODULE_NAME INTERFACE_FILE)
+         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused" )
+     endif()
+ 
+-    find_package(PHP4 5.3 REQUIRED)
++    if (NOT PHP4_INCLUDE_PATH OR NOT PHP4_EXECUTABLE)
++        find_package(PHP4 5.3 REQUIRED)
++    endif (NOT PHP4_INCLUDE_PATH OR NOT PHP4_EXECUTABLE)
+ 
+-    if (PHP4_FOUND)
+-        include_directories(${PHP4_INCLUDE_PATH})
++    if (PHP4_FOUND OR (PHP4_INCLUDE_PATH AND PHP4_EXECUTABLE))
++        include_directories(${PHP4_INCLUDE_PATH} "${PHP4_INCLUDE_PATH}/Zend" "${PHP4_INCLUDE_PATH}/TSRM" "${PHP4_INCLUDE_PATH}/main")
+         add_library(${MODULE_NAME}_phpbindings SHARED ${KOLAB_SWIG_PHP_SOURCE_FILE})
+         target_link_libraries(${MODULE_NAME}_phpbindings kolab)
+         SET_TARGET_PROPERTIES(${MODULE_NAME}_phpbindings PROPERTIES OUTPUT_NAME ${MODULE_NAME})
+@@ -43,9 +45,9 @@ macro (generatePHPBindings MODULE_NAME INTERFACE_FILE)
+             ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.php
+             DESTINATION ${PHP_INSTALL_DIR}
+         )
+-    else(PHP4_FOUND)
++    else (PHP4_FOUND OR (PHP4_INCLUDE_PATH AND PHP4_EXECUTABLE))
+         message(WARNING "not building php bindings because php was not found")
+-    endif (PHP4_FOUND)
++    endif (PHP4_FOUND OR (PHP4_INCLUDE_PATH AND PHP4_EXECUTABLE))
+ endmacro()
+ 
+ 
+@@ -97,4 +99,4 @@ macro(generatePythonBindings MODULE_NAME INTERFACE_FILE)
+         DESTINATION ${PYTHON_INSTALL_DIR}/kolab
+     )
+ 
+-endmacro()
+\ No newline at end of file
++endmacro()

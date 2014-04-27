@@ -17,7 +17,6 @@
 
 #include "timezonetest.h"
 #include <conversion/timezoneconverter.h>
-#include <conversion/commonconversion.h>
 #include <kolabformat/kolabobject.h>
 #include <kolabformat/errorhandler.h>
 #include "testutils.h"
@@ -29,7 +28,6 @@
 #include <kdebug.h>
 #include <kcalcore/event.h>
 #include <kcalcore/icalformat.h>
-#include <ksystemtimezone.h>
 
 // void icuFoo()
 // {
@@ -53,11 +51,6 @@
 // //     icu::TimeZone *tz = icu::TimeZone::getStaticClassID();
 // 
 // }
-
-void TimezoneTest::initTestCase()
-{
-    QVERIFY2(KSystemTimeZones::isTimeZoneDaemonAvailable(), "Timezone support is required for this test. Either use libcalendaring or make sure KTimeZoned is available");
-}
 
 void TimezoneTest::testFromName()
 {
@@ -84,7 +77,6 @@ void TimezoneTest::testFromHardcodedList_data()
     QTest::newRow( "12" ) << QString::fromLatin1("(GMT-08:00) Pacific Time (US and Canada); Tijuana");
     QTest::newRow( "13" ) << QString::fromLatin1("(GMT-11:00) Midway Island, Samoa");
     QTest::newRow( "14" ) << QString::fromLatin1("W. Europe Standard Time");
-    QTest::newRow( "15" ) << QString::fromLatin1("(GMT+1.00) Sarajevo/Warsaw/Zagreb");
 }
 
 void TimezoneTest::testFromHardcodedList()
@@ -151,27 +143,6 @@ void TimezoneTest::testKolabObjectReader()
         showDiff(format.toString( realIncidence ), format.toString( convertedIncidence ));
     }
     QVERIFY( *(realIncidence.data()) ==  *(convertedIncidence.data()) );
-}
-
-void TimezoneTest::testFindLegacyTimezone()
-{
-    const QString normalized = TimezoneConverter::normalizeTimezone("US/Pacific");
-    kDebug() << normalized;
-    QVERIFY(!normalized.isEmpty());
-}
-
-void TimezoneTest::testTimezoneDaemonAvailable()
-{
-    //With KDE it should be available and with libcalendaring it should return true
-    QVERIFY(KSystemTimeZones::isTimeZoneDaemonAvailable());
-}
-
-void TimezoneTest::testUTCOffset()
-{
-    const Kolab::cDateTime expected(2013, 10, 23, 2, 0 ,0, true);
-    const KDateTime input(KDateTime::fromString("2013-10-23T04:00:00+02:00", KDateTime::RFC3339Date));
-    const Kolab::cDateTime result = Kolab::Conversion::fromDate(input);
-    QCOMPARE(result, expected);
 }
 
 QTEST_MAIN( TimezoneTest )

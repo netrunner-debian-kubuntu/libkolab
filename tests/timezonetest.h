@@ -23,19 +23,11 @@ class TimezoneTest: public QObject
 {
     Q_OBJECT
 private slots:
-    /**
-     * If this unittest fails, many others will follow.
-     */
-    void initTestCase();
-
     void testFromName();
     void testFromHardcodedList_data();
     void testFromHardcodedList();
     void testKolabObjectWriter();
     void testKolabObjectReader();
-    void testFindLegacyTimezone();
-    void testTimezoneDaemonAvailable();
-    void testUTCOffset();
 };
 
 #endif // TIMEZONETEST_H

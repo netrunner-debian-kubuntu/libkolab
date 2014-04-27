@@ -2,25 +2,24 @@ Source: libkolab
 Section: libs
 Priority: optional
 Maintainer: Debian Kolab Maintainers <pkg-kolab-devel@lists.alioth.debian.org>
-Uploaders: Paul Klos <kolab@klos2day.nl>, Diane Trout <diane@ghic.org>
+Uploaders: Jeroen van Meeuwen (Kolab Systems) <vanmeeuwen@kolabsys.com>, Paul Klos <kolab@klos2day.nl>
 Build-Depends:
-        cmake,
-        libqt4-dev,
-        debhelper (>= 9),
-        pkg-kde-tools (>= 0.12),
-        libkolabxml-dev (>= 1.0),
-        libboost-program-options-dev,
-        libcurl4-gnutls-dev,
-        swig,
-        php5-dev,
-        php5-cli,
-        python-dev (>= 2.7),
-        kdepimlibs5-dev,
+	cmake,
+	libqt4-dev,
+	debhelper (>= 9),
+	libkolabxml-dev (>= 0.8.4),
+	libboost-dev,
+	libxerces-c-dev,
+	libboost-thread-dev,
+	libboost-system-dev,
+	libcurl4-gnutls-dev,
+	swig,
+	php5-dev,
+	python-dev (>= 2.7),
+	kdepimlibs5-dev,
 X-Python-Version: >= 2.7
-Standards-Version: 3.9.5
+Standards-Version: 3.9.4
 Homepage: http://git.kolab.org/libkolab
-Vcs-Git: git://anonscm.debian.org/pkg-kolab/libkolab.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-kolab/libkolab.git
 
 Package: libkolab0
 Architecture: any
@@ -44,11 +43,11 @@ Description: Maps KDE containers to Kolab formats
 Package: php-kolab
 Architecture: any
 Depends: libkolab0 (= ${binary:Version}),
-         php-kolabformat,
-         ucf,
-         ${php:Depends},
-         ${misc:Depends},
-         ${shlibs:Depends}
+	php-kolabformat,
+	ucf,
+	${php:Depends},
+	${misc:Depends},
+	${shlibs:Depends}
 Description: PHP bindings for Kolab Library
  This package provides the Kolab PHP modules icalendar and calendaring.
  .
@@ -60,9 +59,9 @@ Package: python-kolab
 Architecture: any
 Section: python
 Depends: libkolab0 (= ${binary:Version}),
-         ${python:Depends},
-         ${misc:Depends},
-         ${shlibs:Depends}
+	${python:Depends},
+	${misc:Depends},
+	${shlibs:Depends}
 Description: Python bindings for Kolab Library
  This package provides the Kolab Python modules icalendar and calendaring.
  .

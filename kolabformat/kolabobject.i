@@ -4,7 +4,6 @@
     
     #include "../kolabformat/xmlobject.h"
     #include "../kolabformat/kolabdefinitions.h"
-    #include "../kolabformat/mimeobject.h"
 %}
 
 %include "std_string.i"
@@ -15,4 +14,3 @@
 
 %include "../kolabformat/xmlobject.h"
 %include "../kolabformat/kolabdefinitions.h"
-%include "../kolabformat/mimeobject.h"
