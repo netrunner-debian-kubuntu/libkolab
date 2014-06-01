@@ -4,3 +4,4 @@ simpler_cmake_test.patch
 libkolab-0.3.1-php-paths.patch
 add-linker-flags.patch
 use-python2-only.patch
+dont-redefine-KCalCore-Duration.patch

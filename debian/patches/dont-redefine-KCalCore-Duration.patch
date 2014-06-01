@@ -1,0 +1,10 @@
+--- libkolab.orig/tests/testhelpers.h
++++ libkolab/tests/testhelpers.h
+@@ -44,7 +44,6 @@ Q_DECLARE_METATYPE(std::vector<Kolab::Fr
+ Q_DECLARE_METATYPE(KCalCore::Event);
+ Q_DECLARE_METATYPE(KCalCore::Todo);
+ Q_DECLARE_METATYPE(KCalCore::Journal);
+-Q_DECLARE_METATYPE(KCalCore::Duration);
+ 
+ namespace QTest {
+     
