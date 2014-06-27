@@ -1,0 +1,6 @@
+# SymbolsHelper-Confirmed: 0.5.0 amd64
++ _ZZN5Kolab12ErrorHandler8instanceEvE4inst@Base 0.5.0-1~1.gbp579016
++++ dpkg-gensymbols413Qz8       2014-06-26 04:47:11.324229341 +0000
++libkolab.so.0 libkolab0 #MINVER#
+--- debian/libkolab0.symbols (libkolab0_0.5.0-1~1.gbp579016_amd64)
+@@ -0,0 +1,154 @@
