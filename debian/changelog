@@ -8,6 +8,8 @@ libkolab (0.5.0-1~1.gbp579016) UNRELEASED; urgency=low
   [ Diane Trout ]
   * Add libkolab0.symbols and supporting pkgkde-symbolshelper
     components
+  * Force specific python library version, CMake will default to python3
+    even though these build scripts assume python2.
 
  -- Paul Klos <kolab@klos2day.nl>  Sun, 01 Dec 2013 13:47:45 +0100
 
