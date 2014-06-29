@@ -3,26 +3,6 @@ Upstream-Name: libkolab
 Upstream-Contact: Christian Mollekopf <mollekopf@kolabsys.com>
 Source: http://git.kolab.org/libkolab
 
-Files: debian/*
-Copyright: 2012,      Christian Mollekopf <mollekopf@kolabsys.com>
-           2012-2013, Paul Klos <kolab@klos2day.nl>
-License: GPL-3+
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- .
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
- .
- You should have received a copy of the GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>.
- .
- On Debian systems a full copy of the GPL 3 can be found at
- /usr/share/common-licenses/GPL-3
-
 Files: *
 Copyright: 2011-2012 Christian Mollekopf <mollekopf@kolabsys.com>
            2004 Bo Thorsen <bo@sonofthor.dk>
@@ -44,6 +24,26 @@ License: LGPL-3+
  .
  On Debian systems a full copy of the LGPL 3 can be found at
  /usr/share/common-licenses/LGPL-3
+
+Files: debian/*
+Copyright: 2012,      Christian Mollekopf <mollekopf@kolabsys.com>
+           2012-2013, Paul Klos <kolab@klos2day.nl>
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems a full copy of the GPL 3 can be found at
+ /usr/share/common-licenses/GPL-3
 
 Files: kolab_export.h
        kolabformat/v2helpers.h
