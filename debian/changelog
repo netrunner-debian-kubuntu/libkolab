@@ -7,6 +7,7 @@ libkolab (0.5.2-1) UNRELEASED; urgency=low
   * Add make_python_package.patch to force python kolab to be a package.
   * Imported version 0.5.2
     This release is based on the unreleased 0.5.0 work by Paul Klos.
+  * Add myself to uploaders.
 
  -- Diane Trout <diane@ghic.org>  Sat, 28 Jun 2014 17:55:57 -0700
 
