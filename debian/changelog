@@ -1,18 +1,14 @@
-libkolab (0.5.0-1~1.gbp579016) UNRELEASED; urgency=low
+libkolab (0.5.2-1) UNRELEASED; urgency=low
 
-  [ Paul Klos ]
-  ** SNAPSHOT build @57901645e1037e340b9af5ab01c87bc388855d30 **
-
-  * Imported Upstream version 0.5.0
-
-  [ Diane Trout ]
   * Add libkolab0.symbols and supporting pkgkde-symbolshelper
     components
   * Force specific python library version, CMake will default to python3
     even though these build scripts assume python2.
   * Add make_python_package.patch to force python kolab to be a package.
+  * Imported version 0.5.2
+    This release is based on the unreleased 0.5.0 work by Paul Klos.
 
- -- Paul Klos <kolab@klos2day.nl>  Sun, 01 Dec 2013 13:47:45 +0100
+ -- Diane Trout <diane@ghic.org>  Sat, 28 Jun 2014 17:55:57 -0700
 
 libkolab (0.4.2-7) unstable; urgency=low
 
