@@ -8,6 +8,7 @@ libkolab (0.5.2-1) UNRELEASED; urgency=low
   * Imported version 0.5.2
     This release is based on the unreleased 0.5.0 work by Paul Klos.
   * Add myself to uploaders.
+  * Update Standards-Version to 3.9.5. No changes needed.
 
  -- Diane Trout <diane@ghic.org>  Sat, 28 Jun 2014 17:55:57 -0700
 
