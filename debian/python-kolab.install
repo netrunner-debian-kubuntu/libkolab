@@ -6,3 +6,5 @@ usr/lib*/python*/*-packages/kolab/_icalendar.so
 usr/lib*/python*/*-packages/kolab/icalendar.py
 usr/lib*/python*/*-packages/kolab/_kolabobject.so
 usr/lib*/python*/*-packages/kolab/kolabobject.py
+usr/lib*/python*/*-packages/kolab/__init__.py
+

@@ -1,2 +1,3 @@
+make_python_package.patch
 disable-rpath.patch
 add-linker-flags.patch
