@@ -105,6 +105,7 @@ void normalizeMimemessage(QString &content)
     content.replace(QRegExp("<uri>data:*</uri>", Qt::CaseSensitive, QRegExp::Wildcard), "<uri>data:</uri>");
     content.replace(QRegExp("<last-modification-date>*</last-modification-date>", Qt::CaseSensitive, QRegExp::Wildcard), "<last-modification-date></last-modification-date>");
     content.replace(QRegExp("<timestamp>*</timestamp>", Qt::CaseSensitive, QRegExp::Wildcard), "<timestamp></timestamp>");
+    content.replace(QRegExp("<x-kolab-version>*</x-kolab-version>", Qt::CaseSensitive, QRegExp::Wildcard), "<x-kolab-version></x-kolab-version>");
 
     content.replace(QRegExp("--nextPart\\S*", Qt::CaseSensitive), "--part");
     content.replace(QRegExp("\\bboundary=\"nextPart[^\\n]*", Qt::CaseSensitive), "boundary");

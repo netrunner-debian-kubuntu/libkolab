@@ -28,6 +28,7 @@ namespace Kolab {
 #define KOLAB_FOLDER_TYPE_NOTE    "note"
 #define KOLAB_FOLDER_TYPE_CONFIGURATION "configuration"
 #define KOLAB_FOLDER_TYPE_FREEBUSY      "freebusy"
+#define KOLAB_FOLDER_TYPE_FILE    "file"
 
 #define KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ".default"
 #define KOLAB_FOLDER_TYPE_DRAFT_SUFFIX ".drafts"
@@ -42,6 +43,7 @@ namespace Kolab {
 #define X_KOLAB_TYPE_HEADER "X-Kolab-Type"
 #define X_KOLAB_MIME_VERSION_HEADER "X-Kolab-Mime-Version"
 #define X_KOLAB_MIME_VERSION_HEADER_COMPAT "X-Kolab-Version"
+#define KOLAB_VERSION_V2 "2.0"
 #define KOLAB_VERSION_V3 "3.0"
 
 #define KOLAB_OBJECT_FILENAME "kolab.xml"
@@ -54,12 +56,13 @@ namespace Kolab {
 #define KOLAB_TYPE_TASK    "application/x-vnd.kolab.task"
 #define KOLAB_TYPE_JOURNAL    "application/x-vnd.kolab.journal"
 #define KOLAB_TYPE_CONTACT    "application/x-vnd.kolab.contact"
-#define KOLAB_TYPE_DISTLIST    "application/x-vnd.kolab.contact.distlist"
-#define KOLAB_TYPE_DISTLIST_COMPAT  "application/x-vnd.kolab.distribution-list"
+#define KOLAB_TYPE_DISTLIST_V2    "application/x-vnd.kolab.contact.distlist"
+#define KOLAB_TYPE_DISTLIST  "application/x-vnd.kolab.distribution-list"
 #define KOLAB_TYPE_NOTE   "application/x-vnd.kolab.note"
 #define KOLAB_TYPE_CONFIGURATION    "application/x-vnd.kolab.configuration"
 #define KOLAB_TYPE_DICT    "application/x-vnd.kolab.configuration.dictionary"
 #define KOLAB_TYPE_FREEBUSY    "application/x-vnd.kolab.freebusy"
+#define KOLAB_TYPE_FILE    "application/x-vnd.kolab.file"
 
 enum Version {
     KolabV2,

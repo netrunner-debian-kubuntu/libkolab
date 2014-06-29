@@ -17,6 +17,7 @@
 
 #include "timezonetest.h"
 #include <conversion/timezoneconverter.h>
+#include <conversion/commonconversion.h>
 #include <kolabformat/kolabobject.h>
 #include <kolabformat/errorhandler.h>
 #include "testutils.h"
@@ -165,6 +166,13 @@ void TimezoneTest::testTimezoneDaemonAvailable()
     QVERIFY(KSystemTimeZones::isTimeZoneDaemonAvailable());
 }
 
+void TimezoneTest::testUTCOffset()
+{
+    const Kolab::cDateTime expected(2013, 10, 23, 2, 0 ,0, true);
+    const KDateTime input(KDateTime::fromString("2013-10-23T04:00:00+02:00", KDateTime::RFC3339Date));
+    const Kolab::cDateTime result = Kolab::Conversion::fromDate(input);
+    QCOMPARE(result, expected);
+}
 
 QTEST_MAIN( TimezoneTest )
 

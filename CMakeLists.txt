@@ -33,7 +33,7 @@ endif()
 set(Libkolab_VERSION_MAJOR 0)
 set(Libkolab_VERSION_MINOR 5)
 # Enable the full x.y.z version only for release versions
-set(Libkolab_VERSION_PATCH 0)
+set(Libkolab_VERSION_PATCH 2)
 set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR}.${Libkolab_VERSION_PATCH} )
 #set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR} )
 set(Libkolab_VERSION_STRING ${CMAKE_PROJECT_NAME}-${Libkolab_VERSION})
@@ -82,7 +82,7 @@ if("${KdepimLibs_VERSION}" VERSION_GREATER "4.8.40" OR USE_LIBCALENDARING)
     add_definitions(-DKDEPIMLIBS_VERSION_DEVEL)
 endif()
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -DQT_NO_EXCEPTIONS -fno-check-new -fno-common -Woverloaded-virtual -fno-threadsafe-statics -fvisibility=hidden -Werror=return-type -fvisibility-inlines-hidden -fexceptions -UQT_NO_EXCEPTIONS -fPIC -g" )
+set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -DQT_NO_EXCEPTIONS -fno-common -Woverloaded-virtual -fno-threadsafe-statics -fvisibility=hidden -Werror=return-type -fvisibility-inlines-hidden -fexceptions -UQT_NO_EXCEPTIONS -fPIC -g" )
 # message("${CMAKE_CXX_FLAGS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG")
 
