@@ -114,6 +114,6 @@ public:
     
 };
 
-}; //Namespace
+} //Namespace
 
 #endif // KOLABOBJECT_H

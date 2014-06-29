@@ -660,7 +660,9 @@ Kolab::Contact fromKABC(const KABC::Addressee &addressee)
     if (!relateds.empty()) {
         businessAff.setRelateds(relateds);
     }
-    c.setAffiliations(std::vector<Kolab::Affiliation>() << businessAff);
+    if (!(businessAff == Kolab::Affiliation())) {
+        c.setAffiliations(std::vector<Kolab::Affiliation>() << businessAff);
+    }
     
     std::vector<Kolab::Url> urls;
     if (!addressee.url().isEmpty()) {

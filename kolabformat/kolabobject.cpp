@@ -46,7 +46,7 @@ static inline QString todoKolabType() { return QString::fromLatin1(KOLAB_TYPE_TA
 static inline QString journalKolabType() { return QString::fromLatin1(KOLAB_TYPE_JOURNAL); };
 static inline QString contactKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONTACT); };
 static inline QString distlistKolabType() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST); }
-static inline QString distlistKolabTypeCompat() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST_COMPAT); }
+static inline QString distlistKolabTypeCompat() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST_V2); }
 static inline QString noteKolabType() { return QString::fromLatin1(KOLAB_TYPE_NOTE); }
 static inline QString configurationKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONFIGURATION); }
 static inline QString dictKolabType() { return QString::fromLatin1(KOLAB_TYPE_DICT); }
@@ -378,7 +378,7 @@ ObjectType KolabObjectReader::parseMimeMessage(const KMime::Message::Ptr &msg)
             //For backwards compatibility to development versions, can be removed in future versions
             xKolabVersion = msg->getHeaderByType(X_KOLAB_MIME_VERSION_HEADER_COMPAT);
         }
-        if (!xKolabVersion) {
+        if (!xKolabVersion || xKolabVersion->asUnicodeString() == KOLAB_VERSION_V2) {
             d->mVersion = KolabV2;
         } else {
             if (xKolabVersion->asUnicodeString() != KOLAB_VERSION_V3) { //TODO version compatibility check?
