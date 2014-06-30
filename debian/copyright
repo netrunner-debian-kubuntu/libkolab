@@ -104,7 +104,7 @@ License: LGPL2.1+
 
 Files:  cmake/*
 Copyright: 2011-2013  Copyright (C) 2011-2012 Kolab Systems AG
-License: COPYING-CMAKE-SCRIPTS
+License: BSD-3-clause
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
