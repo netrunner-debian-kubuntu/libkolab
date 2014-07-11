@@ -16,8 +16,8 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 		-DPHP_BINDINGS=ON \
 		-DPHP_INSTALL_DIR=/usr/lib/php5/$(PHPAPI)/ \
-		-DPHP4_EXECUTABLE=/usr/bin/php5 \
-		-DPHP4_INCLUDE_PATH=/usr/include/php5/ \
+		-DPHP_EXECUTABLE=/usr/bin/php5 \
+		-DPHP_INCLUDE_PATH=/usr/include/php5/ \
 		-DPYTHON_BINDINGS=ON \
 		-DPYTHON_INSTALL_DIR=$(PYTHON_SITEARCH) \
 		-DPYTHON_INCLUDE_DIR=/usr/include/python2.7 \

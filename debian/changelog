@@ -9,6 +9,7 @@ libkolab (0.5.2-1) unstable; urgency=low
     This release is based on the unreleased 0.5.0 work by Paul Klos.
   * Add myself to uploaders.
   * Update vcs-git to canonical URL.
+  * Update cmake PHP variable names in override_dh_auto_configure.
   * Update Standards-Version to 3.9.5. No changes needed.
 
  -- Diane Trout <diane@ghic.org>  Sat, 28 Jun 2014 22:13:10 -0700
