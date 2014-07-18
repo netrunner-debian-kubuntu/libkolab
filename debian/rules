@@ -28,7 +28,7 @@ override_dh_gencontrol:
 	dh_gencontrol
 
 override_dh_install:
-	# Install the packages 
+	# Install the packages
 	dh_install --fail-missing
 
 override_dh_auto_test:
