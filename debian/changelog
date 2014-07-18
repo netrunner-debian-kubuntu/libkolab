@@ -1,4 +1,4 @@
-libkolab (0.5.2-1) unstable; urgency=low
+libkolab (0.5.2-1) unstable; urgency=medium
 
   * Add libkolab0.symbols and supporting pkgkde-symbolshelper
     components
