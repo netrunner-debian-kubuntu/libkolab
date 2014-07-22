@@ -23,11 +23,9 @@
 
 #include <QString>
 #include <QList>
-#include <QDebug>
 
 namespace Kolab {
 
-class DebugStream;
 /**
  * Kolab Error Handler
  * 
@@ -89,20 +87,14 @@ public:
         return false;
     }
     
-    /**
-     * Returns a debug stream to which logs errors
-     */
-    static QDebug debugStream(Severity, int line, const char* file);
-
 private:
-    ErrorHandler();
+    ErrorHandler():m_worstError(Debug) {};
     ErrorHandler(const ErrorHandler &);
     ErrorHandler & operator= (const ErrorHandler &);
     
     Severity m_worstError;
     QString m_worstErrorMessage;
     QList <Err> m_errorQueue;
-    QScopedPointer<DebugStream> m_debugStream;
 };
 
 void logMessage(const QString &,const QString &, int, ErrorHandler::Severity s);
@@ -113,28 +105,47 @@ void logMessage(const QString &,const QString &, int, ErrorHandler::Severity s);
 #define CRITICAL(message) logMessage(message,__FILE__, __LINE__, ErrorHandler::Critical);
 
 
-class DebugStream: public QIODevice
-{
-public:
+/**
+ * Drop in replacement for qWarning()
+ * 
+ * Note that this is not only for debug builds, its a fundamental part to detect errors.
+ * 
+ * TODO: It should be possible to replace this with a kWarning/qWarning error handler
+ */
+struct KolabLogger {
+    bool isLast;
+    QString m_message;
     QString m_location;
     ErrorHandler::Severity m_severity;
-    DebugStream();
-    virtual ~DebugStream();
-    bool isSequential() const { return true; }
-    qint64 readData(char *, qint64) { return 0; /* eof */ }
-    qint64 readLineData(char *, qint64) { return 0; /* eof */ }
-    qint64 writeData(const char *data, qint64 len);
-private:
-    Q_DISABLE_COPY(DebugStream)
+    KolabLogger(ErrorHandler::Severity s, int line, const QString &file): isLast(true), m_message(), m_location(file + "(" + QString::number(line)+")"), m_severity(s) {};
+    KolabLogger(ErrorHandler::Severity s, const QString &message, const QString &location): isLast(true), m_message(message), m_location(location), m_severity(s) {};
+    ~KolabLogger(){if (isLast) ErrorHandler::instance().addError(m_severity, m_message, m_location);}
+    QString maybeSpace() const { if (!m_message.isEmpty()) return " "; return ""; }
+    KolabLogger operator<<(const QString &message) {
+        isLast = false;
+        return KolabLogger(m_severity, m_message+maybeSpace()+message, m_location);
+    }
+    KolabLogger operator<<(const QByteArray &message) {
+        isLast = false;
+        return KolabLogger(m_severity, m_message+maybeSpace()+message, m_location);
+    }
+    KolabLogger operator<<(const int &n) {
+        isLast = false;
+        return KolabLogger(m_severity, m_message+maybeSpace()+QString::number(n), m_location);
+    }
+    KolabLogger operator<<(const double &n) {
+        isLast = false;
+        return KolabLogger(m_severity, m_message+maybeSpace()+QString::number(n), m_location);
+    }
+    inline KolabLogger operator<<(const char* t) {
+        isLast = false;
+        return KolabLogger(m_severity, m_message+maybeSpace()+QString::fromAscii(t), m_location);
+    }
 };
-
-#define Debug() Kolab::ErrorHandler::debugStream(Kolab::ErrorHandler::Debug, __LINE__, __FILE__)
-#define Warning() Kolab::ErrorHandler::debugStream(Kolab::ErrorHandler::Warning, __LINE__, __FILE__)
-#define Error() Kolab::ErrorHandler::debugStream(Kolab::ErrorHandler::Error, __LINE__, __FILE__)
-#define Critical() Kolab::ErrorHandler::debugStream(Kolab::ErrorHandler::Critical, __LINE__, __FILE__)
+#define Debug() Kolab::KolabLogger(Kolab::ErrorHandler::Debug, __LINE__, __FILE__)
+#define Warning() Kolab::KolabLogger(Kolab::ErrorHandler::Warning, __LINE__, __FILE__)
+#define Error() Kolab::KolabLogger(Kolab::ErrorHandler::Error, __LINE__, __FILE__)
+#define Critical() Kolab::KolabLogger(Kolab::ErrorHandler::Critical, __LINE__, __FILE__)
 
 }
-
-QDebug operator<<(QDebug dbg, const std::string &s);
-
 #endif // ERRORHANDLER_H

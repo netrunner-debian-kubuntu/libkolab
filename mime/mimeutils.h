@@ -33,6 +33,8 @@ KMime::Content* findContentByName(const KMime::Message::Ptr &data, const QString
 KMime::Content* findContentByType(const KMime::Message::Ptr &data, const QByteArray &type);
 QList<QByteArray> getContentMimeTypeList(const KMime::Message::Ptr &data);
 
+QByteArray getXmlDocument(const KMime::Message::Ptr &data, const QByteArray &mimetype);
+
 /**
 * Get Attachments from a Mime message
 * 

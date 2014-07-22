@@ -24,7 +24,6 @@
 #include <qtemporaryfile.h>
 #include <QBuffer>
 #include <kdebug.h>
-#include <ksystemtimezone.h>
 #include <kolabcontainers.h>
 #include <kolabformat.h>
 
@@ -37,6 +36,20 @@
 #include "kolabformat/kolabobject.h"
 #include "kolabformat/errorhandler.h"
 #include "kolabformat/kolabdefinitions.h"
+
+void normalizeMimemessage(QString &content)
+{
+    content.replace(QRegExp("\\bLibkolab-\\d.\\d.\\d\\b", Qt::CaseSensitive), "Libkolab-x.x.x");
+    content.replace(QRegExp("\\bLibkolabxml-\\d.\\d.\\d\\b", Qt::CaseSensitive), "Libkolabxml-x.x.x");
+    content.replace(QRegExp("\\bLibkolab-\\d.\\d\\b", Qt::CaseSensitive), "Libkolab-x.x.x");
+    content.replace(QRegExp("\\bLibkolabxml-\\d.\\d\\b", Qt::CaseSensitive), "Libkolabxml-x.x.x");
+    content.replace(QRegExp("<uri>cid:*@kolab.resource.akonadi</uri>", Qt::CaseSensitive, QRegExp::Wildcard), "<uri>cid:id@kolab.resource.akonadi</uri>");
+    content.replace(QRegExp("<last-modification-date>*</last-modification-date>", Qt::CaseSensitive, QRegExp::Wildcard), "<last-modification-date></last-modification-date>");
+
+    content.replace(QRegExp("--nextPart\\S*", Qt::CaseSensitive), "--part");
+    content.replace(QRegExp("\\bboundary=\"nextPart[^\\n]*", Qt::CaseSensitive), "boundary");
+    content.replace(QRegExp("Date[^\\n]*", Qt::CaseSensitive), "Date");
+}
 
 static bool compareMimeMessage( const KMime::Message::Ptr &msg, const KMime::Message::Ptr &expectedMsg )
 {
@@ -76,10 +89,6 @@ static bool compareMimeMessage( const KMime::Message::Ptr &msg, const KMime::Mes
     return true;
 }
 
-void FormatTest::initTestCase()
-{
-    QVERIFY2(KSystemTimeZones::isTimeZoneDaemonAvailable(), "Timezone support is required for this test. Either use libcalendaring or make sure KTimeZoned is available");
-}
 
 void FormatTest::testIncidence_data()
 {
@@ -88,29 +97,28 @@ void FormatTest::testIncidence_data()
     QTest::addColumn<QString>( "icalFileName" );
     QTest::addColumn<QString>( "mimeFileName" );
     
-    QTest::newRow( "v2eventSimple" ) << Kolab::KolabV2 << Kolab::EventObject << getPath("v2/event/simple.ics") << getPath("v2/event/simple.ics.mime");
-    QTest::newRow( "v2eventComplex" ) << Kolab::KolabV2 << Kolab::EventObject << getPath("v2/event/complex.ics") << getPath("v2/event/complex.ics.mime");
-    QTest::newRow( "v2eventAttachment" ) << Kolab::KolabV2 << Kolab::EventObject << getPath("v2/event/attachment.ics") << getPath("v2/event/attachment.ics.mime");
-    QTest::newRow( "v2eventAllday" ) << Kolab::KolabV2 << Kolab::EventObject << getPath("v2/event/allday.ics") << getPath("v2/event/allday.ics.mime");
-    QTest::newRow( "v2eventUtf8Attachment" ) << Kolab::KolabV2 << Kolab::EventObject << getPath("v2/event/attachmentUtf8.ics") << getPath("v2/event/attachmentUtf8.ics.mime");
+    QTest::newRow( "v2eventSimple" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/simple.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/simple.ics.mime");
+    QTest::newRow( "v2eventComplex" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/complex.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/complex.ics.mime");
+    QTest::newRow( "v2eventAttachment" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/attachment.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/attachment.ics.mime");
+    QTest::newRow( "v2eventAllday" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/allday.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/allday.ics.mime");
+    QTest::newRow( "v2eventUtf8Attachment" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/attachmentUtf8.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/attachmentUtf8.ics.mime");
     //The following test just fails because we have a nicer mime message output than horde
-//     QTest::newRow( "v2eventHorde" ) << Kolab::KolabV2 << Kolab::EventObject << getPath("v2/event/horde.ics") << getPath("v2/event/horde.ics.mime");
-    QTest::newRow( "v2todoSimple" ) << Kolab::KolabV2 << Kolab::TodoObject << getPath("v2/task/simple.ics") << getPath("v2/task/simple.ics.mime");
-    QTest::newRow( "v2todoComplex" ) << Kolab::KolabV2 << Kolab::TodoObject << getPath("v2/task/complex.ics") << getPath("v2/task/complex.ics.mime");
-    QTest::newRow( "v2todoPrio1" ) << Kolab::KolabV2 << Kolab::TodoObject << getPath("v2/task/prioritytest1.ics") << getPath("v2/task/prioritytest1.ics.mime");
-    QTest::newRow( "v2todoPrio2" ) << Kolab::KolabV2 << Kolab::TodoObject << getPath("v2/task/prioritytest2.ics") << getPath("v2/task/prioritytest2.ics.mime");
-    QTest::newRow( "v2journalSimple" ) << Kolab::KolabV2 << Kolab::JournalObject << getPath("v2/journal/simple.ics") << getPath("v2/journal/simple.ics.mime");
-    QTest::newRow( "v2journalComplex" ) << Kolab::KolabV2 << Kolab::JournalObject << getPath("v2/journal/complex.ics") << getPath("v2/journal/complex.ics.mime");
+//     QTest::newRow( "v2eventHorde" ) << Kolab::KolabV2 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v2/event/horde.ics") << TESTFILEDIR+QString::fromLatin1("v2/event/horde.ics.mime");
+    QTest::newRow( "v2todoSimple" ) << Kolab::KolabV2 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v2/task/simple.ics") << TESTFILEDIR+QString::fromLatin1("v2/task/simple.ics.mime");
+    QTest::newRow( "v2todoComplex" ) << Kolab::KolabV2 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v2/task/complex.ics") << TESTFILEDIR+QString::fromLatin1("v2/task/complex.ics.mime");
+    QTest::newRow( "v2todoPrio1" ) << Kolab::KolabV2 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v2/task/prioritytest1.ics") << TESTFILEDIR+QString::fromLatin1("v2/task/prioritytest1.ics.mime");
+    QTest::newRow( "v2todoPrio2" ) << Kolab::KolabV2 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v2/task/prioritytest2.ics") << TESTFILEDIR+QString::fromLatin1("v2/task/prioritytest2.ics.mime");
+    QTest::newRow( "v2journalSimple" ) << Kolab::KolabV2 << Kolab::JournalObject << TESTFILEDIR+QString::fromLatin1("v2/journal/simple.ics") << TESTFILEDIR+QString::fromLatin1("v2/journal/simple.ics.mime");
+    QTest::newRow( "v2journalComplex" ) << Kolab::KolabV2 << Kolab::JournalObject << TESTFILEDIR+QString::fromLatin1("v2/journal/complex.ics") << TESTFILEDIR+QString::fromLatin1("v2/journal/complex.ics.mime");
 
-    QTest::newRow( "v3eventSimple" ) << Kolab::KolabV3 << Kolab::EventObject << getPath("v3/event/simple.ics") << getPath("v3/event/simple.ics.mime");
-    QTest::newRow( "v3eventComplex" ) << Kolab::KolabV3 << Kolab::EventObject << getPath("v3/event/complex.ics") << getPath("v3/event/complex.ics.mime");
-    QTest::newRow( "v3todoSimple" ) << Kolab::KolabV3 << Kolab::TodoObject << getPath("v3/task/simple.ics") << getPath("v3/task/simple.ics.mime");
-    QTest::newRow( "v3todoComplex" ) << Kolab::KolabV3 << Kolab::TodoObject << getPath("v3/task/complex.ics") << getPath("v3/task/complex.ics.mime");
-    QTest::newRow( "v3journalSimple" ) << Kolab::KolabV3 << Kolab::JournalObject << getPath("v3/journal/simple.ics") << getPath("v3/journal/simple.ics.mime");
-    QTest::newRow( "v3journalComplex" ) << Kolab::KolabV3 << Kolab::JournalObject << getPath("v3/journal/complex.ics") << getPath("v3/journal/complex.ics.mime");
-    QTest::newRow( "v3utf8quotedPrintable" ) << Kolab::KolabV3 << Kolab::EventObject << getPath("v3/event/utf8.ics") << getPath("v3/event/utf8quotedPrintable.ics.mime");
-    QTest::newRow( "v3utf8base64" ) << Kolab::KolabV3 << Kolab::EventObject << getPath("v3/event/utf8.ics") << getPath("v3/event/utf8base64.ics.mime");
-    QTest::newRow( "v3utf88bit" ) << Kolab::KolabV3 << Kolab::EventObject << getPath("v3/event/utf8.ics") << getPath("v3/event/utf88bit.ics.mime");
+    QTest::newRow( "v3eventSimple" ) << Kolab::KolabV3 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v3/event/simple.ics") << TESTFILEDIR+QString::fromLatin1("v3/event/simple.ics.mime");
+    QTest::newRow( "v3eventComplex" ) << Kolab::KolabV3 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v3/event/complex.ics") << TESTFILEDIR+QString::fromLatin1("v3/event/complex.ics.mime");
+    QTest::newRow( "v3todoSimple" ) << Kolab::KolabV3 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v3/task/simple.ics") << TESTFILEDIR+QString::fromLatin1("v3/task/simple.ics.mime");
+    QTest::newRow( "v3todoComplex" ) << Kolab::KolabV3 << Kolab::TodoObject << TESTFILEDIR+QString::fromLatin1("v3/task/complex.ics") << TESTFILEDIR+QString::fromLatin1("v3/task/complex.ics.mime");
+    QTest::newRow( "v3journalSimple" ) << Kolab::KolabV3 << Kolab::JournalObject << TESTFILEDIR+QString::fromLatin1("v3/journal/simple.ics") << TESTFILEDIR+QString::fromLatin1("v3/journal/simple.ics.mime");
+    QTest::newRow( "v3journalComplex" ) << Kolab::KolabV3 << Kolab::JournalObject << TESTFILEDIR+QString::fromLatin1("v3/journal/complex.ics") << TESTFILEDIR+QString::fromLatin1("v3/journal/complex.ics.mime");
+    QTest::newRow( "v3utf8quotedPrintable" ) << Kolab::KolabV3 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v3/event/utf8.ics") << TESTFILEDIR+QString::fromLatin1("v3/event/utf8quotedPrintable.ics.mime");
+    QTest::newRow( "v3utf8base64" ) << Kolab::KolabV3 << Kolab::EventObject << TESTFILEDIR+QString::fromLatin1("v3/event/utf8.ics") << TESTFILEDIR+QString::fromLatin1("v3/event/utf8base64.ics.mime");
 }
 
 
@@ -169,41 +177,31 @@ void FormatTest::testIncidence()
 }
 
 
-enum TestMode {
-    ReadOnly,
-    ReadWrite
-};
-Q_DECLARE_METATYPE(TestMode);
-
 void FormatTest::testContact_data()
 {
     QTest::addColumn<Kolab::Version>( "version" );
     QTest::addColumn<Kolab::ObjectType>( "type" );
     QTest::addColumn<QString>( "vcardFileName" );
     QTest::addColumn<QString>( "mimeFileName" );
-    QTest::addColumn<TestMode>( "mode" );
     
-    QTest::newRow( "v2contactSimple" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/simple.vcf") << getPath("v2/contacts/simple.vcf.mime") << ReadWrite;
-    //FIXME Reference files needs to be adjusted due to fix in how pictures are stored
-//     QTest::newRow( "v2contactComplex" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/complex.vcf") << getPath("v2/contacts/complex.vcf.mime") << ReadWrite;
-    QTest::newRow( "v2contactAddress" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/address.vcf") << getPath("v2/contacts/address.vcf.mime") << ReadWrite;
-    QTest::newRow( "v2contactBug238996" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/bug238996.vcf") << getPath("v2/contacts/bug238996.vcf.mime") << ReadWrite;
-    QTest::newRow( "v2contactDisplayname" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/displayname.vcf") << getPath("v2/contacts/displayname.vcf.mime") << ReadWrite;
-    QTest::newRow( "v2contactEmails" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/emails.vcf") << getPath("v2/contacts/emails.vcf.mime") << ReadWrite;
-    QTest::newRow( "v2contactPhonenumbers" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/phonenumbers.vcf") << getPath("v2/contacts/phonenumbers.vcf.mime") << ReadWrite;
-    // FIXME Reference files needs to be adjusted due to fix in how pictures are stored
-//     QTest::newRow( "v2contactPicture" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/picture.vcf") << getPath("v2/contacts/picture.vcf.mime") << ReadWrite;
+    QTest::newRow( "v2contactSimple" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/simple.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/simple.vcf.mime");
+    QTest::newRow( "v2contactComplex" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/complex.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/complex.vcf.mime");
+    QTest::newRow( "v2contactAddress" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/address.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/address.vcf.mime");
+    QTest::newRow( "v2contactBug238996" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/bug238996.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/bug238996.vcf.mime");
+    QTest::newRow( "v2contactDisplayname" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/displayname.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/displayname.vcf.mime");
+    QTest::newRow( "v2contactEmails" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/emails.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/emails.vcf.mime");
+    QTest::newRow( "v2contactPhonenumbers" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/phonenumbers.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/phonenumbers.vcf.mime");
+    QTest::newRow( "v2contactPicture" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/picture.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/picture.vcf.mime");
     //FIXME the following test fails because the vcard implementation always writes jpeg (which is lossy). The reference vcf file is therefore probably also not really useful
-//     QTest::newRow( "v2pictureJPGHorde" ) << Kolab::KolabV2 << Kolab::ContactObject << getPath("v2/contacts/pictureJPGHorde.vcf") << getPath("v2/contacts/pictureJPGHorde.vcf.mime");
+//     QTest::newRow( "v2pictureJPGHorde" ) << Kolab::KolabV2 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v2/contacts/pictureJPGHorde.vcf") << TESTFILEDIR+QString::fromLatin1("v2/contacts/pictureJPGHorde.vcf.mime");
     
-    QTest::newRow( "v3contactSimple" ) << Kolab::KolabV3 << Kolab::ContactObject << getPath("v3/contacts/simple.vcf") << getPath("v3/contacts/simple.vcf.mime") << ReadWrite;
-    QTest::newRow( "v3contactComplex" ) << Kolab::KolabV3 << Kolab::ContactObject << getPath("v3/contacts/complex.vcf") << getPath("v3/contacts/complex.vcf.mime") << ReadWrite;
-    QTest::newRow( "v3contactPng" ) << Kolab::KolabV3 << Kolab::ContactObject << getPath("v3/readonly/png.vcf") << getPath("v3/readonly/png.vcf.mime") << ReadOnly;
+    QTest::newRow( "v3contactSimple" ) << Kolab::KolabV3 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v3/contacts/simple.vcf") << TESTFILEDIR+QString::fromLatin1("v3/contacts/simple.vcf.mime");
+    QTest::newRow( "v3contactComplex" ) << Kolab::KolabV3 << Kolab::ContactObject << TESTFILEDIR+QString::fromLatin1("v3/contacts/complex.vcf") << TESTFILEDIR+QString::fromLatin1("v3/contacts/complex.vcf.mime");
 }
 
 bool comparePictureToReference(const QImage &picture)
 {
-    QImage img(getPath("picture.jpg"));
+    QImage img(TESTFILEDIR+QString::fromLatin1("picture.jpg"));
     QByteArray pic;
     QBuffer buffer(&pic);
     buffer.open(QIODevice::WriteOnly);
@@ -230,7 +228,6 @@ void FormatTest::testContact()
     QFETCH( Kolab::ObjectType, type );
     QFETCH( QString, vcardFileName ); //To compare
     QFETCH( QString, mimeFileName ); //For parsing
-    QFETCH( TestMode, mode ); //For parsing
     
     //Parse mime message
     bool ok = false;
@@ -270,18 +267,15 @@ void FormatTest::testContact()
     QCOMPARE( realAddressee, convertedAddressee );
 
     //Write
-    if (mode == ReadWrite) {
-        Kolab::overrideTimestamp(Kolab::cDateTime(2012, 5, 5, 5,5,5, true));
-        const KMime::Message::Ptr &convertedMime = Kolab::KolabObjectWriter::writeContact(realAddressee, version);
-        
-        if ( !compareMimeMessage( convertedMime, msg )) {
-            QString expected = msg->encodedContent();
-            normalizeMimemessage(expected);
-            QString converted = convertedMime->encodedContent();
-            normalizeMimemessage(converted);
-            showDiff(expected, converted);
-            QVERIFY( false );
-        }
+    const KMime::Message::Ptr &convertedMime = Kolab::KolabObjectWriter::writeContact(realAddressee, version);
+    
+    if ( !compareMimeMessage( convertedMime, msg )) {
+        QString expected = msg->encodedContent();
+        normalizeMimemessage(expected);
+        QString converted = convertedMime->encodedContent();
+        normalizeMimemessage(converted);
+        showDiff(expected, converted);
+        QVERIFY( false );
     }
     QCOMPARE(Kolab::ErrorHandler::instance().error(), Kolab::ErrorHandler::Debug);
 }
@@ -293,7 +287,7 @@ void FormatTest::testDistlist_data()
     QTest::addColumn<QString>( "vcardFileName" );
     QTest::addColumn<QString>( "mimeFileName" );
     
-    QTest::newRow( "v3distlistSimple" ) << Kolab::KolabV3 << Kolab::DistlistObject << getPath("v3/contacts/distlist.vcf") << getPath("v3/contacts/distlist.vcf.mime");
+    QTest::newRow( "v3distlistSimple" ) << Kolab::KolabV3 << Kolab::DistlistObject << TESTFILEDIR+QString::fromLatin1("v3/contacts/distlist.vcf") << TESTFILEDIR+QString::fromLatin1("v3/contacts/distlist.vcf.mime");
 }
 
 void FormatTest::testDistlist()
@@ -360,7 +354,7 @@ void FormatTest::testNote_data()
     QTest::addColumn<QString>( "noteFileName" );
     QTest::addColumn<QString>( "mimeFileName" );
 
-    QTest::newRow( "v3noteSimple" ) << Kolab::KolabV3 << Kolab::NoteObject << getPath("v3/note/note.mime") << getPath("v3/note/note.mime.mime");
+    QTest::newRow( "v3noteSimple" ) << Kolab::KolabV3 << Kolab::NoteObject << TESTFILEDIR+QString::fromLatin1("v3/note/note.mime") << TESTFILEDIR+QString::fromLatin1("v3/note/note.mime.mime");
 }
 
 
@@ -413,7 +407,7 @@ void FormatTest::testNote()
 //This function exists only to generate the reference files, it's not a real test.
 void FormatTest::generateMimefile()
 {
-//     QFile icalFile( getPath("v3/journal/complex.ics") );
+//     QFile icalFile( TESTFILEDIR+QString::fromLatin1("v3/journal/complex.ics") );
 //     QVERIFY( icalFile.open( QFile::ReadOnly ) );
 //     KCalCore::ICalFormat format;
 //     const KCalCore::Incidence::Ptr realIncidence( format.fromString( QString::fromUtf8( icalFile.readAll() ) ) );
@@ -423,7 +417,7 @@ void FormatTest::generateMimefile()
 //     Kolab::overrideTimestamp(Kolab::cDateTime(2012, 5, 5, 5,5,5, true));
 //     Kolab::KolabObjectWriter::writeIncidence(realIncidence, Kolab::KolabV3)->toStream(s);
     
-//     QFile vcardFile( getPath("v3/contacts/complex.vcf") );
+//     QFile vcardFile( TESTFILEDIR+QString::fromLatin1("v3/contacts/complex.vcf") );
 //     QVERIFY( vcardFile.open( QFile::ReadOnly ) );
 //     KABC::VCardConverter converter;
 //     const KABC::Addressee realAddressee = converter.parseVCard( vcardFile.readAll() );
@@ -441,7 +435,7 @@ void FormatTest::generateMimefile()
 void FormatTest::generateVCard()
 {
 //     bool ok = false;
-//     const KMime::Message::Ptr &msg = readMimeFile( QString::fromLatin1("../")+getPath("v2/contacts/pictureJPGHorde.vcf.mime"), ok );
+//     const KMime::Message::Ptr &msg = readMimeFile( QString::fromLatin1("../")+TESTFILEDIR+QString::fromLatin1("v2/contacts/pictureJPGHorde.vcf.mime"), ok );
 //     qDebug() << msg->encodedContent();
 //     Kolab::KolabObjectReader reader;
 //     Kolab::ObjectType t = reader.parseMimeMessage(msg);
@@ -451,7 +445,7 @@ void FormatTest::generateVCard()
 //     qDebug() << converter.createVCard(convertedAddressee);
 
 //     bool ok = false;
-//     const KMime::Message::Ptr &msg = readMimeFile( getPath("v3/contacts/distlist.vcf.mime"), ok );
+//     const KMime::Message::Ptr &msg = readMimeFile( TESTFILEDIR+QString::fromLatin1("v3/contacts/distlist.vcf.mime"), ok );
 //     qDebug() << msg->encodedContent();
 //     Kolab::KolabObjectReader reader;
 //     Kolab::ObjectType t = reader.parseMimeMessage(msg);
@@ -466,7 +460,7 @@ void FormatTest::generateVCard()
 //Pseudo test to show that JPG is always lossy, even with quality set to 100
 void FormatTest::proveJPGisLossy()
 {
-//     QImage img(getPath("picture.jpg"));
+//     QImage img(TESTFILEDIR+QString::fromLatin1("picture.jpg"));
 //     QByteArray pic;
 //     QBuffer buffer(&pic);
 //     buffer.open(QIODevice::WriteOnly);

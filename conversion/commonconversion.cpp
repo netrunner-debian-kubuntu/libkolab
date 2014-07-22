@@ -39,17 +39,19 @@ KDateTime::Spec getTimeSpec(bool isUtc, const std::string& timezone)
 
     //Convert non-olson timezones if necessary
     const QString normalizedTz = TimezoneConverter::normalizeTimezone(QString::fromStdString(timezone));
+    Debug() << "normalized " << normalizedTz;
     KTimeZone tz = KSystemTimeZones::zone(normalizedTz); //Needs ktimezoned (timezone daemon running) http://api.kde.org/4.x-api/kdelibs-apidocs/kdecore/html/classKSystemTimeZones.html
     if (!tz.isValid()) {
-        Warning() << "invalid timezone: " << QString::fromStdString(timezone) << ", assuming floating time";
+        Error() << "timezone not found" << QString::fromStdString(timezone);
         if (!KSystemTimeZones::isTimeZoneDaemonAvailable()) {
             Error() << "ktimezoned is not available and required for timezone interpretation";
         }
-        return  KDateTime::Spec(KDateTime::ClockTime);
+        tz = KTimeZone::utc(); //Don't crash
     }
     return KDateTime::Spec(tz);
 }
 
+        
 KDateTime toDate(const Kolab::cDateTime &dt)
 {
     KDateTime date;
@@ -88,13 +90,6 @@ cDateTime fromDate(const KDateTime &dt)
         date.setTime(t.hour(), t.minute(), t.second());
         if (dt.timeType() == KDateTime::UTC) { //UTC
             date.setUTC(true);
-        } else if (dt.timeType() == KDateTime::OffsetFromUTC) {
-            const KDateTime utcDate = dt.toUtc();
-            const QDate &d = utcDate.date();
-            date.setDate(d.year(), d.month(), d.day());
-            const QTime &t = utcDate.time();
-            date.setTime(t.hour(), t.minute(), t.second());
-            date.setUTC(true);
         } else if (dt.timeType() == KDateTime::TimeZone) { //Timezone
             //TODO handle local timezone?
             //Convert non-olson timezones if necessary
@@ -102,11 +97,11 @@ cDateTime fromDate(const KDateTime &dt)
             if (!timezone.isEmpty()) {
                 date.setTimezone(toStdString(timezone));
             } else {
-                Warning() << "invalid timezone: " << dt.timeZone().name() << ", assuming floating time";
+                Error() << "invalid timezone: " << dt.timeZone().name() << " , assuming floating time";
                 return date;
             }
         } else if (dt.timeType() != KDateTime::ClockTime) {
-            Error() << "invalid timespec, assuming floating time. Type: " << dt.timeType() << "dt: " << dt.toString();
+            Error() << "invalid timespec, assuming floating time" << dt.timeType();
             return date;
         }
     }

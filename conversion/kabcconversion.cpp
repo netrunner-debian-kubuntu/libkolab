@@ -18,9 +18,9 @@
 #include "kabcconversion.h"
 
 #include "commonconversion.h"
+#include <kcalcore/freebusyurlstore.h>
 #include <kdebug.h>
 #include <qbuffer.h>
-#include <qimagereader.h>
 #include "kolabformat/errorhandler.h"
 
 
@@ -357,24 +357,15 @@ std::string fromPicture(const KABC::Picture &pic, std::string &mimetype)
 
 KABC::Picture toPicture(const std::string &data, const std::string &mimetype) {
     QImage img;
-    bool ret = false;
-    QByteArray type(mimetype.data(), mimetype.size());
-    type = type.split('/').last(); // extract "jpeg" from "image/jpeg"
-    if (QImageReader::supportedImageFormats().contains(type)) {
-        ret = img.loadFromData(QByteArray::fromRawData(data.data(), data.size()), type.constData());
-    } else {
-        ret = img.loadFromData(QByteArray::fromRawData(data.data(), data.size()));
-    }
-    if (!ret) {
-        Warning() << "failed to load picture";
-        return KABC::Picture();
+    if (!img.loadFromData( QByteArray::fromRawData(data.data(), data.size()) )) {
+        Error() << "failed to load picture";
     }
     
     KABC::Picture logo(img);
     if (logo.isEmpty()) {
-        Warning() << "failed to read picture";
-        return KABC::Picture();
+        Error() << "failed to read picture";
     }
+    logo.setType(fromStdString(mimetype));
     return logo;
 }
 
@@ -396,28 +387,6 @@ std::string getCustom(const std::string &id, T &object)
         }
     }
     return std::string();
-}
-
-static QString emailTypesToStringList(int emailTypes) {
-    QStringList types;
-    if (emailTypes & Kolab::Email::Home) {
-        types << "home";
-    }
-    if (emailTypes & Kolab::Email::Work) {
-        types << "work";
-    }
-    return types.join(",");
-}
-
-static int emailTypesFromStringlist(const QString &types) {
-    int emailTypes = Kolab::Email::NoType;
-    if (types.contains("home")) {
-        emailTypes |= Kolab::Email::Home;
-    }
-    if (types.contains("work")) {
-        emailTypes |= Kolab::Email::Work;
-    }
-    return emailTypes;
 }
 
 KABC::Addressee toKABC(const Kolab::Contact &contact)
@@ -453,19 +422,11 @@ KABC::Addressee toKABC(const Kolab::Contact &contact)
   QString preferredEmail;
   
   if (!contact.emailAddresses().empty()) {
-      QStringList emails;
-      foreach( const Kolab::Email &email, contact.emailAddresses()) {
-          emails << fromStdString(email.address());
-          const QString types = emailTypesToStringList(email.types());
-          if (!types.isEmpty()) {
-              addressee.insertCustom(QLatin1String("KOLAB"), QString::fromLatin1("EmailTypes%1").arg(fromStdString(email.address())), types);
-          }
-      }
-      addressee.setEmails(emails);
+      addressee.setEmails(toStringList(contact.emailAddresses()));
       if ((contact.emailAddressPreferredIndex() >= 0) && (contact.emailAddressPreferredIndex() < static_cast<int>(contact.emailAddresses().size()))) {
-          preferredEmail = fromStdString(contact.emailAddresses().at(contact.emailAddressPreferredIndex()).address());
+          preferredEmail = fromStdString(contact.emailAddresses().at(contact.emailAddressPreferredIndex()));
       } else {
-          preferredEmail = fromStdString(contact.emailAddresses().at(0).address());
+          preferredEmail = fromStdString(contact.emailAddresses().at(0));
       }
       addressee.insertEmail(preferredEmail, true);
   }
@@ -474,7 +435,8 @@ KABC::Addressee toKABC(const Kolab::Contact &contact)
       if (preferredEmail.isEmpty()) {
           Error() << "f/b url is set but no email address available, skipping";
       } else  {
-        addressee.insertCustom("KOLAB", "FreebusyUrl", fromStdString(contact.freeBusyUrl()));
+        KCalCore::FreeBusyUrlStore::self()->writeUrl( preferredEmail, fromStdString(contact.freeBusyUrl()) );
+        KCalCore::FreeBusyUrlStore::self()->sync();
       }
   }
   
@@ -619,7 +581,10 @@ Kolab::Contact fromKABC(const KABC::Addressee &addressee)
     c.setNameComponents(nc);
     
     c.setNote(toStdString(addressee.note()));
-    c.setFreeBusyUrl(toStdString(addressee.custom("KOLAB", QString("FreebusyUrl"))));
+    
+    if ( !addressee.preferredEmail().isEmpty() ) {    
+        c.setFreeBusyUrl(toStdString(KCalCore::FreeBusyUrlStore::self()->readUrl( addressee.preferredEmail() )));
+    }
 
     if (!addressee.title().isEmpty()) {
         c.setTitles(std::vector<std::string>() << toStdString(addressee.title()));
@@ -660,9 +625,7 @@ Kolab::Contact fromKABC(const KABC::Addressee &addressee)
     if (!relateds.empty()) {
         businessAff.setRelateds(relateds);
     }
-    if (!(businessAff == Kolab::Affiliation())) {
-        c.setAffiliations(std::vector<Kolab::Affiliation>() << businessAff);
-    }
+    c.setAffiliations(std::vector<Kolab::Affiliation>() << businessAff);
     
     std::vector<Kolab::Url> urls;
     if (!addressee.url().isEmpty()) {
@@ -736,16 +699,13 @@ Kolab::Contact fromKABC(const KABC::Addressee &addressee)
     }
     
     int prefEmail = -1;
-    int count = 0;
-    std::vector<Kolab::Email> emails;
     foreach(const QString &e, addressee.emails()) {
-        if ((prefEmail == -1) && (e == addressee.preferredEmail())) {
-            prefEmail = count;
+        prefEmail++;
+        if (e == addressee.preferredEmail()) {
+            break;
         }
-        count++;
-        emails.push_back(Kolab::Email(toStdString(e), emailTypesFromStringlist(addressee.custom(QLatin1String("KOLAB"), QString::fromLatin1("EmailTypes%1").arg(e)))));
     }
-    c.setEmailAddresses(emails, prefEmail);
+    c.setEmailAddresses(fromStringList(addressee.emails()), prefEmail);
     if (addressee.geo().isValid()) {
         c.setGPSpos(std::vector<Kolab::Geo>() << Kolab::Geo(addressee.geo().latitude(), addressee.geo().longitude()));
     }
@@ -874,6 +834,7 @@ KABC::ContactGroup toKABC(const DistList &dl)
     KABC::ContactGroup cg(fromStdString(dl.name()));
     cg.setId(fromStdString(dl.uid()));
     foreach(const Kolab::ContactReference &m, dl.members()) {
+        KABC::ContactGroup::Data data;
         switch (m.type()) {
             case Kolab::ContactReference::EmailReference:
                 cg.append(KABC::ContactGroup::Data(fromStdString(m.name()), fromStdString(m.email())));

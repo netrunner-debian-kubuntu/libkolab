@@ -26,29 +26,7 @@
 
 #include <kolabformat.h>
 
-QDebug operator<<(QDebug dbg, const std::string &s)
-{
-    dbg.nospace() << QString::fromStdString(s);
-    return dbg.space();
-}
-
 namespace Kolab {
-
-DebugStream::DebugStream()
-:   QIODevice()
-{
-    open(WriteOnly);
-}
-
-DebugStream::~DebugStream(){}
-
-qint64 DebugStream::writeData(const char *data, qint64 len) {
-    const QByteArray buf = QByteArray::fromRawData(data, len);
-//         qt_message_output(QtDebugMsg, buf.trimmed().constData());
-    ErrorHandler::instance().addError(m_severity, buf, m_location);
-    return len;
-}
-
 
 QMutex mutex;
     
@@ -57,20 +35,6 @@ void logMessage(const QString &message, const QString &file, int line, ErrorHand
     ErrorHandler::instance().addError(s, message, file+" "+QString::number(line));
 }
 
-ErrorHandler::ErrorHandler()
-:   m_worstError(Debug),
-    m_debugStream(new DebugStream)
-{
-
-};
-
-QDebug ErrorHandler::debugStream(ErrorHandler::Severity severity, int line, const char* file)
-{
-    QMutexLocker locker(&mutex);
-    ErrorHandler::instance().m_debugStream->m_location = QString(QString(file) + "(" + QString::number(line)+")");
-    ErrorHandler::instance().m_debugStream->m_severity = severity;
-    return QDebug(ErrorHandler::instance().m_debugStream.data());
-}
 
 void ErrorHandler::addError(ErrorHandler::Severity s, const QString& message, const QString &location)
 {

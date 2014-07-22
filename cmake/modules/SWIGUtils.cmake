@@ -23,59 +23,29 @@ macro (generatePHPBindings MODULE_NAME INTERFACE_FILE)
     else()
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused" )
     endif()
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers -Wno-undef" )
 
-    # Try to find PHP5
-    find_path(PHP_INCLUDE_DIR NAMES main/php.h PATH_SUFFIXES php php5)
-    find_program(PHP_EXECUTABLE NAMES php)
+    find_package(PHP4 5.3 REQUIRED)
 
-    # Libkolab needs PHP >= 5.3
-    set(PHP_MIN_VERSION 50300)
-
-    # Find where to install the extension files if it's not defined
-    if(NOT DEFINED PHP_INSTALL_DIR)
-        find_program(PHP_CONFIG_EXECUTABLE NAMES php-config)
-        if(PHP_CONFIG_EXECUTABLE)
-            execute_process(COMMAND ${PHP_CONFIG_EXECUTABLE} --extension-dir
-                OUTPUT_VARIABLE _php_extensions_dir
-                )
-            string(REGEX REPLACE "\n" "" _php_extensions_dir "${_php_extensions_dir}")
-            set(PHP_INSTALL_DIR ${_php_extensions_dir} CACHE STRING "Install directory for PHP bindings.")
-        else()
-            set(PHP_INSTALL_DIR ${LIB_INSTALL_DIR}/extensions)
-        endif()
-    endif()
-
-    if(PHP_INCLUDE_DIR AND PHP_EXECUTABLE)
-        file(READ ${PHP_INCLUDE_DIR}/main/php_version.h PHP_VERSION_CONTENT)
-        string(REGEX MATCH "#define PHP_VERSION_ID[ ]*[0-9]*\n" _PHP_VERSION_ID_MATCH ${PHP_VERSION_CONTENT})
-        if(_PHP_VERSION_ID_MATCH)
-            string(REGEX REPLACE "#define PHP_VERSION_ID[ ]*([0-9]*)\n" "\\1" PHP_VERSION_ID ${_PHP_VERSION_ID_MATCH})
-        endif()
-
-        # Include the needed PHP5 subdirs
-        set(PHP_INCLUDE_DIRS ${PHP_INCLUDE_DIR} ${PHP_INCLUDE_DIR}/main ${PHP_INCLUDE_DIR}/TSRM ${PHP_INCLUDE_DIR}/Zend )
-    endif()
-
-    if(NOT PHP_VERSION_ID VERSION_LESS ${PHP_MIN_VERSION})
-        include_directories(${PHP_INCLUDE_DIRS})
+    if (PHP4_FOUND)
+        include_directories(${PHP4_INCLUDE_PATH})
         add_library(${MODULE_NAME}_phpbindings SHARED ${KOLAB_SWIG_PHP_SOURCE_FILE})
         target_link_libraries(${MODULE_NAME}_phpbindings kolab)
-        set_target_properties(${MODULE_NAME}_phpbindings PROPERTIES OUTPUT_NAME ${MODULE_NAME})
-        set_target_properties(${MODULE_NAME}_phpbindings PROPERTIES PREFIX "")
+        SET_TARGET_PROPERTIES(${MODULE_NAME}_phpbindings PROPERTIES OUTPUT_NAME ${MODULE_NAME})
+        SET_TARGET_PROPERTIES(${MODULE_NAME}_phpbindings PROPERTIES PREFIX "")
 
-        #     configure_file(test.php ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+    #     configure_file(test.php ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+
+        set(PHP_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/phpbindings" CACHE STRING "Install directory for php bindings.")
 
         install(TARGETS ${MODULE_NAME}_phpbindings LIBRARY DESTINATION ${PHP_INSTALL_DIR})
-        install(FILES
+
+        install( FILES
             ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.php
             DESTINATION ${PHP_INSTALL_DIR}
-            )
-
-    else()
+        )
+    else(PHP4_FOUND)
         message(WARNING "not building php bindings because php was not found")
-    endif()
-
+    endif (PHP4_FOUND)
 endmacro()
 
 
@@ -128,4 +98,3 @@ macro(generatePythonBindings MODULE_NAME INTERFACE_FILE)
     )
 
 endmacro()
-

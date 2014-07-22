@@ -39,13 +39,6 @@ QString TimezoneConverter::normalizeTimezone(const QString& tz)
     if (guessedTimezone.isEmpty()) {
         guessedTimezone = fromGMTOffsetTimezone(tz);
     }
-    if (guessedTimezone.isEmpty()) {
-        //slower but also finds outdated zones
-        timezone = KSystemTimeZones::readZone(tz);
-        if (timezone.isValid()) {
-            return tz;
-        }
-    }
     Debug() << "Guessed timezone and found: " << guessedTimezone;
     return guessedTimezone;
 }

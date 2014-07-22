@@ -46,7 +46,7 @@ static inline QString todoKolabType() { return QString::fromLatin1(KOLAB_TYPE_TA
 static inline QString journalKolabType() { return QString::fromLatin1(KOLAB_TYPE_JOURNAL); };
 static inline QString contactKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONTACT); };
 static inline QString distlistKolabType() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST); }
-static inline QString distlistKolabTypeCompat() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST_V2); }
+static inline QString distlistKolabTypeCompat() { return QString::fromLatin1(KOLAB_TYPE_DISTLIST_COMPAT); }
 static inline QString noteKolabType() { return QString::fromLatin1(KOLAB_TYPE_NOTE); }
 static inline QString configurationKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONFIGURATION); }
 static inline QString dictKolabType() { return QString::fromLatin1(KOLAB_TYPE_DICT); }
@@ -218,6 +218,7 @@ ObjectType KolabObjectReader::Private::readKolabV2(const KMime::Message::Ptr &ms
         }
         const QByteArray &xmlData = xmlContent->decodedContent();
         mDictionary = readLegacyDictionaryConfiguration(xmlData, mDictionaryLanguage);
+        ErrorHandler::handleLibkolabxmlErrors();
         mObjectType = objectType;
         return mObjectType;
     }
@@ -262,57 +263,54 @@ ObjectType KolabObjectReader::Private::readKolabV2(const KMime::Message::Ptr &ms
             Error() << "Could not extract all attachments. " << mIncidence->attachments().size() << " out of " << attachments.size();
         }
     }
+    mObjectType = objectType;
     if (ErrorHandler::errorOccured()) {
         printMessageDebugInfo(msg);
-        return InvalidObject;
     }
-    mObjectType = objectType;
-    return mObjectType;
+    return objectType;
 }
 
 ObjectType KolabObjectReader::Private::readKolabV3(const KMime::Message::Ptr &msg, Kolab::ObjectType objectType)
 {
-    KMime::Content * const xmlContent = Mime::findContentByType( msg, getMimeType(objectType) );
+    KMime::Content *xmlContent = Mime::findContentByType( msg, getMimeType(objectType) );
     if ( !xmlContent ) {
         Critical() << "no " << getMimeType(objectType) << " part found";
         printMessageDebugInfo(msg);
         return InvalidObject;
     }
-    const QByteArray &content = xmlContent->decodedContent();
-    const std::string xml = std::string(content.data(), content.size());
     switch (objectType) {
         case EventObject: {
-            const Kolab::Event & event = Kolab::readEvent(xml, false);
+            const Kolab::Event & event = Kolab::readEvent(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mIncidence = Kolab::Conversion::toKCalCore(event);
         }
             break;
         case TodoObject: {
-            const Kolab::Todo & event = Kolab::readTodo(xml, false);
+            const Kolab::Todo & event = Kolab::readTodo(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mIncidence = Kolab::Conversion::toKCalCore(event);
         }
             break;
         case JournalObject: {
-            const Kolab::Journal & event = Kolab::readJournal(xml, false);
+            const Kolab::Journal & event = Kolab::readJournal(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mIncidence = Kolab::Conversion::toKCalCore(event);
         }
             break;
         case ContactObject: {
-            const Kolab::Contact &contact = Kolab::readContact(xml, false);
+            const Kolab::Contact &contact = Kolab::readContact(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mAddressee = Kolab::Conversion::toKABC(contact); //TODO extract attachments
         }
             break;
         case DistlistObject: {
-            const Kolab::DistList &distlist = Kolab::readDistlist(xml, false);
+            const Kolab::DistList &distlist = Kolab::readDistlist(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mContactGroup = Kolab::Conversion::toKABC(distlist);
         }
             break;
         case NoteObject: {
-            const Kolab::Note &note = Kolab::readNote(xml, false);
+            const Kolab::Note &note = Kolab::readNote(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mNote = Kolab::Conversion::toNote(note);
         }
             break;
         case DictionaryConfigurationObject: {
-            const Kolab::Configuration &configuration = Kolab::readConfiguration(xml, false);
+            const Kolab::Configuration &configuration = Kolab::readConfiguration(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             const Kolab::Dictionary &dictionary = configuration.dictionary();
             mDictionary.clear();
             foreach (const std::string &entry, dictionary.entries()) {
@@ -322,7 +320,7 @@ ObjectType KolabObjectReader::Private::readKolabV3(const KMime::Message::Ptr &ms
         }
             break;
         case FreebusyObject: {
-            const Kolab::Freebusy &fb = Kolab::readFreebusy(xml, false);
+            const Kolab::Freebusy &fb = Kolab::readFreebusy(std::string(xmlContent->decodedContent().data(), xmlContent->decodedContent().size()), false);
             mFreebusy = fb;
         }
             break;
@@ -336,13 +334,12 @@ ObjectType KolabObjectReader::Private::readKolabV3(const KMime::Message::Ptr &ms
 //             kDebug() << "getting attachments";
         Mime::getAttachmentsById(mIncidence, msg);
     }
-    ErrorHandler::handleLibkolabxmlErrors();
     if (ErrorHandler::errorOccured()) {
         printMessageDebugInfo(msg);
-        return InvalidObject;
     }
+    ErrorHandler::handleLibkolabxmlErrors();
     mObjectType = objectType;
-    return mObjectType;
+    return objectType;
 }
 
 ObjectType KolabObjectReader::parseMimeMessage(const KMime::Message::Ptr &msg)
@@ -378,7 +375,7 @@ ObjectType KolabObjectReader::parseMimeMessage(const KMime::Message::Ptr &msg)
             //For backwards compatibility to development versions, can be removed in future versions
             xKolabVersion = msg->getHeaderByType(X_KOLAB_MIME_VERSION_HEADER_COMPAT);
         }
-        if (!xKolabVersion || xKolabVersion->asUnicodeString() == KOLAB_VERSION_V2) {
+        if (!xKolabVersion) {
             d->mVersion = KolabV2;
         } else {
             if (xKolabVersion->asUnicodeString() != KOLAB_VERSION_V3) { //TODO version compatibility check?
@@ -392,8 +389,10 @@ ObjectType KolabObjectReader::parseMimeMessage(const KMime::Message::Ptr &msg)
 
     if (d->mVersion == KolabV2) {
         return d->readKolabV2(msg, objectType);
+    } else {
+        return d->readKolabV3(msg, objectType);
     }
-    return d->readKolabV3(msg, objectType);
+    return InvalidObject;
 }
 
 Version KolabObjectReader::getVersion() const
