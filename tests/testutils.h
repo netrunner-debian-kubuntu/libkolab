@@ -18,7 +18,6 @@
 #ifndef TESTUTILS_H
 #define TESTUTILS_H
 
-#define TESTFILEDIR QString::fromLatin1(TEST_DATA_PATH "/testfiles/")
 #include <qtemporaryfile.h>
 #include <qprocess.h>
 #include <quuid.h>
@@ -42,6 +41,12 @@ do {\
 
 
 #endif
+
+const QString TESTFILEDIR = QString::fromLatin1(TEST_DATA_PATH "/testfiles/");
+
+QString getPath(const char *file) {
+    return TESTFILEDIR+QString::fromLatin1(file);
+}
 
 void showDiff(const QString &expected, const QString &converted)
 {
@@ -86,6 +91,27 @@ KMime::Message::Ptr readMimeFile( const QString &fileName, bool &ok)
     
     return msg;
 }
+
+
+void normalizeMimemessage(QString &content)
+{
+    content.replace(QRegExp("\\bLibkolab-\\d.\\d.\\d\\b", Qt::CaseSensitive), "Libkolab-x.x.x");
+    content.replace(QRegExp("\\bLibkolabxml-\\d.\\d.\\d\\b", Qt::CaseSensitive), "Libkolabxml-x.x.x");
+    content.replace(QRegExp("\\bLibkolab-\\d.\\d\\b", Qt::CaseSensitive), "Libkolab-x.x.x");
+    content.replace(QRegExp("\\bLibkolabxml-\\d.\\d\\b", Qt::CaseSensitive), "Libkolabxml-x.x.x");
+    content.replace(QRegExp("<uri>cid:*@kolab.resource.akonadi</uri>", Qt::CaseSensitive, QRegExp::Wildcard), "<uri>cid:id@kolab.resource.akonadi</uri>");
+    content.replace(QRegExp("<uri>mailto:*</uri>", Qt::CaseSensitive, QRegExp::Wildcard), "<uri>mailto:</uri>");
+    content.replace(QRegExp("<cal-address>mailto:*</cal-address>", Qt::CaseSensitive, QRegExp::Wildcard), "<cal-address>mailto:</cal-address>");
+    content.replace(QRegExp("<uri>data:*</uri>", Qt::CaseSensitive, QRegExp::Wildcard), "<uri>data:</uri>");
+    content.replace(QRegExp("<last-modification-date>*</last-modification-date>", Qt::CaseSensitive, QRegExp::Wildcard), "<last-modification-date></last-modification-date>");
+    content.replace(QRegExp("<timestamp>*</timestamp>", Qt::CaseSensitive, QRegExp::Wildcard), "<timestamp></timestamp>");
+    content.replace(QRegExp("<x-kolab-version>*</x-kolab-version>", Qt::CaseSensitive, QRegExp::Wildcard), "<x-kolab-version></x-kolab-version>");
+
+    content.replace(QRegExp("--nextPart\\S*", Qt::CaseSensitive), "--part");
+    content.replace(QRegExp("\\bboundary=\"nextPart[^\\n]*", Qt::CaseSensitive), "boundary");
+    content.replace(QRegExp("Date[^\\n]*", Qt::CaseSensitive), "Date");
+}
+
 
 //Normalize incidences for comparison
 void normalizeIncidence( KCalCore::Incidence::Ptr incidence)

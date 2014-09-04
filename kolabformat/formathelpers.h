@@ -16,6 +16,7 @@ enum FolderType {
     NoteType,
     ConfigurationType,
     FreebusyType,
+    FileType,
     LastType
 };
 

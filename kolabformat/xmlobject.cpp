@@ -327,5 +327,26 @@ std::string XMLObject::writeConfiguration(const Configuration &configuration, Ve
     return result;
 }
 
+File XMLObject::readFile(const std::string& s, Version version)
+{
+    if (version == KolabV2) {
+        Critical() << "only v3 implementation available";
+        return File();
+    }
+    return Kolab::readFile(s, false);
+}
+
+std::string XMLObject::writeFile(const File &file, Version version, const std::string& productId)
+{
+    mWrittenUID.clear();
+    if (version != KolabV3) {
+        Critical() << "only v3 implementation available";
+        return std::string();
+    }
+    const std::string result = Kolab::writeFile(file, productId);
+    mWrittenUID = Kolab::getSerializedUID();
+    return result;
+}
+
     
 };

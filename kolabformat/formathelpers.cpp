@@ -15,7 +15,8 @@ static const struct {
   { KOLAB_FOLDER_TYPE_JOURNAL, I18N_NOOP( "Journal" )  },
   { KOLAB_FOLDER_TYPE_NOTE,    I18N_NOOP( "Notes" )    },
   { KOLAB_FOLDER_TYPE_CONFIGURATION, I18N_NOOP( "Configuration" )    },
-  { KOLAB_FOLDER_TYPE_FREEBUSY,    I18N_NOOP( "Freebusy" ) }
+  { KOLAB_FOLDER_TYPE_FREEBUSY,    I18N_NOOP( "Freebusy" ) },
+  { KOLAB_FOLDER_TYPE_FILE,    I18N_NOOP( "Files" ) }
 };
 static const int numFolderTypeData = sizeof folderTypeData / sizeof *folderTypeData;
 
@@ -64,6 +65,11 @@ FolderType folderTypeFromString(const std::string& folderTypeName)
     if ( folderTypeName == KOLAB_FOLDER_TYPE_FREEBUSY ||
         folderTypeName == KOLAB_FOLDER_TYPE_FREEBUSY KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ) {
         return FreebusyType;
+    }
+
+    if ( folderTypeName == KOLAB_FOLDER_TYPE_FILE ||
+        folderTypeName == KOLAB_FOLDER_TYPE_FILE KOLAB_FOLDER_TYPE_DEFAULT_SUFFIX ) {
+        return FileType;
     }
 
     return MailType;

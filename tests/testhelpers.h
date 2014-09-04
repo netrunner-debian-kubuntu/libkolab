@@ -44,7 +44,14 @@ Q_DECLARE_METATYPE(std::vector<Kolab::FreebusyPeriod>);
 Q_DECLARE_METATYPE(KCalCore::Event);
 Q_DECLARE_METATYPE(KCalCore::Todo);
 Q_DECLARE_METATYPE(KCalCore::Journal);
+
+#if KDEPIMLIBS_VERSION_MAJOR <= 4
+#if KDEPIMLIBS_VERSION_MINOR <= 11
+#if KDEPIMLIBS_VERSION_PATCH < 52
 Q_DECLARE_METATYPE(KCalCore::Duration);
+#endif
+#endif
+#endif
 
 namespace QTest {
     
@@ -301,6 +308,21 @@ namespace QTest {
         ba += QString::fromStdString(p.eventLocation())+ "\n";
         ba += QString::fromStdString(p.eventSummary())+ "\n";
         ba += QByteArray(toString(p.periods()))+ "\n";
+        ba += ")";
+        return qstrdup(ba.data());
+    }
+
+    template<>
+    char *toString(const Kolab::Duration &p)
+    {
+        QByteArray ba = "Kolab::Duration";
+        ba += p.isNegative() ? "-": "+";
+        ba += "(";
+        ba += QString::number(p.weeks())+ ", ";
+        ba += QString::number(p.days())+ ", ";
+        ba += QString::number(p.hours())+ ", ";
+        ba += QString::number(p.minutes())+ ", ";
+        ba += QString::number(p.seconds());
         ba += ")";
         return qstrdup(ba.data());
     }

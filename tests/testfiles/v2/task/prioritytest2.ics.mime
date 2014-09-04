@@ -27,10 +27,9 @@ Content-Disposition: attachment; filename="kolab.xml"
  <creation-date>2009-09-01T13:17:03Z</creation-date>
  <last-modification-date>2009-09-01T13:17:03+00:00</last-modification-date>
  <sensitivity>public</sensitivity>
+ <priority>1</priority>
  <summary>Simple Task</summary>
  <organizer/>
- <priority>1</priority>
- <x-kcal-priority>1</x-kcal-priority>
  <completed>0</completed>
  <status>not-started</status>
 </task>

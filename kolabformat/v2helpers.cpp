@@ -192,7 +192,7 @@ KABC::ContactGroup contactGroupFromKolab(const QByteArray &xmlData)
 
 KMime::Message::Ptr distListToKolabFormat(const KolabV2::DistributionList& distList, const QString &productId)
 {    
-    KMime::Message::Ptr message = Mime::createMessage( KOLAB_TYPE_DISTLIST, false, productId );
+    KMime::Message::Ptr message = Mime::createMessage( KOLAB_TYPE_DISTLIST_V2, false, productId );
     if (!message) {
         Critical() << "empty message";
         return KMime::Message::Ptr();
@@ -200,7 +200,7 @@ KMime::Message::Ptr distListToKolabFormat(const KolabV2::DistributionList& distL
     message->subject()->fromUnicodeString( distList.uid(), "utf-8" );
     message->from()->fromUnicodeString( distList.uid(), "utf-8" );
     
-    KMime::Content* content = Mime::createMainPart( KOLAB_TYPE_DISTLIST, distList.saveXML().toUtf8() );
+    KMime::Content* content = Mime::createMainPart( KOLAB_TYPE_DISTLIST_V2, distList.saveXML().toUtf8() );
     message->addContent( content );
     
     message->assemble();
