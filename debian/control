@@ -3,19 +3,18 @@ Section: libs
 Priority: optional
 Maintainer: Debian Kolab Maintainers <pkg-kolab-devel@lists.alioth.debian.org>
 Uploaders: Paul Klos <kolab@klos2day.nl>, Diane Trout <diane@ghic.org>
-Build-Depends:
-        cmake,
-        libqt4-dev,
-        debhelper (>= 9),
-        pkg-kde-tools (>= 0.12),
-        libkolabxml-dev (>= 1.0),
-        libboost-program-options-dev,
-        libcurl4-gnutls-dev,
-        swig,
-        php5-dev,
-        php5-cli,
-        python-dev (>= 2.7),
-        kdepimlibs5-dev,
+Build-Depends: cmake,
+               libqt4-dev,
+               debhelper (>= 9),
+               pkg-kde-tools (>= 0.12),
+               libkolabxml-dev (>= 1.0),
+               libboost-program-options-dev,
+               libcurl4-gnutls-dev,
+               swig,
+               php5-dev (>= 5.3),
+               php5-cli,
+               python-dev (>= 2.7),
+               kdepimlibs5-dev (>= 4:4.10.0),
 X-Python-Version: >= 2.7
 Standards-Version: 3.9.5
 Homepage: http://git.kolab.org/libkolab

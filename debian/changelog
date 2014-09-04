@@ -2,6 +2,7 @@ libkolab (0.5.3-1) UNRELEASED; urgency=medium
 
   * New upstream release.
   * Special thanks to Sven Eckelmann for the patch that fixed #732213.
+  * Update build dependencies.
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 04 Sep 2014 12:29:13 +0200
 
