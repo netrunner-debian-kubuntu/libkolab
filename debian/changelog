@@ -1,8 +1,9 @@
-libkolab (0.5.2-3) UNRELEASED; urgency=medium
+libkolab (0.5.3-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
   * Special thanks to Sven Eckelmann for the patch that fixed #732213.
 
- -- Maximiliano Curia <maxy@debian.org>  Wed, 27 Aug 2014 04:14:09 +0200
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 04 Sep 2014 12:29:13 +0200
 
 libkolab (0.5.2-2) unstable; urgency=medium
 
