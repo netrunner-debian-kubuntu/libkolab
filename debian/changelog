@@ -12,6 +12,7 @@ libkolab (0.6.0-0) UNRELEASED; urgency=medium
     002-Make-libkolab-compile-with-upstream-kdepimlibs.patch
   * Updated symbols file.
   * Cleanup/Fixes copyright file.
+  * Updated php module dependency list.
   * Switched downloadurl to http://mirror.kolabsys.com/pub/releases/
     (there are also signed packages available, but unfortunately not
     a detached signature)
