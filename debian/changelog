@@ -2,6 +2,9 @@ libkolab (0.6.0-0) UNRELEASED; urgency=medium
 
   * Team upload.
   * New upstream release.
+  * Switched downloadurl to http://mirror.kolabsys.com/pub/releases/
+    (there are also signed packages available, but unfortunately not
+    a detached signature)
 
  -- Sandro Knauß <bugs@sandroknauss.de>  Fri, 13 Feb 2015 23:15:41 +0100
 

@@ -1,3 +1,2 @@
 version=3
-http://git.kolab.org/libkolab/ \
-  /libkolab/snapshot/libkolab-([0-9\.]+)\.tar\.gz
+http://mirror.kolabsys.com/pub/releases/libkolab-([0-9\.]+)\.tar\.gz
