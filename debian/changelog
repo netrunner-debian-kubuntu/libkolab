@@ -11,6 +11,8 @@ libkolab (0.6.0-0) UNRELEASED; urgency=medium
   * Added patch to build with current kdepimlibs (from kolab):
     002-Make-libkolab-compile-with-upstream-kdepimlibs.patch
   * Updated symbols file.
+  * Added kolabdummy php module to prevent apache crash, while reloading
+    (for further information see https://issues.kolab.org/show_bug.cgi?id=2050)
   * Cleanup/Fixes copyright file.
   * Updated php module dependency list.
   * Switched downloadurl to http://mirror.kolabsys.com/pub/releases/

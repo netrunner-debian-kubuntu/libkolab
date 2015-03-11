@@ -6,19 +6,15 @@ set -e
 #DEBHELPER#
 
 inidir=/etc/php5/mods-available
-module=kolab
-package=php-${module}
-inifile=${module}.ini
-priority=31
 
-if [ "$1" = "configure" ]; then
-
+register_module () {
+	local module=$1 inifile=$1.ini package=$2 args="$3"
 	# Register new conffile with UCF
 	ucf /usr/share/php5/${module}/${inifile} ${inidir}/${inifile}
 	ucfr --force ${package} ${inidir}/${inifile}
 
 	# Move pre-extension manager conffile
-	dpkg-maintscript-helper mv_conffile /etc/php5/conf.d/${inifile} ${inidir}/${inifile} 0.4.0~ -- "$@";
+	dpkg-maintscript-helper mv_conffile /etc/php5/conf.d/${inifile} ${inidir}/${inifile} 0.4.0~ -- $args;
 
 	if [ -f "${inidir}/${inifile}.dpkg-new" ]; then
 	    md5sum="$(md5sum ${inidir}/${inifile}.dpkg-new | sed -e 's/ .*//')"
@@ -29,7 +25,12 @@ if [ "$1" = "configure" ]; then
 	fi
 
 	# Enable the module
-	php5enmod ${module}/${priority:-21}
+	php5enmod ${module}
+}
+
+if [ "$1" = "configure" ]; then
+	register_module kolabdummy php-kolab "$*"
+	register_module kolab php-kolab "$*"
 fi
 
 exit 0
