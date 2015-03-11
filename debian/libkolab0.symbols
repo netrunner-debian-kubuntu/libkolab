@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 0.5.2 amd64
+# SymbolsHelper-Confirmed: 0.6.0 amd64
 libkolab.so.0 libkolab0 #MINVER#
  _ZGVZN5Kolab12ErrorHandler8instanceEvE4inst@Base 0.5.2
  _ZN5Kolab10Conversion10toKCalCoreERKNS_4TodoE@Base 0.5.2
@@ -69,7 +69,12 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZN5Kolab13FreebusyUtils16generateFreeBusyERK5QListI14QSharedPointerIN8KCalCore5EventEEERK9KDateTimeSB_RKS2_INS3_6PersonEE@Base 0.5.2
  _ZN5Kolab13FreebusyUtils17aggregateFreeBusyERKSt6vectorINS_8FreebusyESaIS2_EERKSsS8_b@Base 0.5.2
  _ZN5Kolab13FreebusyUtils5toIFBERKNS_8FreebusyE@Base 0.5.2
+ _ZN5Kolab14RelationMemberC1Ev@Base 0.6.0
+ _ZN5Kolab14RelationMemberC2Ev@Base 0.6.0
+ _ZN5Kolab14RelationMemberD1Ev@Base 0.6.0
+ _ZN5Kolab14RelationMemberD2Ev@Base 0.6.0
  _ZN5Kolab14fromICalEventsERKSs@Base 0.5.2
+ _ZN5Kolab14parseMemberUrlERK7QString@Base 0.6.0
  _ZN5Kolab14readV2EventXMLERK10QByteArrayR11QStringList@Base 0.5.2
  _ZN5Kolab16folderAnnotationENS_10FolderTypeEb@Base 0.5.2
  _ZN5Kolab17KolabObjectReader10setVersionENS_7VersionE@Base 0.5.2
@@ -88,10 +93,13 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZN5Kolab17KolabObjectWriter12writeJournalERK14QSharedPointerIN8KCalCore7JournalEENS_7VersionERK7QStringSA_@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter13writeDistlistERKN4KABC12ContactGroupENS_7VersionERK7QString@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter13writeFreebusyERKNS_8FreebusyENS_7VersionERK7QString@Base 0.5.2
+ _ZN5Kolab17KolabObjectWriter13writeRelationERKN7Akonadi8RelationERK11QStringListNS_7VersionERK7QString@Base 0.6.0
  _ZN5Kolab17KolabObjectWriter14writeIncidenceERK14QSharedPointerIN8KCalCore9IncidenceEENS_7VersionERK7QStringSA_@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter15writeDictionaryERK11QStringListRK7QStringNS_7VersionES6_@Base 0.5.2
+ _ZN5Kolab17KolabObjectWriter8writeTagERKN7Akonadi3TagERK11QStringListNS_7VersionERK7QString@Base 0.6.0
  _ZN5Kolab17KolabObjectWriter9writeNoteERKN5boost10shared_ptrIN5KMime7MessageEEENS_7VersionERK7QString@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter9writeTodoERK14QSharedPointerIN8KCalCore4TodoEENS_7VersionERK7QStringSA_@Base 0.5.2
+ _ZN5Kolab17generateMemberUrlERKNS_14RelationMemberE@Base 0.6.0
  _ZN5Kolab17nameForFolderTypeENS_10FolderTypeE@Base 0.5.2
  _ZN5Kolab20folderTypeFromStringERKSs@Base 0.5.2
  _ZN5Kolab23guessFolderTypeFromNameERKSs@Base 0.5.2
@@ -131,10 +139,15 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZNK5Kolab17KolabObjectReader10getContactEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader10getJournalEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader10getVersionEv@Base 0.5.2
+ _ZNK5Kolab17KolabObjectReader10isRelationEv@Base 0.6.0
  _ZNK5Kolab17KolabObjectReader11getDistlistEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader11getFreebusyEv@Base 0.5.2
+ _ZNK5Kolab17KolabObjectReader11getRelationEv@Base 0.6.0
  _ZNK5Kolab17KolabObjectReader12getIncidenceEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader13getDictionaryER7QString@Base 0.5.2
+ _ZNK5Kolab17KolabObjectReader13getTagMembersEv@Base 0.6.0
+ _ZNK5Kolab17KolabObjectReader5isTagEv@Base 0.6.0
+ _ZNK5Kolab17KolabObjectReader6getTagEv@Base 0.6.0
  _ZNK5Kolab17KolabObjectReader7getNoteEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader7getTodoEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader7getTypeEv@Base 0.5.2
@@ -146,6 +159,7 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZNK5Kolab9XMLObject21pictureAttachmentNameEv@Base 0.5.2
  (optional=templinst)_ZNSt12_Destroy_auxILb0EE9__destroyIPSsEEvT_S3_@Base 0.5.2
  (optional=templinst)_ZNSt6vectorISsSaISsEE13_M_insert_auxEN9__gnu_cxx17__normal_iteratorIPSsS1_EERKSs@Base 0.5.2
+ (optional=templinst)_ZNSt6vectorISsSaISsEE7reserveEm@Base 0.6.0
  (optional=templinst)_ZNSt6vectorISsSaISsEEC1ERKS1_@Base 0.5.2
  (optional=templinst)_ZNSt6vectorISsSaISsEEC2ERKS1_@Base 0.5.2
  (optional=templinst)_ZNSt6vectorISsSaISsEED1Ev@Base 0.5.2
