@@ -31,9 +31,9 @@ endif()
 # 0.1.1 (patch release for 0.1.0)
 # 0.2 (0.2 development version towards 0.2.0)
 set(Libkolab_VERSION_MAJOR 0)
-set(Libkolab_VERSION_MINOR 5)
+set(Libkolab_VERSION_MINOR 6)
 # Enable the full x.y.z version only for release versions
-set(Libkolab_VERSION_PATCH 3)
+set(Libkolab_VERSION_PATCH 0)
 set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR}.${Libkolab_VERSION_PATCH} )
 #set(Libkolab_VERSION ${Libkolab_VERSION_MAJOR}.${Libkolab_VERSION_MINOR} )
 set(Libkolab_VERSION_STRING ${CMAKE_PROJECT_NAME}-${Libkolab_VERSION})
@@ -55,7 +55,7 @@ endforeach()
 include(MacroLogFeature)
 
 # Do the building
-find_package(Libkolabxml 1.0 REQUIRED)
+find_package(Libkolabxml 1.1 REQUIRED)
 macro_log_feature(Libkolabxml_FOUND "Libkolabxml" "Kolab XML Format 3 serializing library" "http://git.kolab.org/libkolabxml/" TRUE "1.0" "Required for reading/writing Kolab XML Objects")
 
 find_package(Qt4 4.6.0 REQUIRED)
@@ -91,7 +91,7 @@ if (USE_LIBCALENDARING)
     set( KDE_LIBRARIES ${Libcalendaring_LIBRARIES} )
     message("${Libcalendaring_INCLUDE_DIRS} ${Libcalendaring_LIBRARIES}")
 else()
-    set( KDE_INCLUDES ${KDEPIMLIBS_INCLUDE_DIRS} ${KDE4_INCLUDE_DIR})
+    set( KDE_INCLUDES ${KDEPIMLIBS_INCLUDE_DIRS} ${KDE4_INCLUDES} )
     set( KDE_LIBRARIES
         ${KDEPIMLIBS_KCALCORE_LIBS}
         ${KDEPIMLIBS_KABC_LIBS}
@@ -118,6 +118,17 @@ include_directories(
 )
 
 configure_file(libkolab-version.h.cmake "${CMAKE_BINARY_DIR}/libkolab-version.h" @ONLY)
+
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+set(CMAKE_REQUIRED_INCLUDES "/opt/devel/kolab/include/")
+# include(CheckIncludeFileCXX)
+# check_include_file_cxx(akonadi/tag.h HAVE_TAG_H)
+#check_include_file_cxx doesn't work for some reason, so we use find_path instead.
+#we have to make sure that we only search in KDE_INCLUDES though, to not accidentally include a system akonadi/tag.h
+#when we're searching for one in libcalendaring.
+find_path(HAVE_TAG_H akonadi/tag.h PATHS ${KDE_INCLUDES} NO_DEFAULT_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH)
+find_path(HAVE_RELATION_H akonadi/relation.h PATHS ${KDE_INCLUDES} NO_DEFAULT_PATH NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libkolab_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/libkolab_config.h)
 
 add_subdirectory(kolabformatV2)
 add_subdirectory(conversion)
@@ -180,6 +191,7 @@ install(FILES
     kolabformat/errorhandler.h
     kolabformat/xmlobject.h
     kolabformat/mimeobject.h
+    ${CMAKE_CURRENT_BINARY_DIR}/libkolab_config.h
     conversion/kcalconversion.h
     conversion/kabcconversion.h
     conversion/commonconversion.h
@@ -209,5 +221,6 @@ endif(PYTHON_BINDINGS)
 
 if(PHP_BINDINGS)
     generatePHPBindings(kolabshared shared.i)
+    generatePHPBindings(dummy dummy.i)
     add_subdirectory(kolabformat/php)
 endif(PHP_BINDINGS)

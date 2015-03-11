@@ -51,6 +51,7 @@ static inline QString noteKolabType() { return QString::fromLatin1(KOLAB_TYPE_NO
 static inline QString configurationKolabType() { return QString::fromLatin1(KOLAB_TYPE_CONFIGURATION); }
 static inline QString dictKolabType() { return QString::fromLatin1(KOLAB_TYPE_DICT); }
 static inline QString freebusyKolabType() { return QString::fromLatin1(KOLAB_TYPE_FREEBUSY); }
+static inline QString relationKolabType() { return QString::fromLatin1(KOLAB_TYPE_RELATION); }
 
 static inline QString xCalMimeType() { return QString::fromLatin1(MIME_TYPE_XCAL); };
 static inline QString xCardMimeType() { return QString::fromLatin1(MIME_TYPE_XCARD); };
@@ -61,6 +62,92 @@ KCalCore::Event::Ptr readV2EventXML(const QByteArray& xmlData, QStringList& atta
     return fromXML<KCalCore::Event::Ptr, KolabV2::Event>(xmlData, attachments);
 }
 
+QString ownUrlDecode(QByteArray encodedParam)
+{
+    encodedParam.replace('+', ' ');
+    return QUrl::fromPercentEncoding(encodedParam);
+}
+
+RelationMember parseMemberUrl(const QString &string)
+{
+    if (string.startsWith("urn:uuid:")) {
+        RelationMember member;
+        member.gid = string.mid(9);
+        return member;
+    }
+    QUrl url(QUrl::fromEncoded(string.toLatin1()));
+    QList<QByteArray> path;
+    Q_FOREACH(const QByteArray &fragment, url.encodedPath().split('/')) {
+        path.append(ownUrlDecode(fragment).toUtf8());
+    }
+    // qDebug() << path;
+    bool isShared = false;
+    int start = path.indexOf("user");
+    if (start < 0) {
+        start = path.indexOf("shared");
+        isShared = true;
+    }
+    if (start < 0) {
+        Warning() << "Couldn't find \"user\" or \"shared\" in path: " << path;
+        return RelationMember();
+    }
+    path = path.mid(start + 1);
+    if (path.size() < 2) {
+        Warning() << "Incomplete path: " << path;
+        return RelationMember();
+    }
+    RelationMember member;
+    if (!isShared) {
+        member.user = path.takeFirst();
+    }
+    member.uid = path.takeLast().toLong();
+    member.mailbox = path;
+    member.messageId = ownUrlDecode(url.encodedQueryItemValue("message-id"));
+    member.subject = ownUrlDecode(url.encodedQueryItemValue("subject"));
+    member.date = ownUrlDecode(url.encodedQueryItemValue("date"));
+    // qDebug() << member.uid << member.mailbox;
+    return member;
+}
+
+static QByteArray join(const QList<QByteArray> &list, const QByteArray &c)
+{
+    QByteArray result;
+    Q_FOREACH (const QByteArray &a, list) {
+        result += a + c;
+    }
+    result.chop(c.size());
+    return result;
+}
+
+KOLAB_EXPORT QString generateMemberUrl(const RelationMember &member)
+{
+    if (!member.gid.isEmpty()) {
+        return QString("urn:uuid:%1").arg(member.gid);
+    }
+    QUrl url;
+    url.setScheme("imap");
+    QList<QByteArray> path;
+    path << "/";
+    if (!member.user.isEmpty()) {
+        path << "user";
+        path << QUrl::toPercentEncoding(member.user.toLatin1());
+    } else {
+        path << "shared";
+    }
+    Q_FOREACH(const QByteArray &mb, member.mailbox) {
+        path << QUrl::toPercentEncoding(mb);
+    }
+    path << QByteArray::number(member.uid);
+    url.setEncodedPath("/" + join(path, "/"));
+
+    QList<QPair<QByteArray, QByteArray> > queryItems;
+    queryItems.append(qMakePair(QString::fromLatin1("message-id").toLatin1(), QUrl::toPercentEncoding(member.messageId)));
+    queryItems.append(qMakePair(QString::fromLatin1("subject").toLatin1(), QUrl::toPercentEncoding(member.subject)));
+    queryItems.append(qMakePair(QString::fromLatin1("date").toLatin1(), QUrl::toPercentEncoding(member.date)));
+    url.setEncodedQueryItems(queryItems);
+
+    return QString::fromLatin1(url.toEncoded());
+}
 
 //@cond PRIVATE
 class KolabObjectReader::Private
@@ -77,7 +164,7 @@ public:
 
     ObjectType readKolabV2(const KMime::Message::Ptr &msg, Kolab::ObjectType objectType);
     ObjectType readKolabV3(const KMime::Message::Ptr &msg, Kolab::ObjectType objectType);
-    
+
     KCalCore::Incidence::Ptr mIncidence;
     KABC::Addressee mAddressee;
     KABC::ContactGroup mContactGroup;
@@ -90,6 +177,14 @@ public:
     ObjectType mOverrideObjectType;
     Version mOverrideVersion;
     bool mDoOverrideVersion;
+
+#ifdef HAVE_RELATION_H
+    Akonadi::Relation mRelation;
+#endif
+#ifdef HAVE_TAG_H
+    Akonadi::Tag mTag;
+    QStringList mTagMembers;
+#endif
 };
 //@endcond
 
@@ -101,7 +196,7 @@ KolabObjectReader::KolabObjectReader()
 KolabObjectReader::KolabObjectReader(const KMime::Message::Ptr& msg)
 : d( new KolabObjectReader::Private )
 {
-    d->mObjectType = parseMimeMessage(msg);
+    parseMimeMessage(msg);
 }
 
 KolabObjectReader::~KolabObjectReader()
@@ -138,6 +233,8 @@ Kolab::ObjectType getObjectType(const QString &type)
         return FreebusyObject;
     } else if (type.contains(dictKolabType())) { //Previous versions appended the language to the type
         return DictionaryConfigurationObject;
+    } else if (type == relationKolabType()) {
+        return RelationConfigurationObject;
     }
     Warning() << "Unknown object type: " << type;
     return Kolab::InvalidObject;
@@ -162,6 +259,8 @@ QByteArray getTypeString(Kolab::ObjectType type)
             return KOLAB_TYPE_NOTE;
         case DictionaryConfigurationObject:
             return KOLAB_TYPE_CONFIGURATION;
+        case RelationConfigurationObject:
+            return KOLAB_TYPE_RELATION;
         default:
             Critical() << "unknown type "<< type;
     }
@@ -181,6 +280,7 @@ QByteArray getMimeType(Kolab::ObjectType type)
             return MIME_TYPE_XCARD;
         case NoteObject:
         case DictionaryConfigurationObject:
+        case RelationConfigurationObject:
             return MIME_TYPE_KOLAB;
         default:
             Critical() << "unknown type "<< type;
@@ -326,6 +426,44 @@ ObjectType KolabObjectReader::Private::readKolabV3(const KMime::Message::Ptr &ms
             mFreebusy = fb;
         }
             break;
+#ifdef HAVE_TAG_H
+        case RelationConfigurationObject: {
+            const Kolab::Configuration &configuration = Kolab::readConfiguration(xml, false);
+            const Kolab::Relation &relation = configuration.relation();
+
+            if (relation.type() == "tag") {
+                mTag = Akonadi::Tag();
+                mTag.setName(Conversion::fromStdString(relation.name()));
+                mTag.setGid(Conversion::fromStdString(configuration.uid()).toLatin1());
+                mTag.setType(Akonadi::Tag::GENERIC);
+
+                mTagMembers.reserve(relation.members().size());
+                foreach (const std::string &member, relation.members()) {
+                    mTagMembers << Conversion::fromStdString(member);
+                }
+            } else if (relation.type() == "generic") {
+#ifdef HAVE_RELATION_H
+                if (relation.members().size() == 2) {
+                    mRelation = Akonadi::Relation();
+                    mRelation.setRemoteId(Conversion::fromStdString(configuration.uid()).toLatin1());
+                    mRelation.setType(Akonadi::Relation::GENERIC);
+
+                    mTagMembers.reserve(relation.members().size());
+                    foreach (const std::string &member, relation.members()) {
+                        mTagMembers << Conversion::fromStdString(member);
+                    }
+                } else {
+                    Critical() << "generic relation had wrong number of members:" << relation.members().size();
+                    printMessageDebugInfo(msg);
+                }
+#endif
+            } else {
+                Critical() << "unknown configuration object type" << relation.type();
+                printMessageDebugInfo(msg);
+            }
+        }
+            break;
+#endif
         default:
             Critical() << "no kolab object found ";
             printMessageDebugInfo(msg);
@@ -451,6 +589,35 @@ Freebusy KolabObjectReader::getFreebusy() const
 {
     return d->mFreebusy;
 }
+
+#ifdef HAVE_TAG_H
+bool KolabObjectReader::isTag() const
+{
+    return !d->mTag.gid().isEmpty();
+}
+
+Akonadi::Tag KolabObjectReader::getTag() const
+{
+    return d->mTag;
+}
+
+QStringList KolabObjectReader::getTagMembers() const
+{
+    return d->mTagMembers;
+}
+#endif
+
+#ifdef HAVE_RELATION_H
+bool KolabObjectReader::isRelation() const
+{
+    return d->mRelation.isValid();
+}
+
+Akonadi::Relation KolabObjectReader::getRelation() const
+{
+    return d->mRelation;
+}
+#endif
 
 
 //Normalize incidences before serializing them
@@ -630,9 +797,58 @@ KMime::Message::Ptr KolabObjectWriter::writeFreebusy(const Freebusy &freebusy, V
     return  Mime::createMessage(Conversion::fromStdString(freebusy.uid()), xCalMimeType(), freebusyKolabType(), Conversion::fromStdString(v3String).toUtf8(), true, getProductId(productId));
 }
 
+#ifdef HAVE_TAG_H
+KMime::Message::Ptr writeRelationHelper(const Kolab::Relation &relation, const QByteArray &uid, const QString &productId)
+{
+    Kolab::Configuration configuration(relation); //TODO preserve creation/lastModified date
+    configuration.setUid(uid.constData());
+    const std::string &v3String = Kolab::writeConfiguration(configuration, Conversion::toStdString(getProductId(productId)));
+    ErrorHandler::handleLibkolabxmlErrors();
+    return  Mime::createMessage(Conversion::fromStdString(configuration.uid()), kolabMimeType(), relationKolabType(), Conversion::fromStdString(v3String).toUtf8(), true, getProductId(productId));
+}
 
+KMime::Message::Ptr KolabObjectWriter::writeTag(const Akonadi::Tag &tag, const QStringList &members, Version v, const QString &productId)
+{
+    ErrorHandler::clearErrors();
+    if (v != KolabV3) {
+        Critical() << "only v3 implementation available";
+    }
 
+    Kolab::Relation relation(Conversion::toStdString(tag.name()), "tag");
+    std::vector<std::string> m;
+    m.reserve(members.count());
+    foreach (const QString &member, members) {
+        m.push_back(Conversion::toStdString(member));
+    }
+    relation.setMembers(m);
 
+    return writeRelationHelper(relation, tag.gid(), productId);
+}
+#endif
+
+#ifdef HAVE_RELATION_H
+KMime::Message::Ptr KolabObjectWriter::writeRelation(const Akonadi::Relation &relation, const QStringList &items, Version v, const QString &productId)
+{
+    ErrorHandler::clearErrors();
+    if (v != KolabV3) {
+        Critical() << "only v3 implementation available";
+    }
+
+    if (items.size() != 2) {
+        Critical() << "Wrong number of members for generic relation.";
+        return KMime::Message::Ptr();
+    }
+
+    Kolab::Relation kolabRelation(std::string(), "generic");
+    std::vector<std::string> m;
+    m.reserve(2);
+    m.push_back(Conversion::toStdString(items.at(0)));
+    m.push_back(Conversion::toStdString(items.at(1)));
+    kolabRelation.setMembers(m);
+
+    return writeRelationHelper(kolabRelation, relation.remoteId(), productId);
+}
+#endif
 
 
 }; //Namespace
