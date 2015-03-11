@@ -504,8 +504,6 @@ void KCalConversionTest::testContactConversion_data()
     QTest::addColumn<KABC::Addressee>( "kcal" );
     QTest::addColumn<Kolab::Contact>( "kolab" );
     
-    Kolab::cDateTime date(2011,2,2,12,11,10,true);
-    Kolab::cDateTime date2(2011,2,2,12,12,10,true);
     {
         KABC::Addressee kcal;
         kcal.setUid("uid");
@@ -516,6 +514,20 @@ void KCalConversionTest::testContactConversion_data()
         kolab.setName("name");
 
         QTest::newRow("basic") << kcal << kolab;
+    }
+    {
+        KABC::Addressee kcal;
+        kcal.setUid("uid");
+        kcal.setFormattedName("name");
+        kcal.setBirthday(QDateTime(QDate(2012,2,2)));
+
+        //Because QDateTime doesn't know date-only values we always end up with a date-time
+        Kolab::Contact kolab;
+        kolab.setUid("uid");
+        kolab.setName("name");
+        kolab.setBDay(Kolab::cDateTime(2012,2,2,0,0,0));
+
+        QTest::newRow("bday") << kcal << kolab;
     }
     {
         KABC::Addressee kcal;
@@ -554,12 +566,14 @@ void KCalConversionTest::testContactConversion()
     foreach (const QString &mail, e.emails()) {
         QCOMPARE(e.custom(QLatin1String("KOLAB"), QString::fromLatin1("EmailTypes%1").arg(mail)), kcal.custom(QLatin1String("KOLAB"), QString::fromLatin1("EmailTypes%1").arg(mail)));
     }
+    QCOMPARE(e.birthday(), kcal.birthday());
     
     const Kolab::Contact &b = fromKABC(kcal);
     QCOMPARE(b.uid(), kolab.uid());
     QCOMPARE(b.name(), kolab.name());
     QCOMPARE(b.emailAddresses(), kolab.emailAddresses());
     QCOMPARE(b.emailAddressPreferredIndex(), kolab.emailAddressPreferredIndex());
+    QCOMPARE(b.bDay(), kolab.bDay());
 }
 
 

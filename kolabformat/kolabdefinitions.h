@@ -63,6 +63,7 @@ namespace Kolab {
 #define KOLAB_TYPE_DICT    "application/x-vnd.kolab.configuration.dictionary"
 #define KOLAB_TYPE_FREEBUSY    "application/x-vnd.kolab.freebusy"
 #define KOLAB_TYPE_FILE    "application/x-vnd.kolab.file"
+#define KOLAB_TYPE_RELATION "application/x-vnd.kolab.configuration.relation"
 
 enum Version {
     KolabV2,
@@ -78,7 +79,8 @@ enum ObjectType {
     DistlistObject,
     NoteObject,
     DictionaryConfigurationObject,
-    FreebusyObject
+    FreebusyObject,
+    RelationConfigurationObject
 };
 
 }

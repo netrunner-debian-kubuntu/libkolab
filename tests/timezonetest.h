@@ -32,10 +32,12 @@ private slots:
     void testFromHardcodedList_data();
     void testFromHardcodedList();
     void testKolabObjectWriter();
-    void testKolabObjectReader();
+    // void testKolabObjectReader();
     void testFindLegacyTimezone();
+    void testIgnoreInvalidTimezone();
     void testTimezoneDaemonAvailable();
     void testUTCOffset();
+    void localTimezone();
 };
 
 #endif // TIMEZONETEST_H

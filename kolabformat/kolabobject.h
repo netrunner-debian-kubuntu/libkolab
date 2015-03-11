@@ -20,6 +20,15 @@
 
 #include <kolab_export.h>
 
+#include <libkolab_config.h>
+
+#ifdef HAVE_TAG_H
+#include <akonadi/item.h>
+#include <akonadi/tag.h>
+#endif
+#ifdef HAVE_RELATION_H
+#include <akonadi/relation.h>
+#endif
 #include <kabc/addressee.h>
 #include <kabc/contactgroup.h>
 #include <kcalcore/incidence.h>
@@ -36,6 +45,18 @@ class Freebusy;
 
 
 KOLAB_EXPORT KCalCore::Event::Ptr readV2EventXML(const QByteArray &xmlData, QStringList &attachments);
+
+struct KOLAB_EXPORT RelationMember {
+    QString messageId;
+    QString subject;
+    QString date;
+    QList<QByteArray> mailbox;
+    QString user;
+    qint64 uid;
+    QString gid;
+};
+KOLAB_EXPORT RelationMember parseMemberUrl(const QString &url);
+KOLAB_EXPORT QString generateMemberUrl(const RelationMember &url);
 
 /**
  * Class to read Kolab Mime files
@@ -87,9 +108,20 @@ public:
     KMime::Message::Ptr getNote() const;
     QStringList getDictionary(QString &lang) const;
     Freebusy getFreebusy() const;
+#ifdef HAVE_TAG_H
+    bool isTag() const;
+    Akonadi::Tag getTag() const;
+    QStringList getTagMembers() const;
+#endif
+#ifdef HAVE_RELATION_H
+    bool isRelation() const;
+    Akonadi::Relation getRelation() const;
+#endif
 
 private:
     //@cond PRIVATE
+    KolabObjectReader(const KolabObjectReader &other);
+    KolabObjectReader &operator=(const KolabObjectReader &rhs);
     class Private;
     Private *const d;
     //@endcond
@@ -111,6 +143,12 @@ public:
     static KMime::Message::Ptr writeNote(const KMime::Message::Ptr &, Version v = KolabV3, const QString &productId = QString());
     static KMime::Message::Ptr writeDictionary(const QStringList &, const QString &lang, Version v = KolabV3, const QString &productId = QString());
     static KMime::Message::Ptr writeFreebusy(const Kolab::Freebusy &, Version v = KolabV3, const QString &productId = QString());
+#ifdef HAVE_TAG_H
+    static KMime::Message::Ptr writeTag(const Akonadi::Tag &, const QStringList &items, Version v = KolabV3, const QString &productId = QString());
+#endif
+#ifdef HAVE_RELATION_H
+    static KMime::Message::Ptr writeRelation(const Akonadi::Relation &, const QStringList &items, Version v = KolabV3, const QString &productId = QString());
+#endif
     
 };
 

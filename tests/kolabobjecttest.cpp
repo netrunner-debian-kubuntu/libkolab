@@ -80,6 +80,92 @@ void KolabObjectTest::dontCrashWithEmptyIncidence()
     QCOMPARE(Kolab::ErrorHandler::instance().error(), Kolab::ErrorHandler::Critical);
 }
 
+void KolabObjectTest::parseRelationMembers()
+{
+    {
+        QString memberString("imap:///user/jan.aachen%40lhm.klab.cc/INBOX/20?message-id=%3Cf06aa3345a25005380b47547ad161d36%40lhm.klab.cc%3E&subject=Re%3A+test&date=Tue%2C+12+Aug+2014+20%3A42%3A59+%2B0200");
+        Kolab::RelationMember member = Kolab::parseMemberUrl(memberString);
+
+        QString result = Kolab::generateMemberUrl(member);
+        qDebug() << result;
+        result.replace(QLatin1String("%20"),QLatin1String("+"));
+        QCOMPARE(result, memberString);
+    }
+
+    //user namespace by uid
+    {
+
+        Kolab::RelationMember member;
+        member.uid = 20;
+        member.mailbox = QList<QByteArray>() << "INBOX";
+        member.user = "john.doe@example.org";
+        member.messageId = "messageid";
+        member.date = "date";
+        member.subject = "subject";
+        QString url = Kolab::generateMemberUrl(member);
+        qDebug() << url;
+        Kolab::RelationMember result = Kolab::parseMemberUrl(url);
+        QCOMPARE(result.uid, member.uid);
+        QCOMPARE(result.mailbox, member.mailbox);
+        QCOMPARE(result.user, member.user);
+        QCOMPARE(result.messageId, member.messageId);
+        QCOMPARE(result.date, member.date);
+        QCOMPARE(result.subject, member.subject);
+    }
+
+    //shared namespace by uid
+    {
+
+        Kolab::RelationMember member;
+        member.uid = 20;
+        member.mailbox = QList<QByteArray>() << "foo" << "bar";
+        member.messageId = "messageid";
+        member.date = "date";
+        member.subject = "subject";
+        QString url = Kolab::generateMemberUrl(member);
+        qDebug() << url;
+        Kolab::RelationMember result = Kolab::parseMemberUrl(url);
+        QCOMPARE(result.uid, member.uid);
+        QCOMPARE(result.mailbox, member.mailbox);
+        QVERIFY(result.user.isEmpty());
+        QCOMPARE(result.messageId, member.messageId);
+        QCOMPARE(result.date, member.date);
+        QCOMPARE(result.subject, member.subject);
+    }
+
+    //by uuid/gid
+    {
+
+        Kolab::RelationMember member;
+        member.gid = "fooobar";
+        QString url = Kolab::generateMemberUrl(member);
+        qDebug() << url;
+        Kolab::RelationMember result = Kolab::parseMemberUrl(url);
+        QCOMPARE(result.gid, member.gid);
+    }
+
+    // chars to en/decode
+    {
+
+        Kolab::RelationMember member;
+        member.uid = 20;
+        member.mailbox = QList<QByteArray>() << "spaces in folders" << "+^,:@";
+        member.user = "john.doe:^@example.org";
+        member.messageId = "messageid+^,:@";
+        member.date = "date+^,:@";
+        member.subject = "subject+^,:@";
+
+        QString url = Kolab::generateMemberUrl(member);
+        qDebug() << url;
+        Kolab::RelationMember result = Kolab::parseMemberUrl(url);
+        QCOMPARE(result.uid, member.uid);
+        QCOMPARE(result.mailbox, member.mailbox);
+        QCOMPARE(result.user, member.user);
+        QCOMPARE(result.messageId, member.messageId);
+        QCOMPARE(result.date, member.date);
+        QCOMPARE(result.subject, member.subject);
+    }
+}
 
 
 

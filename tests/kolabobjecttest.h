@@ -27,6 +27,7 @@ private slots:
     void preserveUnicode();
     void dontCrashWithEmptyOrganizer();
     void dontCrashWithEmptyIncidence();
+    void parseRelationMembers();
 };
 
 #endif // KOLABOBJECTTEST_H
