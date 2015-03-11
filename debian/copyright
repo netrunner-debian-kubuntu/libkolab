@@ -6,9 +6,6 @@ Source: http://git.kolab.org/libkolab
 Files: *
 Copyright: 2011-2013 Christian Mollekopf <mollekopf@kolabsys.com>
            2013 Sofia Balicka <balicka@kolabsys.com>
-           2004 Bo Thorsen <bo@sonofthor.dk>
-           2009 <kevin.krammer@gmx.at>
-           2002-2004 Klarälvdalens Datakonsult AB
 License: LGPL-3+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
@@ -47,26 +44,10 @@ License: GPL-3+
  /usr/share/common-licenses/GPL-3
 
 Files: kolab_export.h
-       kolabformat/v2helpers.h
-       kolabformatV2/journal.h
-       kolabformatV2/event.cpp
-       kolabformatV2/note.h
-       kolabformatV2/contact.cpp
-       kolabformatV2/contact.h
-       kolabformatV2/kolabbase.h
-       kolabformatV2/incidence.h
-       kolabformatV2/note.cpp
-       kolabformatV2/journal.cpp
-       kolabformatV2/kolabbase.cpp
-       kolabformatV2/event.h
-       kolabformatV2/task.h
-       kolabformatV2/incidence.cpp
-       kolabformatV2/distributionlist.h
-       kolabformatV2/distributionlist.cpp
-       kolabformatV2/task.cpp
+       kolabformatV2/*
 Copyright: 2011-2012 Christian Mollekopf <mollekopf@kolabsys.com>
            2004 Bo Thorsen <bo@sonofthor.dk>
-           2009 <kevin.krammer@gmx.at>
+           2009 Kevin Krammer <kevin.krammer@gmx.at>
            2002-2004 Klarälvdalens Datakonsult AB
 License: LGPL-2+-QT-EXCEPTION
  This library is free software; you can redistribute it and/or
@@ -98,9 +79,29 @@ License: LGPL-2+-QT-EXCEPTION
  On Debian systems a full copy of the LGPL 2 can be found at
  /usr/share/common-licenses/LGPL-2
 
-Files: icalendar/icalendar.* icalendar/imip.*
+Files: icalendar/icalendar.*
+       icalendar/imip.*
 Copyright: 2012 Christian Mollekopf <chrigi_1@fastmail.fm>
-License: LGPL2.1+
+License: LGPL-2.1+
+
+Files: kolabformat/xmlobject.*
+Copyright: 2012 Christian Mollekopf <mollekopf@kolabsys.com>
+License: AGPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+ .
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems a full copy of the AGPL 3 can be found at
+ /usr/share/common-licenses/AGPL-3
 
 Files:  cmake/*
 Copyright: 2011-2013  Copyright (C) 2011-2012 Kolab Systems AG
@@ -128,7 +129,7 @@ License: BSD-3-clause
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-License: LGPL2.1+
+License: LGPL-2.1+
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
