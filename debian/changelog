@@ -2,6 +2,7 @@ libkolab (0.6.0-0) UNRELEASED; urgency=medium
 
   * Team upload.
   * New upstream release.
+  * Updated Standards-Version to 3.9.6. No changes needed.
   * Added myself to uploaders with Diane's permission.
   * Added patch to build with current kdepimlibs (from kolab):
     002-Make-libkolab-compile-with-upstream-kdepimlibs.patch
