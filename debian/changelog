@@ -3,6 +3,7 @@ libkolab (0.6.0-0) UNRELEASED; urgency=medium
   * Team upload.
   * New upstream release.
   * Updated Descriptions (Closes: #724845)
+  * Added libxerces-c-dev, libboost-thread-dev to build-dep.
   * Updated build-dep libkolabxml to 1.1.0 (minimun required dependency by
     upstream)
   * Updated Standards-Version to 3.9.6. No changes needed.
