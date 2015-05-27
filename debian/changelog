@@ -1,4 +1,4 @@
-libkolab (0.6.0-0) UNRELEASED; urgency=medium
+libkolab (0.6.0-1) unstable; urgency=medium
 
   * Team upload.
   * New upstream release.
@@ -19,7 +19,7 @@ libkolab (0.6.0-0) UNRELEASED; urgency=medium
     (there are also signed packages available, but unfortunately not
     a detached signature)
 
- -- Sandro Knauß <bugs@sandroknauss.de>  Fri, 13 Feb 2015 23:15:41 +0100
+ -- Sandro Knauß <bugs@sandroknauss.de>  Wed, 27 May 2015 16:28:00 +0200
 
 libkolab (0.5.3-1) unstable; urgency=medium
 
