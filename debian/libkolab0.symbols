@@ -69,8 +69,6 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZN5Kolab13FreebusyUtils16generateFreeBusyERK5QListI14QSharedPointerIN8KCalCore5EventEEERK9KDateTimeSB_RKS2_INS3_6PersonEE@Base 0.5.2
  _ZN5Kolab13FreebusyUtils17aggregateFreeBusyERKSt6vectorINS_8FreebusyESaIS2_EERKSsS8_b@Base 0.5.2
  _ZN5Kolab13FreebusyUtils5toIFBERKNS_8FreebusyE@Base 0.5.2
- _ZN5Kolab14RelationMemberC1Ev@Base 0.6.0
- _ZN5Kolab14RelationMemberC2Ev@Base 0.6.0
  _ZN5Kolab14RelationMemberD1Ev@Base 0.6.0
  _ZN5Kolab14RelationMemberD2Ev@Base 0.6.0
  _ZN5Kolab14fromICalEventsERKSs@Base 0.5.2
@@ -93,7 +91,6 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZN5Kolab17KolabObjectWriter12writeJournalERK14QSharedPointerIN8KCalCore7JournalEENS_7VersionERK7QStringSA_@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter13writeDistlistERKN4KABC12ContactGroupENS_7VersionERK7QString@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter13writeFreebusyERKNS_8FreebusyENS_7VersionERK7QString@Base 0.5.2
- _ZN5Kolab17KolabObjectWriter13writeRelationERKN7Akonadi8RelationERK11QStringListNS_7VersionERK7QString@Base 0.6.0
  _ZN5Kolab17KolabObjectWriter14writeIncidenceERK14QSharedPointerIN8KCalCore9IncidenceEENS_7VersionERK7QStringSA_@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter15writeDictionaryERK11QStringListRK7QStringNS_7VersionES6_@Base 0.5.2
  _ZN5Kolab17KolabObjectWriter8writeTagERKN7Akonadi3TagERK11QStringListNS_7VersionERK7QString@Base 0.6.0
@@ -139,10 +136,8 @@ libkolab.so.0 libkolab0 #MINVER#
  _ZNK5Kolab17KolabObjectReader10getContactEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader10getJournalEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader10getVersionEv@Base 0.5.2
- _ZNK5Kolab17KolabObjectReader10isRelationEv@Base 0.6.0
  _ZNK5Kolab17KolabObjectReader11getDistlistEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader11getFreebusyEv@Base 0.5.2
- _ZNK5Kolab17KolabObjectReader11getRelationEv@Base 0.6.0
  _ZNK5Kolab17KolabObjectReader12getIncidenceEv@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader13getDictionaryER7QString@Base 0.5.2
  _ZNK5Kolab17KolabObjectReader13getTagMembersEv@Base 0.6.0
