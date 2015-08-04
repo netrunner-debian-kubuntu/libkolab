@@ -7,7 +7,7 @@ Build-Depends: cmake,
                libqt4-dev,
                debhelper (>= 9),
                pkg-kde-tools (>= 0.12),
-               libkolabxml-dev (>= 1.1),
+               libkolabxml-dev (>= 1.1.1),
                libboost-program-options-dev,
                libboost-thread-dev,
                libcurl4-gnutls-dev,
@@ -78,7 +78,7 @@ Depends: libkolab0 (= ${binary:Version}),
          ${misc:Depends},
          libqt4-dev,
          kdepimlibs5-dev,
-         libkolabxml-dev
+         libkolabxml-dev (>= 1.1.1)
 Description: Development package for Kolab library
  libkolab provides conversions from/to KDE containers, MIME message
  handling and facilities to read and write kolabv2 and kolabv3.
