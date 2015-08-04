@@ -13,11 +13,9 @@ KOLAB: #4448
  kolabformat/kolabobject.cpp | 5 ++++-
  2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 365edac..bd53e27 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -78,6 +78,11 @@ add_definitions( -DKDEPIMLIBS_VERSION_MAJOR=${KdepimLibs_VERSION_MAJOR} )
+@@ -80,6 +80,11 @@
  add_definitions( -DKDEPIMLIBS_VERSION_MINOR=${KdepimLibs_VERSION_MINOR} )
  add_definitions( -DKDEPIMLIBS_VERSION_PATCH=${KdepimLibs_VERSION_PATCH} )
  
@@ -29,11 +27,9 @@ index 365edac..bd53e27 100644
  if("${KdepimLibs_VERSION}" VERSION_GREATER "4.8.40" OR USE_LIBCALENDARING)
      add_definitions(-DKDEPIMLIBS_VERSION_DEVEL)
  endif()
-diff --git a/kolabformat/kolabobject.cpp b/kolabformat/kolabobject.cpp
-index 681b4a5..e5c404d 100644
 --- a/kolabformat/kolabobject.cpp
 +++ b/kolabformat/kolabobject.cpp
-@@ -435,8 +435,11 @@ ObjectType KolabObjectReader::Private::readKolabV3(const KMime::Message::Ptr &ms
+@@ -435,8 +435,11 @@
                  mTag = Akonadi::Tag();
                  mTag.setName(Conversion::fromStdString(relation.name()));
                  mTag.setGid(Conversion::fromStdString(configuration.uid()).toLatin1());
@@ -46,6 +42,3 @@ index 681b4a5..e5c404d 100644
                  mTagMembers.reserve(relation.members().size());
                  foreach (const std::string &member, relation.members()) {
                      mTagMembers << Conversion::fromStdString(member);
--- 
-2.1.4
-

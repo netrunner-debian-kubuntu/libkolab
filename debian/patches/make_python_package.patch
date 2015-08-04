@@ -4,7 +4,7 @@ Description: Add __init__ file to make kolab a valid python package
  it could be an empty file if included in git.
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -205,6 +205,11 @@
+@@ -217,6 +217,11 @@
  if(PYTHON_BINDINGS)
      generatePythonBindings(shared shared.i)
      add_subdirectory(kolabformat/python)
