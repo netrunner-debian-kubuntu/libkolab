@@ -1,11 +1,11 @@
-libkolab (1.0.0-0ubuntu1) UNRELEASED; urgency=medium
+libkolab (1.0.0-0ubuntu1) wily; urgency=medium
 
   * New upstream release using Qt5 and KF5 (LP: #1489392)
   * Sobump from 0 to 1 (rename package accordingly)
   * Import upstream commits to fix compatibility with KDE Applications 15.08
     - upstream_Fix-build-with-Qt-5.5-and-also-adjust-to-the-latest-.patch
 
- -- Harald Sitter <sitter@kde.org>  Thu, 27 Aug 2015 13:12:02 +0200
+ -- Harald Sitter <sitter@kde.org>  Thu, 27 Aug 2015 14:22:41 +0200
 
 libkolab (0.6.0-2) unstable; urgency=medium
 
